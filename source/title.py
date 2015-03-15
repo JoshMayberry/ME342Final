@@ -14,7 +14,7 @@ import wx.xrc
 ## Class MyApp
 ###########################################################################
 
-class MyApp ( wx.Frame ):
+class MyTestApp ( wx.Frame ):
 	
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -53,7 +53,7 @@ class MyApp ( wx.Frame ):
 		pass
 	
 app = wx.App()
-frame = MyApp(None)
+frame = MyTestApp(None)
 frame.Show()
 app.MainLoop()
 
