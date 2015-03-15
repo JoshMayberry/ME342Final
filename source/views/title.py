@@ -8,13 +8,12 @@
 ###########################################################################
 
 import wx
-import wx.xrc
 
 ###########################################################################
 ## Class MyApp
 ###########################################################################
 
-class MyApp ( wx.Frame ):
+class Title ( wx.Frame ):
 	
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -32,7 +31,7 @@ class MyApp ( wx.Frame ):
 		fgSizerBtn.SetFlexibleDirection( wx.BOTH )
 		fgSizerBtn.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.thermoBtn = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER )
+		self.thermoBtn = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize )
 		self.thermoBtn.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
 		
 		fgSizerBtn.Add( self.thermoBtn, 0, wx.EXPAND, 5 )
@@ -48,12 +47,26 @@ class MyApp ( wx.Frame ):
 		self.Layout()
 		
 		self.Centre( wx.BOTH )
+
+		self.setup_events()
 	
 	def __del__( self ):
 		pass
-	
-app = wx.App()
-frame = MyApp(None)
-frame.Show()
-app.MainLoop()
+
+	def setup_events(self):
+		self.Bind(wx.EVT_BUTTON, self.onBtnClick, self.thermoBtn)
+
+	# Virtual event handlers, overide them in your derived class
+	def onBtnClick( self, event):
+		print ("Hi from Title")
+		event.Skip()
+
+
+
+
+if __name__ == '__main__':
+	app = wx.App()
+	frame = MyApp(None)
+	frame.Show()
+	app.MainLoop()
 
