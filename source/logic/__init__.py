@@ -1,2 +1,3 @@
 from .logicThermoSetup import LogicThermoSetup
-from .logicTitle import LogicTitle
+from .logicSubject import LogicSubject
+from .logicThermoInput import LogicThermoInput
