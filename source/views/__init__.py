@@ -1,3 +1,3 @@
-from .subject import frm_Subject
-from .thermoSetup import frm_ThermoSetup
-from .thermoInput import frm_ThermoInput
+from .frmSubject import Frm_Subject
+from .frmThermoInput import Frm_ThermoInput
+from .frmThermoSetup import Frm_ThermoSetup

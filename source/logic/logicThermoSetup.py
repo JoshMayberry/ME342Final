@@ -1,14 +1,13 @@
 import wx
-from ..views import frm_ThermoSetup
-#from ..logic import LogicThermoInput
+from ..views import Frm_ThermoSetup
+from .logicThermoInput import LogicThermoInput
 
-class LogicThermoSetup(frm_ThermoSetup):
+class LogicThermoSetup(Frm_ThermoSetup):
 	def __init__(self, parent):
 
-		print ("Building GUI~")
+		print ("Building ", self.__class__)
 		# build gui
-		frm_ThermoSetup.__init__(self, parent)
-		print('HI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+		Frm_ThermoSetup.__init__(self, parent)
 
 	def onBtnClick_Medium_IdealGas( self, event ):
 		event.Skip()
@@ -62,7 +61,7 @@ class LogicThermoSetup(frm_ThermoSetup):
 		event.Skip()
 	
 	def onBtnClick_ContinueToInput( self, event ):
-		LogicThermoInput(self.parent).Show()
+		LogicThermoInput(self).Show()
 		self.Destroy()
 		event.Skip()
 

@@ -1,6 +1,6 @@
 import wx
 
-class frm_ThermoSetup ( wx.Frame ):
+class Frm_ThermoSetup ( wx.Frame ):
 	
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 368,307 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
