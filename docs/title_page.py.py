@@ -17,7 +17,7 @@ import wx.xrc
 class Frm_Subject ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 345,115 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -34,11 +34,9 @@ class Frm_Subject ( wx.Frame ):
 		sz_btns.SetFlexibleDirection( wx.BOTH )
 		sz_btns.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.btn_Thermo = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER )
+		self.btn_Thermo = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.btn_Thermo.SetDefault() 
-		self.btn_Thermo.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
-		
-		sz_btns.Add( self.btn_Thermo, 0, wx.EXPAND, 5 )
+		sz_btns.Add( self.btn_Thermo, 0, wx.ALL, 5 )
 		
 		
 		sz_Subject.Add( sz_btns, 1, wx.EXPAND, 5 )
@@ -68,7 +66,7 @@ class Frm_Subject ( wx.Frame ):
 class Frm_ThermoSetup ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 368,307 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 300,307 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -384,6 +382,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		siz_ThermoInput_Title.Add( sz_ThermoInput_Inputs, 1, wx.EXPAND, 5 )
 		
+		self.btn_TI_Continue = wx.Button( self, wx.ID_ANY, u"Continue", wx.DefaultPosition, wx.DefaultSize, 0 )
+		siz_ThermoInput_Title.Add( self.btn_TI_Continue, 0, wx.ALL, 5 )
+		
 		
 		self.SetSizer( siz_ThermoInput_Title )
 		self.Layout()
@@ -397,6 +398,7 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.val_TI_V2.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_V2 )
 		self.val_TI_W.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_W )
 		self.val_TI_Q.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_Q )
+		self.btn_TI_Continue.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToResults )
 	
 	def __del__( self ):
 		pass
@@ -419,6 +421,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		event.Skip()
 	
 	def onVal_TI_Q( self, event ):
+		event.Skip()
+	
+	def onBtnClick_ContinueToResults( self, event ):
 		event.Skip()
 	
 

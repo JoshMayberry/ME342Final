@@ -1,5 +1,6 @@
-from ..views import Frm_Subject
-from .logicThermoSetup import LogicThermoSetup
+
+from ..views import Frm_Subject #Needed to communicate with the frame
+from .logicThermoSetup import LogicThermoSetup #Needed to go to the next frame
 
 #Builds the GUI and handels events
 class LogicSubject(Frm_Subject):

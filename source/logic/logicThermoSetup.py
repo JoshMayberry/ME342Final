@@ -1,7 +1,7 @@
 import wx
-from ..views import Frm_ThermoSetup
-from .logicThermoInput import LogicThermoInput
-import numpy as np
+from ..views import Frm_ThermoSetup #Needed to communicate with the frame
+from .logicThermoInput import LogicThermoInput #Needed to go to the next frame
+import numpy as np #Needed for np.nan
 
 class LogicThermoSetup(Frm_ThermoSetup):
 	def __init__(self, parent):
@@ -178,7 +178,6 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.k,self.Cp,self.Cv,self.Cavg = (0,)*4
 
 		args = self.inputList
-		print(args)
 		LogicThermoInput(self.parent,*args).Show()
 		self.Destroy()
 		event.Skip()

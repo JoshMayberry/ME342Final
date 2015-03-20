@@ -3,7 +3,7 @@ import wx
 class Frm_Subject ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 345,135 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		sz_Subject = wx.BoxSizer( wx.VERTICAL )
 		
@@ -18,11 +18,9 @@ class Frm_Subject ( wx.Frame ):
 		sz_btns.SetFlexibleDirection( wx.BOTH )
 		sz_btns.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.btn_Thermo = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER )
+		self.btn_Thermo = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.btn_Thermo.SetDefault() 
-		self.btn_Thermo.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
-		
-		sz_btns.Add( self.btn_Thermo, 0, wx.EXPAND, 5 )
+		sz_btns.Add( self.btn_Thermo, 0, wx.ALL, 5 )
 		
 		
 		sz_Subject.Add( sz_btns, 1, wx.EXPAND, 5 )

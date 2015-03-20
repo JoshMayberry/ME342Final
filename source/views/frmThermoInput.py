@@ -1,4 +1,5 @@
 import wx
+#from ..logic import LogicThermoInput
 
 class Frm_ThermoInput ( wx.Frame ):
 	
@@ -7,6 +8,7 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		siz_ThermoInput_Title = wx.BoxSizer( wx.VERTICAL )
 		
+		#The Main Title
 		self.tit_TI_Input = wx.StaticText( self, wx.ID_ANY, u"Inputs", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.tit_TI_Input.Wrap( -1 )
 		siz_ThermoInput_Title.Add( self.tit_TI_Input, 0, wx.ALL, 5 )
@@ -15,6 +17,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		sz_ThermoInput_Inputs.SetFlexibleDirection( wx.BOTH )
 		sz_ThermoInput_Inputs.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
+#The inputs
+		#The input for State 1 sizer starts here
+		##Setup the title and spacer
 		sz_TI_State1 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		sz_TI_State1.SetFlexibleDirection( wx.BOTH )
 		sz_TI_State1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -27,23 +32,12 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_spacer1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
 		
-		self.txt_TI_P1 = wx.StaticText( self, wx.ID_ANY, u"P1", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_P1.Wrap( -1 )
-		sz_TI_State1.Add( self.txt_TI_P1, 0, wx.ALL, 5 )
-		
-		self.val_TI_P1 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		sz_TI_State1.Add( self.val_TI_P1, 0, wx.ALL, 5 )
-		
-		self.txt_TI_V1 = wx.StaticText( self, wx.ID_ANY, u"V1", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_V1.Wrap( -1 )
-		sz_TI_State1.Add( self.txt_TI_V1, 0, wx.ALL, 5 )
-		
-		self.val_TI_V1 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		sz_TI_State1.Add( self.val_TI_V1, 0, wx.ALL, 5 )
-		
-		
+		##Generate all the State 1 input boxes
+		self.CreateState1(sz_TI_State1)		
 		sz_ThermoInput_Inputs.Add( sz_TI_State1, 1, wx.EXPAND, 5 )
-		
+
+		#The input for State 2 sizer starts here
+		##Setup the title and spacer
 		sz_TI_State2 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		sz_TI_State2.SetFlexibleDirection( wx.BOTH )
 		sz_TI_State2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -56,6 +50,10 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_spacer2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
 		
+		##
+		##Generate all the State 1 input boxes
+		#self.CreateState2(sz_TI_State1)
+
 		self.txt_TI_P2 = wx.StaticText( self, wx.ID_ANY, u"P2", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_P2, 0, wx.ALL, 5 )
@@ -73,6 +71,7 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		sz_ThermoInput_Inputs.Add( sz_TI_State2, 1, wx.EXPAND, 5 )
 		
+		#The input for Other sizer starts here
 		sz_TI_Other = wx.FlexGridSizer( 0, 2, 0, 0 )
 		sz_TI_Other.SetFlexibleDirection( wx.BOTH )
 		sz_TI_Other.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -102,8 +101,11 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		sz_ThermoInput_Inputs.Add( sz_TI_Other, 1, wx.EXPAND, 5 )
 		
-		
+		#The button sizer starts here
 		siz_ThermoInput_Title.Add( sz_ThermoInput_Inputs, 1, wx.EXPAND, 5 )
+		
+		self.btn_TI_Continue = wx.Button( self, wx.ID_ANY, u"Continue", wx.DefaultPosition, wx.DefaultSize, 0 )
+		siz_ThermoInput_Title.Add( self.btn_TI_Continue, 0, wx.ALL, 5 )
 		
 		
 		self.SetSizer( siz_ThermoInput_Title )
@@ -112,12 +114,16 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
-		self.val_TI_P1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
-		self.val_TI_V1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_V1 )
+
+		#self.CreateEvents()
+
+		#self.val_TI_P1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
+		#self.val_TI_V1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_V1 )
 		self.val_TI_P2.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P2 )
 		self.val_TI_V2.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_V2 )
 		self.val_TI_W.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_W )
 		self.val_TI_Q.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_Q )
+		self.btn_TI_Continue.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToResults )
 	
 	def __del__( self ):
 		pass
