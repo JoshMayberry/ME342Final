@@ -37,7 +37,7 @@ class LogicThermoInput(Frm_ThermoInput):
 			What is necissary was decided in the previous frame.
 		"""
 		print('Setting up State 1')
-		for i in range(1):#len(self.inputList[0])):
+		for i in range(len(self.inputList[0])):
 			#Make the text label
 			txtName = 'txt_TI_'+ str(self.inputList[0][i])
 			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[0][i], wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -48,6 +48,46 @@ class LogicThermoInput(Frm_ThermoInput):
 			valName = 'val_TI_'+ str(self.inputList[0][i])
 			self.valName = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 			sz_TI_State1.Add( self.valName, 0, wx.ALL, 5 )
+
+			self.nameList.append([txtName,valName])
+
+	def CreateState2(self,sz_TI_State2):
+		"""
+			This populates all of State 2 with the necissary variables.
+			What is necissary was decided in the previous frame.
+		"""
+		print('Setting up State 2')
+		for i in range(len(self.inputList[1])):
+			#Make the text label
+			txtName = 'txt_TI_'+ str(self.inputList[1][i])
+			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[1][i], wx.DefaultPosition, wx.DefaultSize, 0 )
+			self.txtName.Wrap( -1 )
+			sz_TI_State2.Add( self.txtName, 0, wx.ALL, 5 )
+
+			#Make the input box
+			valName = 'val_TI_'+ str(self.inputList[1][i])
+			self.valName = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+			sz_TI_State2.Add( self.valName, 0, wx.ALL, 5 )
+
+			self.nameList.append([txtName,valName])
+
+	def CreateOther(self,sz_TI_Other):
+		"""
+			This populates all of Other with the necissary variables.
+			What is necissary was decided in the previous frame.
+		"""
+		print('Setting up Other')
+		for i in range(len(self.inputList[2])):
+			#Make the text label
+			txtName = 'txt_TI_'+ str(self.inputList[0][i])
+			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[2][i], wx.DefaultPosition, wx.DefaultSize, 0 )
+			self.txtName.Wrap( -1 )
+			sz_TI_Other.Add( self.txtName, 0, wx.ALL, 5 )
+
+			#Make the input box
+			valName = 'val_TI_'+ str(self.inputList[2][i])
+			self.valName = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+			sz_TI_Other.Add( self.valName, 0, wx.ALL, 5 )
 
 			self.nameList.append([txtName,valName])
 

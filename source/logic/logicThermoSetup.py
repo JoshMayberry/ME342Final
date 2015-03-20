@@ -168,7 +168,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.inputList[0].extend(['T'])
 		else:
 			self.inputList[0].extend(['T1'])
-			self.inputList[0].extend(['T2'])
+			self.inputList[1].extend(['T2'])
 
 		#if self.etc3 == 'Reversable':
 
