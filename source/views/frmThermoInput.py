@@ -23,8 +23,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_State1, 0, wx.ALL, 5 )
 		
-		
-		sz_TI_State1.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		self.txt_TI_spacer1 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer1.Wrap( -1 )
+		sz_TI_State1.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
 		
 		self.txt_TI_P1 = wx.StaticText( self, wx.ID_ANY, u"P1", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P1.Wrap( -1 )
@@ -51,8 +52,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_State2, 0, wx.ALL, 5 )
 		
-		
-		sz_TI_State2.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		self.txt_TI_spacer2 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer2.Wrap( -1 )
+		sz_TI_State2.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
 		
 		self.txt_TI_P2 = wx.StaticText( self, wx.ID_ANY, u"P2", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P2.Wrap( -1 )
@@ -79,8 +81,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_Other.Wrap( -1 )
 		sz_TI_Other.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
 		
-		
-		sz_TI_Other.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		self.txt_TI_spacer3 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer3.Wrap( -1 )
+		sz_TI_Other.Add( self.txt_TI_spacer3, 0, wx.ALL, 5 )
 		
 		self.txt_TI_W = wx.StaticText( self, wx.ID_ANY, u"W", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_W.Wrap( -1 )

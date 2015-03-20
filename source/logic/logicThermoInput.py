@@ -3,7 +3,7 @@ from ..views import Frm_ThermoInput
 
 class LogicThermoInput(Frm_ThermoInput):
 	def __init__(self, parent):
-		print ("Building GUI~")
+
 		print ("Building ", self.__class__)
 		# build gui
 		Frm_ThermoInput.__init__(self, parent)

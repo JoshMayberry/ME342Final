@@ -11,10 +11,10 @@ import wx
 import wx.xrc
 
 ###########################################################################
-## Class frm_Subject
+## Class Frm_Subject
 ###########################################################################
 
-class frm_Subject ( wx.Frame ):
+class Frm_Subject ( wx.Frame ):
 	
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -62,10 +62,10 @@ class frm_Subject ( wx.Frame ):
 	
 
 ###########################################################################
-## Class frm_ThermoSetup
+## Class Frm_ThermoSetup
 ###########################################################################
 
-class frm_ThermoSetup ( wx.Frame ):
+class Frm_ThermoSetup ( wx.Frame ):
 	
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 368,307 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -218,6 +218,7 @@ class frm_ThermoSetup ( wx.Frame ):
 	def onBtnClick_Medium_IdealGas( self, event ):
 		event.Skip()
 	
+	
 	def onBtnClick_Medium_R132( self, event ):
 		event.Skip()
 	
@@ -271,10 +272,10 @@ class frm_ThermoSetup ( wx.Frame ):
 	
 
 ###########################################################################
-## Class frm_ThermoInput
+## Class Frm_ThermoInput
 ###########################################################################
 
-class frm_ThermoInput ( wx.Frame ):
+class Frm_ThermoInput ( wx.Frame ):
 	
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -299,8 +300,9 @@ class frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_State1, 0, wx.ALL, 5 )
 		
-		
-		sz_TI_State1.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		self.txt_TI_spacer1 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer1.Wrap( -1 )
+		sz_TI_State1.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
 		
 		self.txt_TI_P1 = wx.StaticText( self, wx.ID_ANY, u"P1", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P1.Wrap( -1 )
@@ -327,8 +329,9 @@ class frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_State2, 0, wx.ALL, 5 )
 		
-		
-		sz_TI_State2.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		self.txt_TI_spacer2 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer2.Wrap( -1 )
+		sz_TI_State2.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
 		
 		self.txt_TI_P2 = wx.StaticText( self, wx.ID_ANY, u"P2", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P2.Wrap( -1 )
@@ -355,8 +358,9 @@ class frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_Other.Wrap( -1 )
 		sz_TI_Other.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
 		
-		
-		sz_TI_Other.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		self.txt_TI_spacer3 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer3.Wrap( -1 )
+		sz_TI_Other.Add( self.txt_TI_spacer3, 0, wx.ALL, 5 )
 		
 		self.txt_TI_W = wx.StaticText( self, wx.ID_ANY, u"W", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_W.Wrap( -1 )

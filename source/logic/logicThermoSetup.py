@@ -6,7 +6,8 @@ class LogicThermoSetup(Frm_ThermoSetup):
 	def __init__(self, parent):
 
 		print ("Building ", self.__class__)
-		# build gui
+		self.parent = parent
+		#Build GUI
 		Frm_ThermoSetup.__init__(self, parent)
 
 	def onBtnClick_Medium_IdealGas( self, event ):
@@ -61,7 +62,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		event.Skip()
 	
 	def onBtnClick_ContinueToInput( self, event ):
-		LogicThermoInput(self).Show()
+		LogicThermoInput(self.parent).Show()
 		self.Destroy()
 		event.Skip()
 
