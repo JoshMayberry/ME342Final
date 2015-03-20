@@ -1,6 +1,6 @@
 import wx
 from ..views import frm_ThermoSetup
-from ..logic import LogicThermoInput
+#from ..logic import LogicThermoInput
 
 class LogicThermoSetup(frm_ThermoSetup):
 	def __init__(self, parent):
