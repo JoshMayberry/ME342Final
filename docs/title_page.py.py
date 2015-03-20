@@ -158,20 +158,20 @@ class Frm_ThermoSetup ( wx.Frame ):
 		self.txt_TS_Etc.Wrap( -1 )
 		sz_TI_Etc.Add( self.txt_TS_Etc, 0, wx.ALL, 5 )
 		
-		self.btn_TS_Adiabadic = wx.RadioButton( self, wx.ID_ANY, u"Adiabadic", wx.DefaultPosition, wx.DefaultSize, wx.RB_GROUP )
+		self.btn_TS_Adiabadic = wx.CheckBox( self, wx.ID_ANY, u"Adiabadic", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sz_TI_Etc.Add( self.btn_TS_Adiabadic, 0, wx.ALL, 5 )
 		
-		self.btn_TS_Isothermal = wx.RadioButton( self, wx.ID_ANY, u"Isothermal", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.btn_TS_Isothermal = wx.CheckBox( self, wx.ID_ANY, u"Isothermal", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sz_TI_Etc.Add( self.btn_TS_Isothermal, 0, wx.ALL, 5 )
 		
-		self.btn_TS_Isotropic = wx.RadioButton( self, wx.ID_ANY, u"Isotropic", wx.DefaultPosition, wx.DefaultSize, 0 )
-		sz_TI_Etc.Add( self.btn_TS_Isotropic, 0, wx.ALL, 5 )
+		self.btn_TS_Reversable = wx.CheckBox( self, wx.ID_ANY, u"Reversable", wx.DefaultPosition, wx.DefaultSize, 0 )
+		sz_TI_Etc.Add( self.btn_TS_Reversable, 0, wx.ALL, 5 )
 		
-		self.btn_TS_Polytropic = wx.RadioButton( self, wx.ID_ANY, u"Polytropic", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.btn_TS_Polytropic = wx.CheckBox( self, wx.ID_ANY, u"Polytropic", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sz_TI_Etc.Add( self.btn_TS_Polytropic, 0, wx.ALL, 5 )
 		
-		self.btn_TS_Nozzle = wx.CheckBox( self, wx.ID_ANY, u"Nozzle", wx.DefaultPosition, wx.DefaultSize, 0 )
-		sz_TI_Etc.Add( self.btn_TS_Nozzle, 0, wx.ALL, 5 )
+		self.btn_TS_Valve = wx.CheckBox( self, wx.ID_ANY, u"Valve", wx.DefaultPosition, wx.DefaultSize, 0 )
+		sz_TI_Etc.Add( self.btn_TS_Valve, 0, wx.ALL, 5 )
 		
 		
 		sz_TS_Setups.Add( sz_TI_Etc, 1, wx.EXPAND, 5 )
@@ -191,7 +191,7 @@ class Frm_ThermoSetup ( wx.Frame ):
 		
 		# Connect Events
 		self.btn_TS_Medium1.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_IdealGas )
-		self.btn_TS_Medium2.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_IdealGas )
+		self.btn_TS_Medium2.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_Water )
 		self.btn_TS_Medium3.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_R132 )
 		self.btn_TS_System1.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_System_Closed )
 		self.btn_TS_System2.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_System_Steady )
@@ -203,11 +203,11 @@ class Frm_ThermoSetup ( wx.Frame ):
 		self.btn_TS_Container5.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Container_Turbine )
 		self.btn_TS_Container6.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Container_HeatExch )
 		self.btn_TS_Container7.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Container_Mixing )
-		self.btn_TS_Adiabadic.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Etc_Adiabadic )
-		self.btn_TS_Isothermal.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Etc_Isothermal )
-		self.btn_TS_Isotropic.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Etc_Isotropic )
-		self.btn_TS_Polytropic.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Etc_Polytropic )
-		self.btn_TS_Nozzle.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Nozzle )
+		self.btn_TS_Adiabadic.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Adiabadic )
+		self.btn_TS_Isothermal.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Isothermal )
+		self.btn_TS_Reversable.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Reversable )
+		self.btn_TS_Polytropic.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Polytropic )
+		self.btn_TS_Valve.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Valve )
 		self.btn_TS_Continue.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToInput )
 	
 	def __del__( self ):
@@ -218,6 +218,8 @@ class Frm_ThermoSetup ( wx.Frame ):
 	def onBtnClick_Medium_IdealGas( self, event ):
 		event.Skip()
 	
+	def onBtnClick_Medium_Water( self, event ):
+		event.Skip()
 	
 	def onBtnClick_Medium_R132( self, event ):
 		event.Skip()
@@ -258,13 +260,13 @@ class Frm_ThermoSetup ( wx.Frame ):
 	def onBtnClick_Etc_Isothermal( self, event ):
 		event.Skip()
 	
-	def onBtnClick_Etc_Isotropic( self, event ):
+	def onBtnClick_Etc_Reversable( self, event ):
 		event.Skip()
 	
 	def onBtnClick_Etc_Polytropic( self, event ):
 		event.Skip()
 	
-	def onBtnClick_Etc_Nozzle( self, event ):
+	def onBtnClick_Etc_Valve( self, event ):
 		event.Skip()
 	
 	def onBtnClick_ContinueToInput( self, event ):

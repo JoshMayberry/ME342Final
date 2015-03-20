@@ -2,11 +2,13 @@ import wx
 from ..views import Frm_ThermoInput
 
 class LogicThermoInput(Frm_ThermoInput):
-	def __init__(self, parent):
+	def __init__(self, parent,*args):
 
 		print ("Building ", self.__class__)
 		# build gui
 		Frm_ThermoInput.__init__(self, parent)
+		self.inputList = args
+		print('\n',self.inputList)
 
 	def onVal_TI_P1( self, event ):
 		event.Skip()
