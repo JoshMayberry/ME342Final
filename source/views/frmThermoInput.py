@@ -4,7 +4,8 @@ import wx
 class Frm_ThermoInput ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		windowSize = self.setSize()
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( windowSize[0],windowSize[1] ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		siz_ThermoInput_Title = wx.BoxSizer( wx.VERTICAL )
 		
@@ -86,7 +87,8 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 	# Connect Events
 
-		#self.CreateEvents()
+		self.CreateEvents()
+		#self.val_TI_P1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
 		self.btn_TI_Continue.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToResults )
 	
 	def __del__( self ):
