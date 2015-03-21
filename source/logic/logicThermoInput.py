@@ -48,7 +48,8 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the unit dropdown list
 			unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
 			unit_Choices = self.findUnits(self.inputList[0][i])
-			unitName = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			valId += 2000
+			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
 			unitName.SetSelection( 0 )
 			sz_TI_State1.Add( unitName, 0, wx.ALL, 5 )
 			#self.nameList.append(valName)
@@ -78,7 +79,8 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the unit dropdown list
 			unitName = 'self.unit_TI_'+ str(self.inputList[1][i])
 			unit_Choices = self.findUnits(self.inputList[1][i])
-			unitName = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			valId += 2000
+			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
 			unitName.SetSelection( 0 )
 			sz_TI_State2.Add( unitName, 0, wx.ALL, 5 )
 			#self.nameList.append(valName)
@@ -106,7 +108,8 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the unit dropdown list
 			unitName = 'self.unit_TI_'+ str(self.inputList[2][i])
 			unit_Choices = self.findUnits(self.inputList[2][i])
-			unitName = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			valId += 2000
+			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
 			unitName.SetSelection( 0 )
 			sz_TI_Other.Add( unitName, 0, wx.ALL, 5 )
 			#self.nameList.append(valName)
@@ -121,14 +124,22 @@ class LogicThermoInput(Frm_ThermoInput):
 			#print(500+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[0][i])
 			self.FindWindowById(500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
+			unitsName = 'onUnits_TI_'+ str(self.inputList[0][i])
+			self.FindWindowById(2500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
+		
 		for i in range(len(self.inputList[1])):
 			#print(1000+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[1][i])
 			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
+			unitsName = 'onUnits_TI_'+ str(self.inputList[1][i])
+			self.FindWindowById(2500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
+		
 		for i in range(len(self.inputList[2])):
 			#print(1500+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[2][i])
 			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
+			unitsName = 'onUnits_TI_'+ str(self.inputList[2][i])
+			self.FindWindowById(2500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
 
 	def findWhich(self,item):
 		"""
@@ -243,11 +254,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.P1 = self.FindWindowById(myId).GetLineText(0)
 		print('P1',self.P1)
 		event.Skip()
+	def onUnits_TI_P1( self, event ):
+		myId = self.findWhich('P1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UP1 = self.FindWindowById(myId).GetString(n)
+		print('P1 Units',self.UP1)
+		event.Skip()
 	
 	def onVal_TI_V1( self, event ):
 		myId = self.findWhich('V1')
 		self.V1 = self.FindWindowById(myId).GetLineText(0)
 		print('V1',self.V1)
+		event.Skip()
+	def onUnits_TI_V1( self, event ):
+		myId = self.findWhich('V1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UV1 = self.FindWindowById(myId).GetString(n)
+		print('V1 Units',self.UV1)
 		event.Skip()
 
 	def onVal_TI_v1( self, event ):
@@ -255,11 +278,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.v1 = self.FindWindowById(myId).GetLineText(0)
 		print('v1',self.v1)
 		event.Skip()
+	def onUnits_TI_v1( self, event ):
+		myId = self.findWhich('v1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uv1 = self.FindWindowById(myId).GetString(n)
+		print('v1 Units',self.Uv1)
+		event.Skip()
 
 	def onVal_TI_T1( self, event ):
 		myId = self.findWhich('T1')
 		self.T1 = self.FindWindowById(myId).GetLineText(0)
 		print('T1',self.T1)
+		event.Skip()
+	def onUnits_TI_T1( self, event ):
+		myId = self.findWhich('T1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UT1 = self.FindWindowById(myId).GetString(n)
+		print('T1 Units',self.UT1)
 		event.Skip()
 
 	def onVal_TI_u1( self, event ):
@@ -267,11 +302,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.u1 = self.FindWindowById(myId).GetLineText(0)
 		print('u1',self.u1)
 		event.Skip()
+	def onUnits_TI_u1( self, event ):
+		myId = self.findWhich('u1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uu1 = self.FindWindowById(myId).GetString(n)
+		print('u1 Units',self.Uu1)
+		event.Skip()
 
 	def onVal_TI_hi( self, event ):
 		myId = self.findWhich('hi')
 		self.hi = self.FindWindowById(myId).GetLineText(0)
 		print('hi',self.hi)
+		event.Skip()
+	def onUnits_TI_hi( self, event ):
+		myId = self.findWhich('hi') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uhi = self.FindWindowById(myId).GetSelection(n)
+		print(' Units',self.Uhi)
 		event.Skip()
 
 	def onVal_TI_s1( self, event ):
@@ -279,11 +326,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.s1 = self.FindWindowById(myId).GetLineText(0)
 		print('s1',self.s1)
 		event.Skip()
+	def onUnits_TI_s1( self, event ):
+		myId = self.findWhich('s1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Us1 = self.FindWindowById(myId).GetString(n)
+		print('s1 Units',self.Us1)
+		event.Skip()
 
 	def onVal_TI_si( self, event ):
 		myId = self.findWhich('si')
 		self.si = self.FindWindowById(myId).GetLineText(0)
 		print('si',self.si)
+		event.Skip()
+	def onUnits_TI_si( self, event ):
+		myId = self.findWhich('si') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Usi = self.FindWindowById(myId).GetString(n)
+		print('si Units',self.Usi)
 		event.Skip()
 
 	def onVal_TI_x1( self, event ):
@@ -291,11 +350,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.x1 = self.FindWindowById(myId).GetLineText(0)
 		print('x1',self.x1)
 		event.Skip()
+	def onUnits_TI_x1( self, event ):
+		myId = self.findWhich('x1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Ux1 = self.FindWindowById(myId).GetString(n)
+		print('x1 Units',self.Ux1)
+		event.Skip()
 
 	def onVal_TI_m1( self, event ):
 		myId = self.findWhich('m1')
 		self.m1 = self.FindWindowById(myId).GetLineText(0)
 		print('m1',self.m1)
+		event.Skip()
+	def onUnits_TI_m1( self, event ):
+		myId = self.findWhich('m1') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Um1 = self.FindWindowById(myId).GetString(n)
+		print('m1 Units',self.Um1)
 		event.Skip()
 
 	def onVal_TI_mi( self, event ):
@@ -303,11 +374,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('mi',self.mi)
 		event.Skip()
+	def onUnits_TI_mi( self, event ):
+		myId = self.findWhich('mi') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Umi = self.FindWindowById(myId).GetString(n)
+		print('mi Units',self.Umi)
+		event.Skip()
 
 	def onVal_TI_pi_h( self, event ):
 		myId = self.findWhich('pi_h')
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('pi_h',self.mi)
+		event.Skip()
+	def onUnits_TI_pi_h( self, event ):
+		myId = self.findWhich('pi_h') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Upi_h = self.FindWindowById(myId).GetString(n)
+		print('pi_h Units',self.Upi_h)
 		event.Skip()
 
 	def onVal_TI_p1_h( self, event ):
@@ -315,17 +398,35 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('p1_h',self.mi)
 		event.Skip()
+	def onUnits_TI_p1_h( self, event ):
+		myId = self.findWhich('p1_h') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Up1_h = self.FindWindowById(myId).GetString(n)
+		print('p1_h Units',self.Up1_h)
+		event.Skip()
 
 	def onVal_TI_ki_v( self, event ):
 		myId = self.findWhich('ki_v')
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('ki_v',self.mi)
 		event.Skip()
+	def onUnits_TI_ki_v( self, event ):
+		myId = self.findWhich('ki_v') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uki_v = self.FindWindowById(myId).GetString(n)
+		print('ki_v Units',self.Uki_v)
+		event.Skip()
 
 	def onVal_TI_k1_v( self, event ):
 		myId = self.findWhich('k1_v')
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('k1_v',self.mi)
+		event.Skip()
+	def onUnits_TI_k1_v( self, event ):
+		myId = self.findWhich('k1_v') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uk1_v = self.FindWindowById(myId).GetString(n)
+		print('k1_v Units',self.Uk1_v)
 		event.Skip()
 
 #The State 2 Variable Conrollers
@@ -334,11 +435,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.P2 = self.FindWindowById(myId).GetLineText(0)
 		print('P2',self.P2)
 		event.Skip()
+	def onUnits_TI_P2( self, event ):
+		myId = self.findWhich('P2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UP2 = self.FindWindowById(myId).GetString(n)
+		print('P2 Units',self.UP2)
+		event.Skip()
 	
 	def onVal_TI_V2( self, event ):
 		myId = self.findWhich('V2')
 		self.V2 = self.FindWindowById(myId).GetLineText(0)
 		print('V2',self.V2)
+		event.Skip()
+	def onUnits_TI_V2( self, event ):
+		myId = self.findWhich('V2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UV2 = self.FindWindowById(myId).GetString(n)
+		print('V2 Units',self.UV2)
 		event.Skip()
 
 	def onVal_TI_v2( self, event ):
@@ -346,11 +459,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.v2 = self.FindWindowById(myId).GetLineText(0)
 		print('v2',self.v2)
 		event.Skip()
+	def onUnits_TI_v2( self, event ):
+		myId = self.findWhich('v2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uv2 = self.FindWindowById(myId).GetString(n)
+		print('v2 Units',self.Uv2)
+		event.Skip()
 
 	def onVal_TI_T2( self, event ):
 		myId = self.findWhich('T2')
 		self.T2  = self.FindWindowById(myId).GetLineText(0)
 		print('T2',self.T2)
+		event.Skip()
+	def onUnits_TI_T2( self, event ):
+		myId = self.findWhich('T2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UT2 = self.FindWindowById(myId).GetString(n)
+		print('T2 Units',self.UT2)
 		event.Skip()
 
 	def onVal_TI_u2( self, event ):
@@ -358,11 +483,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.u2 = self.FindWindowById(myId).GetLineText(0)
 		print('u2',self.u2)
 		event.Skip()
+	def onUnits_TI_u2( self, event ):
+		myId = self.findWhich('u2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uu2 = self.FindWindowById(myId).GetString(n)
+		print('u2 Units',self.Uu2)
+		event.Skip()
 
 	def onVal_TI_he( self, event ):
 		myId = self.findWhich('he')
 		self.he = self.FindWindowById(myId).GetLineText(0)
 		print('he',self.he)
+		event.Skip()
+	def onUnits_TI_he( self, event ):
+		myId = self.findWhich('he') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uhe = self.FindWindowById(myId).GetString(n)
+		print('he Units',self.Uhe)
 		event.Skip()
 
 	def onVal_TI_s2( self, event ):
@@ -370,11 +507,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.s2 = self.FindWindowById(myId).GetLineText(0)
 		print('s2',self.s2)
 		event.Skip()
+	def onUnits_TI_s2( self, event ):
+		myId = self.findWhich('s2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Us2 = self.FindWindowById(myId).GetString(n)
+		print('s2 Units',self.Us2)
+		event.Skip()
 
 	def onVal_TI_se( self, event ):
 		myId = self.findWhich('se')
 		self.se = self.FindWindowById(myId).GetLineText(0)
 		print('se',self.se)
+		event.Skip()
+	def onUnits_TI_se( self, event ):
+		myId = self.findWhich('se') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Use = self.FindWindowById(myId).GetString(n)
+		print('se Units',self.Use)
 		event.Skip()
 
 	def onVal_TI_x2( self, event ):
@@ -382,11 +531,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.x2 = self.FindWindowById(myId).GetLineText(0)
 		print('x2',self.x2)
 		event.Skip()
+	def onUnits_TI_x2( self, event ):
+		myId = self.findWhich('x2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Ux2 = self.FindWindowById(myId).GetString(n)
+		print('x2 Units',self.Ux2)
+		event.Skip()
 
 	def onVal_TI_m2( self, event ):
 		myId = self.findWhich('m2')
 		self.m2 = self.FindWindowById(myId).GetLineText(0)
 		print('m2',self.m2)
+		event.Skip()
+	def onUnits_TI_m2( self, event ):
+		myId = self.findWhich('m2') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Um2 = self.FindWindowById(myId).GetString(n)
+		print('m2 Units',self.Um2)
 		event.Skip()
 
 	def onVal_TI_me( self, event ):
@@ -394,11 +555,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.me = self.FindWindowById(myId).GetLineText(0)
 		print('me',self.me)
 		event.Skip()
+	def onUnits_TI_me( self, event ):
+		myId = self.findWhich('me') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Ume = self.FindWindowById(myId).GetString(n)
+		print('me Units',self.Ume)
+		event.Skip()
 
 	def onVal_TI_pe_h( self, event ):
 		myId = self.findWhich('pe_h')
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('pe_h',self.mi)
+		event.Skip()
+	def onUnits_TI_pe_h( self, event ):
+		myId = self.findWhich('pe_h') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Upe_h = self.FindWindowById(myId).GetString(n)
+		print('pe_h Units',self.Upe_h)
 		event.Skip()
 
 	def onVal_TI_p2_h( self, event ):
@@ -406,17 +579,35 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('p2_h',self.mi)
 		event.Skip()
+	def onUnits_TI_p2_h( self, event ):
+		myId = self.findWhich('p2_h') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Up2_h = self.FindWindowById(myId).GetString(n)
+		print('p2_h Units',self.Up2_h)
+		event.Skip()
 
 	def onVal_TI_ke_v( self, event ):
 		myId = self.findWhich('ke_v')
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('ke_v',self.mi)
 		event.Skip()
+	def onUnits_TI_ke_v( self, event ):
+		myId = self.findWhich('ke_v') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uke_v = self.FindWindowById(myId).GetString(n)
+		print('ke_v Units',self.Uke_v)
+		event.Skip()
 
 	def onVal_TI_k2_v( self, event ):
 		myId = self.findWhich('k2_v')
 		self.mi = self.FindWindowById(myId).GetLineText(0)
 		print('k2_v',self.mi)
+		event.Skip()
+	def onUnits_TI_k2_v( self, event ):
+		myId = self.findWhich('k2_v') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uk2_v = self.FindWindowById(myId).GetString()
+		print('k2_v Units',self.Uk2_v)
 		event.Skip()
 
 #The Other Variable Controllers
@@ -425,11 +616,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.W = self.FindWindowById(myId).GetLineText(0)
 		print('W',self.W)
 		event.Skip()
+	def onUnits_TI_W( self, event ):
+		myId = self.findWhich('W') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UW = self.FindWindowById(myId).GetString(n)
+		print('W Units',self.UW)
+		event.Skip()
 	
 	def onVal_TI_Q( self, event ):
 		myId = self.findWhich('Q')
 		self.Q = self.FindWindowById(myId).GetLineText(0)
 		print('Q',self.Q)
+		event.Skip()
+	def onUnits_TI_Q( self, event ):
+		myId = self.findWhich('Q') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UQ = self.FindWindowById(myId).GetString(n)
+		print('Q Units',self.UQ)
 		event.Skip()
 
 	def onVal_TI_k( self, event ):
@@ -437,11 +640,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.k = self.FindWindowById(myId).GetLineText(0)
 		print('k',self.k)
 		event.Skip()
+	def onUnits_TI_k( self, event ):
+		myId = self.findWhich('k') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uk = self.FindWindowById(myId).GetString(n)
+		print('k Units',self.Uk)
+		event.Skip()
 
 	def onVal_TI_Cp( self, event ):
 		myId = self.findWhich('Cp')
 		self.Cp = self.FindWindowById(myId).GetLineText(0)
 		print('Cp',self.Cp)
+		event.Skip()
+	def onUnits_TI_Cp( self, event ):
+		myId = self.findWhich('Cp') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UCp = self.FindWindowById(myId).GetString(n)
+		print('Cp Units',self.UCp)
 		event.Skip()
 
 	def onVal_TI_Cv( self, event ):
@@ -449,11 +664,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.Cv = self.FindWindowById(myId).GetLineText(0)
 		print('Cv',self.Cv)
 		event.Skip()
+	def onUnits_TI_Cv( self, event ):
+		myId = self.findWhich('Cv') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UCv = self.FindWindowById(myId).GetString(n)
+		print('Cv Units',self.UCv)
+		event.Skip()
 
 	def onVal_TI_Cavg( self, event ):
 		myId = self.findWhich('Cavg')
 		self.Cv = self.FindWindowById(myId).GetLineText(0)
 		print('Cavg',self.Cv)
+		event.Skip()
+	def onUnits_TI_Cavg( self, event ):
+		myId = self.findWhich('Cavg') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UCavg = self.FindWindowById(myId).GetString(n)
+		print('Cavg Units',self.UCavg)
 		event.Skip()
 
 	def onVal_TI_roe( self, event ):
@@ -461,11 +688,23 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.roe = self.FindWindowById(myId).GetLineText(0)
 		print('roe',self.roe)
 		event.Skip()
+	def onUnits_TI_roe( self, event ):
+		myId = self.findWhich('roe') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.Uroe = self.FindWindowById(myId).GetString(n)
+		print('roe Units',self.Uroe)
+		event.Skip()
 
 	def onVal_TI_R( self, event ):
 		myId = self.findWhich('R')
 		self.R = self.FindWindowById(myId).GetLineText(0)
 		print('R',self.R)
+		event.Skip()
+	def onUnits_TI_R( self, event ):
+		myId = self.findWhich('R') + 2000
+		n = self.FindWindowById(myId).GetSelection()
+		self.UR = self.FindWindowById(myId).GetString(n)
+		print('R Units',self.UR)
 		event.Skip()
 
 #The button at the end controller
