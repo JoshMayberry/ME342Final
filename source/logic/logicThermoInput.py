@@ -92,21 +92,22 @@ class LogicThermoInput(Frm_ThermoInput):
 
 	def CreateEvents(self):
 		x = 1
-		print('\n')
+		print('\n','hi')
 		#Add an event to that box
 		#self.FindWindowById(999).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
 		for i in range(len(self.inputList[0])):
 			#print(500+i)
-			self.eventName = 'onVal_TI_'+ str(self.inputList[0][i])
-			self.FindWindowById(500+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#self.eventName )
+			eventName = 'self.onVal_TI_'+ str(self.inputList[0][i])
+			print(eventName)
+			self.FindWindowById(500+i).Bind( wx.EVT_TEXT_ENTER, exec(eventName))
 		for i in range(len(self.inputList[1])):
 			#print(1000+i)
 			self.eventName = 'onVal_TI_'+ str(self.inputList[1][i])
-			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#self.eventName )
+			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#eventName )
 		for i in range(len(self.inputList[2])):
 			#print(1500+i)
 			self.eventName = 'onVal_TI_'+ str(self.inputList[2][i])
-			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#self.eventName )
+			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#eventName )
 
 	def findWhich(self,item):
 		"""
@@ -135,28 +136,187 @@ class LogicThermoInput(Frm_ThermoInput):
 
 		return answer
 
+#The State 1 Variable Controllers
 	def onVal_TI_P1( self, event ):
 		#This will edit an internal variable whenever the text in the box is changed and enter is pressed.
-		myId = self.findWhich('P2')
-		print(self.FindWindowById(myId).GetLineText(0)) #This is to test if it works
+		myId = self.findWhich('P1')
+		self.P1 = self.FindWindowById(myId).GetLineText(0)
+		print('P1',self.P1)
 		event.Skip()
 	
 	def onVal_TI_V1( self, event ):
+		myId = self.findWhich('V1')
+		self.V1 = self.FindWindowById(myId).GetLineText(0)
+		print('V1',self.V1)
 		event.Skip()
-	
+
+	def onVal_TI_v1( self, event ):
+		myId = self.findWhich('v1')
+		self.v1 = self.FindWindowById(myId).GetLineText(0)
+		print('v1',self.v1)
+		event.Skip()
+
+	def onVal_TI_T1( self, event ):
+		myId = self.findWhich('T1')
+		self.T1 = self.FindWindowById(myId).GetLineText(0)
+		print('T1',self.T1)
+		event.Skip()
+
+	def onVal_TI_u1( self, event ):
+		myId = self.findWhich('u1')
+		self.u1 = self.FindWindowById(myId).GetLineText(0)
+		print('u1',self.u1)
+		event.Skip()
+
+	def onVal_TI_hi( self, event ):
+		myId = self.findWhich('hi')
+		self.hi = self.FindWindowById(myId).GetLineText(0)
+		print('hi',self.hi)
+		event.Skip()
+
+	def onVal_TI_s1( self, event ):
+		myId = self.findWhich('s1')
+		self.s1 = self.FindWindowById(myId).GetLineText(0)
+		print('s1',self.s1)
+		event.Skip()
+
+	def onVal_TI_si( self, event ):
+		myId = self.findWhich('si')
+		self.si = self.FindWindowById(myId).GetLineText(0)
+		print('si',self.si)
+		event.Skip()
+
+	def onVal_TI_x1( self, event ):
+		myId = self.findWhich('x1')
+		self.x1 = self.FindWindowById(myId).GetLineText(0)
+		print('x1',self.x1)
+		event.Skip()
+
+	def onVal_TI_m1( self, event ):
+		myId = self.findWhich('m1')
+		self.m1 = self.FindWindowById(myId).GetLineText(0)
+		print('m1',self.m1)
+		event.Skip()
+
+	def onVal_TI_mi( self, event ):
+		myId = self.findWhich('mi')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('mi',self.mi)
+		event.Skip()
+
+#The State 2 Variable Conrollers
 	def onVal_TI_P2( self, event ):
+		myId = self.findWhich('P2')
+		self.P2 = self.FindWindowById(myId).GetLineText(0)
+		print('P2',self.P2)
 		event.Skip()
 	
 	def onVal_TI_V2( self, event ):
+		myId = self.findWhich('V2')
+		self.V2 = self.FindWindowById(myId).GetLineText(0)
+		print('V2',self.V2)
 		event.Skip()
-	
+
+	def onVal_TI_v2( self, event ):
+		myId = self.findWhich('v2')
+		self.v2 = self.FindWindowById(myId).GetLineText(0)
+		print('v2',self.v2)
+		event.Skip()
+
+	def onVal_TI_T2( self, event ):
+		myId = self.findWhich('T2')
+		self.T2  = self.FindWindowById(myId).GetLineText(0)
+		print('T2',self.T2)
+		event.Skip()
+
+	def onVal_TI_u2( self, event ):
+		myId = self.findWhich('u2')
+		self.u2 = self.FindWindowById(myId).GetLineText(0)
+		print('u2',self.u2)
+		event.Skip()
+
+	def onVal_TI_he( self, event ):
+		myId = self.findWhich('he')
+		self.he = self.FindWindowById(myId).GetLineText(0)
+		print('he',self.he)
+		event.Skip()
+
+	def onVal_TI_s2( self, event ):
+		myId = self.findWhich('s2')
+		self.s2 = self.FindWindowById(myId).GetLineText(0)
+		print('s2',self.s2)
+		event.Skip()
+
+	def onVal_TI_se( self, event ):
+		myId = self.findWhich('se')
+		self.se = self.FindWindowById(myId).GetLineText(0)
+		print('se',self.se)
+		event.Skip()
+
+	def onVal_TI_x2( self, event ):
+		myId = self.findWhich('x2')
+		self.x2 = self.FindWindowById(myId).GetLineText(0)
+		print('x2',self.x2)
+		event.Skip()
+
+	def onVal_TI_m2( self, event ):
+		myId = self.findWhich('m2')
+		self.m2 = self.FindWindowById(myId).GetLineText(0)
+		print('m2',self.m2)
+		event.Skip()
+
+	def onVal_TI_me( self, event ):
+		myId = self.findWhich('me')
+		self.me = self.FindWindowById(myId).GetLineText(0)
+		print('me',self.me)
+		event.Skip()
+
+#The Other Variable Controllers
 	def onVal_TI_W( self, event ):
+		myId = self.findWhich('W')
+		self.W = self.FindWindowById(myId).GetLineText(0)
+		print('W',self.W)
 		event.Skip()
 	
 	def onVal_TI_Q( self, event ):
+		myId = self.findWhich('Q')
+		self.Q = self.FindWindowById(myId).GetLineText(0)
+		print('Q',self.Q)
 		event.Skip()
 
+	def onVal_TI_k( self, event ):
+		myId = self.findWhich('k')
+		self.k = self.FindWindowById(myId).GetLineText(0)
+		print('k',self.k)
+		event.Skip()
+
+	def onVal_TI_Cp( self, event ):
+		myId = self.findWhich('Cp')
+		self.Cp = self.FindWindowById(myId).GetLineText(0)
+		print('Cp',self.Cp)
+		event.Skip()
+
+	def onVal_TI_Cv( self, event ):
+		myId = self.findWhich('Cv')
+		self.Cv = self.FindWindowById(myId).GetLineText(0)
+		print('Cv',self.Cv)
+		event.Skip()
+
+	def onVal_TI_roe( self, event ):
+		myId = self.findWhich('roe')
+		self.roe = self.FindWindowById(myId).GetLineText(0)
+		print('roe',self.roe)
+		event.Skip()
+
+	def onVal_TI_R( self, event ):
+		myId = self.findWhich('R')
+		self.R = self.FindWindowById(myId).GetLineText(0)
+		print('R',self.R)
+		event.Skip()
+
+#The button at the end controller
 	def onBtnClick_ContinueToResults( self, event ):
+		print('continue')
 		event.Skip()
 
 if __name__ == '__main__':
