@@ -132,14 +132,14 @@ class LogicThermoInput(Frm_ThermoInput):
 			eventName = 'onVal_TI_'+ str(self.inputList[1][i])
 			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
 			unitsName = 'onUnits_TI_'+ str(self.inputList[1][i])
-			self.FindWindowById(2500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
+			self.FindWindowById(3000+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
 		
 		for i in range(len(self.inputList[2])):
 			#print(1500+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[2][i])
 			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
 			unitsName = 'onUnits_TI_'+ str(self.inputList[2][i])
-			self.FindWindowById(2500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
+			self.FindWindowById(3500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
 
 	def findWhich(self,item):
 		"""
@@ -165,7 +165,7 @@ class LogicThermoInput(Frm_ThermoInput):
 				if item == self.inputList[2][i]: 
 					answer = 1500+i
 					break
-
+		print(answer)
 		return answer
 
 	def findUnits(self,var):
@@ -259,6 +259,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UP1 = self.FindWindowById(myId).GetString(n)
 		print('P1 Units',self.UP1)
+		print('hi')
 		event.Skip()
 	
 	def onVal_TI_V1( self, event ):
@@ -710,11 +711,12 @@ class LogicThermoInput(Frm_ThermoInput):
 #The button at the end controller
 	def onBtnClick_ContinueToResults( self, event ):
 		print('continue')
+		print(self.UP2)
 		#The args are split up for ease of reading it and ease of changing it.
-		args = [self.P1,self.V1,self.v1,self.T1,self.u1,self.hi,self.si,self.s1,self.x1,self.m1,self.mi]
-		args.extend([self.P2,self.V2,self.v2,self.T2,self.u2,self.he,self.se,self.s2,self.x2,self.m2,self.me])
-		args.extend([self.W,self.Q,self.k,self.Cp,self.Cv,self.roe,self.R])
-		LogicThermoEquations(self.parent,*args).Show()
+	#	args = [self.P1,self.V1,self.v1,self.T1,self.u1,self.hi,self.si,self.s1,self.x1,self.m1,self.mi]
+	#	args.extend([self.P2,self.V2,self.v2,self.T2,self.u2,self.he,self.se,self.s2,self.x2,self.m2,self.me])
+	#	args.extend([self.W,self.Q,self.k,self.Cp,self.Cv,self.roe,self.R])
+	#	LogicThermoEquations(self.parent,*args).Show()
 		#after the calculator runs, show the next frame and destroy this one.
 		event.Skip()
 
