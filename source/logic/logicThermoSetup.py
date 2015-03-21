@@ -117,45 +117,45 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.inputList[2].extend(['roe'])
 		if self.system == 'Steady':
 			self.zeroList.extend(['m2','m1','u2','u1','s2','s1'])
-			self.inputList[0].extend(['P1','ui','si','mi','x1'])
-			self.inputList[1].extend(['P2','ue','se','me','x2'])
+			self.inputList[0].extend(['P1','hi','si','mi','x1'])
+			self.inputList[1].extend(['P2','he','se','me','x2'])
 			self.inputList[2].extend(['roe'])
 		if self.system == 'Unsteady':
-			self.inputList[0].extend(['P1','u1','s1','m1','ui','si','mi','x1'])
-			self.inputList[1].extend(['P2','u2','s2','m2','ue','se','me','x2'])
+			self.inputList[0].extend(['P1','u1','s1','m1','hi','si','mi','x1'])
+			self.inputList[1].extend(['P2','u2','s2','m2','he','se','me','x2'])
 			self.inputList[2].extend(['roe'])
 
 		if self.container == 'Rigid':
-			self.zeroList(['V2','V1','v2','v1','pe: h','pi: h','p2: h','p1:h ','ke: v','ki: v','k2: v','k1: v'])
+			self.zeroList.extend(['V2','V1','v2','v1','pe: h','pi: h','p2: h','p1:h ','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Piston':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Membrane':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Nozzle':
 			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h'])
-			self.inputList[0].extend(['ki: v','k1: v','V1','v1'])
-			self.inputList[1].extend(['ke: v','k2: v','V2','v2'])
+			self.inputList[0].extend(['ki_v','k1_v','V1','v1'])
+			self.inputList[1].extend(['ke_v','k2_v','V2','v2'])
 		if self.container == 'Turbine':
 			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h'])
-			self.inputList[0].extend(['ki: v','k1: v','V1','v1'])
-			self.inputList[1].extend(['ke: v','k2: v','V2','v2'])
+			self.inputList[0].extend(['ki_v','k1_v','V1','v1'])
+			self.inputList[1].extend(['ke_v','k2_v','V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Mixing':
-			self.zeroList.extend(['W','pe: h','pi: h','p2': h,'p1: h','ke: v','ki: v','k2: v','k1: v'])
+			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 		if self.container == 'HeatExch':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
 		
 		if self.valve == 'Valve': #make it smart with the containers. Some modifications may have to be done to the .kv file. Example: Heat Exchangers don't have valves.
-			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
+			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 
@@ -165,7 +165,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.inputList[2].extend(['Q'])
 		
 		if self.etc2 == 'Isothermal':
-			self.inputList[0].extend(['T'])
+			self.inputList[0].extend(['T1'])
 		else:
 			self.inputList[0].extend(['T1'])
 			self.inputList[1].extend(['T2'])

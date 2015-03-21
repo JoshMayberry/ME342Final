@@ -204,6 +204,30 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('mi',self.mi)
 		event.Skip()
 
+	def onVal_TI_pi_h( self, event ):
+		myId = self.findWhich('pi_h')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('pi_h',self.mi)
+		event.Skip()
+
+	def onVal_TI_p1_h( self, event ):
+		myId = self.findWhich('p1_h')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('p1_h',self.mi)
+		event.Skip()
+
+	def onVal_TI_ki_v( self, event ):
+		myId = self.findWhich('ki_v')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('ki_v',self.mi)
+		event.Skip()
+
+	def onVal_TI_k1_v( self, event ):
+		myId = self.findWhich('k1_v')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('k1_v',self.mi)
+		event.Skip()
+
 #The State 2 Variable Conrollers
 	def onVal_TI_P2( self, event ):
 		myId = self.findWhich('P2')
@@ -271,6 +295,30 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('me',self.me)
 		event.Skip()
 
+	def onVal_TI_pe_h( self, event ):
+		myId = self.findWhich('pe_h')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('pe_h',self.mi)
+		event.Skip()
+
+	def onVal_TI_p2_h( self, event ):
+		myId = self.findWhich('p2_h')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('p2_h',self.mi)
+		event.Skip()
+
+	def onVal_TI_ke_v( self, event ):
+		myId = self.findWhich('ke_v')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('ke_v',self.mi)
+		event.Skip()
+
+	def onVal_TI_k2_v( self, event ):
+		myId = self.findWhich('k2_v')
+		self.mi = self.FindWindowById(myId).GetLineText(0)
+		print('k2_v',self.mi)
+		event.Skip()
+
 #The Other Variable Controllers
 	def onVal_TI_W( self, event ):
 		myId = self.findWhich('W')
@@ -300,6 +348,12 @@ class LogicThermoInput(Frm_ThermoInput):
 		myId = self.findWhich('Cv')
 		self.Cv = self.FindWindowById(myId).GetLineText(0)
 		print('Cv',self.Cv)
+		event.Skip()
+
+	def onVal_TI_Cavg( self, event ):
+		myId = self.findWhich('Cavg')
+		self.Cv = self.FindWindowById(myId).GetLineText(0)
+		print('Cavg',self.Cv)
 		event.Skip()
 
 	def onVal_TI_roe( self, event ):
