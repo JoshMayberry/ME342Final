@@ -3,7 +3,7 @@ import wx
 class Frm_ThermoSetup ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 315,315 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 304,307 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		sz_ThermoSetup = wx.BoxSizer( wx.VERTICAL )
 		
@@ -105,6 +105,15 @@ class Frm_ThermoSetup ( wx.Frame ):
 		
 		self.btn_TS_Valve = wx.CheckBox( self, wx.ID_ANY, u"Valve", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sz_TI_Etc.Add( self.btn_TS_Valve, 0, wx.ALL, 5 )
+		
+		self.txt_TS_Units = wx.StaticText( self, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TS_Units.Wrap( -1 )
+		sz_TI_Etc.Add( self.txt_TS_Units, 0, wx.ALL, 5 )
+		
+		units_TS_ChooseChoices = ['Metric','English']
+		self.units_TS_Choose = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), units_TS_ChooseChoices, 0 )
+		self.units_TS_Choose.SetSelection( 0 )
+		sz_TI_Etc.Add( self.units_TS_Choose, 0, wx.ALL, 5 )
 		
 		
 		sz_TS_Setups.Add( sz_TI_Etc, 1, wx.EXPAND, 5 )
