@@ -19,7 +19,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		lengthList = [len(self.inputList[0]),len(self.inputList[1]),len(self.inputList[2])]
 		Lmax = np.array(lengthList).argmax()
 		n = lengthList[Lmax] #The length of the longest column
-		x = 510
+		x = 850
 		y = 36*(n+3) #n +2 for the title and +1 for the button
 		return [x,y]
 
@@ -39,9 +39,15 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the input box
 			valName = 'self.val_TI_'+ str(self.inputList[0][i])
 			valId = 500 + i #This is so I can find it later
-			valName = wx.TextCtrl( self, id = valId, value = wx.EmptyString, pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0  )
+			valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0  )
 			sz_TI_State1.Add( valName, 0, wx.ALL, 5 )
 
+			#Make the unit dropdown list
+			unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
+			unit_Choices = findUnits
+			unitName = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), unit_Choices, 0 )
+			unitName.SetSelection( 0 )
+			sz_TI_State1.Add( unitName, 0, wx.ALL, 5 )
 			#self.nameList.append(valName)
 			#print(valId)
 
@@ -63,9 +69,15 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the input box
 			valName = 'val_TI_'+ str(self.inputList[1][i])
 			valId = 1000 + i
-			self.valName = wx.TextCtrl( self, id = valId, value = wx.EmptyString, pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0 )
+			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 			sz_TI_State2.Add( self.valName, 0, wx.ALL, 5 )
 
+			#Make the unit dropdown list
+			unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
+			unit_Choices = findUnits
+			unitName = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), unit_Choices, 0 )
+			unitName.SetSelection( 0 )
+			sz_TI_State2.Add( unitName, 0, wx.ALL, 5 )
 			#self.nameList.append(valName)
 			#print(valId)
 
@@ -85,9 +97,15 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the input box
 			valName = 'val_TI_'+ str(self.inputList[2][i])
 			valId = 1500 + i
-			self.valName = wx.TextCtrl( self, id = valId, value = wx.EmptyString, pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0 )
+			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 			sz_TI_Other.Add( self.valName, 0, wx.ALL, 5 )
 
+			#Make the unit dropdown list
+			unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
+			unit_Choices = findUnits
+			unitName = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), unit_Choices, 0 )
+			unitName.SetSelection( 0 )
+			sz_TI_Other.Add( unitName, 0, wx.ALL, 5 )
 			#self.nameList.append(valName)
 			#print(valId)
 
@@ -135,6 +153,43 @@ class LogicThermoInput(Frm_ThermoInput):
 					break
 
 		return answer
+
+	def findUits(self,var):
+		"""
+			This finds the appropriate units to display for the given variable
+		"""
+		if 'P' in var:
+			#Acceleration Units (Metric)
+			unitList = ['m/s','cm/s']
+
+			#Acceleration Units (English)
+			unitList = ['ft/s']
+
+			#Area Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+			# Units
+			unitList = []
+
+		return unitList
 
 #The State 1 Variable Controllers
 	def onVal_TI_P1( self, event ):

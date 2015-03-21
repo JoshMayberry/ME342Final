@@ -17,11 +17,18 @@ class Frm_ThermoInput ( wx.Frame ):
 		sz_ThermoInput_Inputs = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_ThermoInput_Inputs.SetFlexibleDirection( wx.BOTH )
 		sz_ThermoInput_Inputs.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+		#This is the spacer
+			#You Cannot add the same spacer to the same sizer twice, so you need multiple ones.
+		self.txt_TI_spacer1 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer1.Wrap( -1 )
+		self.txt_TI_spacer2 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer2.Wrap( -1 )
 		
 #The inputs
 	#The input for State 1 sizer starts here
-		##Setup the title and spacer
-		sz_TI_State1 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		##Setup the title
+		sz_TI_State1 = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_State1.SetFlexibleDirection( wx.BOTH )
 		sz_TI_State1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -29,17 +36,17 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_State1, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer1 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer1.Wrap( -1 )
+		#Setup the spacers
 		sz_TI_State1.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
+		sz_TI_State1.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
 		
 		##Generate all the State 1 input boxes
 		self.CreateState1(sz_TI_State1)		
 		sz_ThermoInput_Inputs.Add( sz_TI_State1, 1, wx.EXPAND, 5 )
 
 	#The input for State 2 sizer starts here
-		##Setup the title and spacer
-		sz_TI_State2 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		##Setup the title
+		sz_TI_State2 = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_State2.SetFlexibleDirection( wx.BOTH )
 		sz_TI_State2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -47,8 +54,8 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_State2, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer2 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer2.Wrap( -1 )
+		#Setup the spacers
+		sz_TI_State2.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
 		sz_TI_State2.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
 		
 		##Generate all the State 2 input boxes
@@ -56,8 +63,8 @@ class Frm_ThermoInput ( wx.Frame ):
 		sz_ThermoInput_Inputs.Add( sz_TI_State2, 1, wx.EXPAND, 5 )
 		
 	#The input for Other sizer starts here
-		##Setup the title and spacer
-		sz_TI_Other = wx.FlexGridSizer( 0, 2, 0, 0 )
+		##Setup the title
+		sz_TI_Other = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_Other.SetFlexibleDirection( wx.BOTH )
 		sz_TI_Other.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -65,9 +72,9 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_Other.Wrap( -1 )
 		sz_TI_Other.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer3 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer3.Wrap( -1 )
-		sz_TI_Other.Add( self.txt_TI_spacer3, 0, wx.ALL, 5 )
+		#Setup the spacers
+		sz_TI_Other.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
+		sz_TI_Other.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
 		
 		##Generate all the Other input boxes
 		self.CreateOther(sz_TI_Other)

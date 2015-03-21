@@ -17,7 +17,7 @@ import wx.xrc
 class Frm_Subject ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 345,115 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 345,135 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -278,7 +278,7 @@ class Frm_ThermoSetup ( wx.Frame ):
 class Frm_ThermoInput ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 856,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -292,7 +292,7 @@ class Frm_ThermoInput ( wx.Frame ):
 		sz_ThermoInput_Inputs.SetFlexibleDirection( wx.BOTH )
 		sz_ThermoInput_Inputs.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		sz_TI_State1 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sz_TI_State1 = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_State1.SetFlexibleDirection( wx.BOTH )
 		sz_TI_State1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -300,28 +300,42 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_State1, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer1 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer1.Wrap( -1 )
-		sz_TI_State1.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
+		self.txt_TI_spacer11 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer11.Wrap( -1 )
+		sz_TI_State1.Add( self.txt_TI_spacer11, 0, wx.ALL, 5 )
+		
+		self.txt_TI_spacer12 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer12.Wrap( -1 )
+		sz_TI_State1.Add( self.txt_TI_spacer12, 0, wx.ALL, 5 )
 		
 		self.txt_TI_P1 = wx.StaticText( self, wx.ID_ANY, u"P1", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_P1, 0, wx.ALL, 5 )
 		
-		self.val_TI_P1 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.val_TI_P1 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 		sz_TI_State1.Add( self.val_TI_P1, 0, wx.ALL, 5 )
+		
+		unit_TI_P1Choices = []
+		self.unit_TI_P1 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), unit_TI_P1Choices, 0 )
+		self.unit_TI_P1.SetSelection( 0 )
+		sz_TI_State1.Add( self.unit_TI_P1, 0, wx.ALL, 5 )
 		
 		self.txt_TI_V1 = wx.StaticText( self, wx.ID_ANY, u"V1", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_V1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_V1, 0, wx.ALL, 5 )
 		
-		self.val_TI_V1 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.val_TI_V1 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 		sz_TI_State1.Add( self.val_TI_V1, 0, wx.ALL, 5 )
+		
+		unit_TI_V1Choices = []
+		self.unit_TI_V1 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), unit_TI_V1Choices, 0 )
+		self.unit_TI_V1.SetSelection( 0 )
+		sz_TI_State1.Add( self.unit_TI_V1, 0, wx.ALL, 5 )
 		
 		
 		sz_ThermoInput_Inputs.Add( sz_TI_State1, 1, wx.EXPAND, 5 )
 		
-		sz_TI_State2 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sz_TI_State2 = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_State2.SetFlexibleDirection( wx.BOTH )
 		sz_TI_State2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -329,28 +343,42 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_State2, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer2 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer2.Wrap( -1 )
-		sz_TI_State2.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
+		self.txt_TI_spacer21 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer21.Wrap( -1 )
+		sz_TI_State2.Add( self.txt_TI_spacer21, 0, wx.ALL, 5 )
+		
+		self.txt_TI_spacer22 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer22.Wrap( -1 )
+		sz_TI_State2.Add( self.txt_TI_spacer22, 0, wx.ALL, 5 )
 		
 		self.txt_TI_P2 = wx.StaticText( self, wx.ID_ANY, u"P2", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_P2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_P2, 0, wx.ALL, 5 )
 		
-		self.val_TI_P2 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.val_TI_P2 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 		sz_TI_State2.Add( self.val_TI_P2, 0, wx.ALL, 5 )
+		
+		unit_TI_P2Choices = []
+		self.unit_TI_P2 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), unit_TI_P2Choices, 0 )
+		self.unit_TI_P2.SetSelection( 0 )
+		sz_TI_State2.Add( self.unit_TI_P2, 0, wx.ALL, 5 )
 		
 		self.txt_TI_V2 = wx.StaticText( self, wx.ID_ANY, u"V2", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_V2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_V2, 0, wx.ALL, 5 )
 		
-		self.val_TI_V2 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.val_TI_V2 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 		sz_TI_State2.Add( self.val_TI_V2, 0, wx.ALL, 5 )
+		
+		m_choice4Choices = []
+		self.m_choice4 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), m_choice4Choices, 0 )
+		self.m_choice4.SetSelection( 0 )
+		sz_TI_State2.Add( self.m_choice4, 0, wx.ALL, 5 )
 		
 		
 		sz_ThermoInput_Inputs.Add( sz_TI_State2, 1, wx.EXPAND, 5 )
 		
-		sz_TI_Other = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sz_TI_Other = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_Other.SetFlexibleDirection( wx.BOTH )
 		sz_TI_Other.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -358,23 +386,37 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_Other.Wrap( -1 )
 		sz_TI_Other.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer3 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer3.Wrap( -1 )
-		sz_TI_Other.Add( self.txt_TI_spacer3, 0, wx.ALL, 5 )
+		self.txt_TI_spacer31 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer31.Wrap( -1 )
+		sz_TI_Other.Add( self.txt_TI_spacer31, 0, wx.ALL, 5 )
+		
+		self.txt_TI_spacer32 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer32.Wrap( -1 )
+		sz_TI_Other.Add( self.txt_TI_spacer32, 0, wx.ALL, 5 )
 		
 		self.txt_TI_W = wx.StaticText( self, wx.ID_ANY, u"W", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_W.Wrap( -1 )
 		sz_TI_Other.Add( self.txt_TI_W, 0, wx.ALL, 5 )
 		
-		self.val_TI_W = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.val_TI_W = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 		sz_TI_Other.Add( self.val_TI_W, 0, wx.ALL, 5 )
+		
+		m_choice5Choices = []
+		self.m_choice5 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), m_choice5Choices, 0 )
+		self.m_choice5.SetSelection( 0 )
+		sz_TI_Other.Add( self.m_choice5, 0, wx.ALL, 5 )
 		
 		self.txt_TI_Q = wx.StaticText( self, wx.ID_ANY, u"Q", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_Q.Wrap( -1 )
 		sz_TI_Other.Add( self.txt_TI_Q, 0, wx.ALL, 5 )
 		
-		self.val_TI_Q = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.val_TI_Q = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 		sz_TI_Other.Add( self.val_TI_Q, 0, wx.ALL, 5 )
+		
+		m_choice6Choices = []
+		self.m_choice6 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 60,-1 ), m_choice6Choices, 0 )
+		self.m_choice6.SetSelection( 0 )
+		sz_TI_Other.Add( self.m_choice6, 0, wx.ALL, 5 )
 		
 		
 		sz_ThermoInput_Inputs.Add( sz_TI_Other, 1, wx.EXPAND, 5 )
@@ -393,6 +435,7 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		# Connect Events
 		self.val_TI_P1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
+		self.unit_TI_P1.Bind( wx.EVT_CHOICE, self.onUnit_Chose )
 		self.val_TI_V1.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_V1 )
 		self.val_TI_P2.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P2 )
 		self.val_TI_V2.Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_V2 )
@@ -406,6 +449,9 @@ class Frm_ThermoInput ( wx.Frame ):
 	
 	# Virtual event handlers, overide them in your derived class
 	def onVal_TI_P1( self, event ):
+		event.Skip()
+	
+	def onUnit_Chose( self, event ):
 		event.Skip()
 	
 	def onVal_TI_V1( self, event ):
