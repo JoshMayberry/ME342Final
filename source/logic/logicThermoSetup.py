@@ -12,7 +12,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		self.medium,self.system,self.container = 'IdealGas','Closed','Rigid'
 		self.etc1,self.etc2,self.etc3,self.etc4,self.etc5,self.valve = ('N/A',)*6
 		self.W,self.V2,self.V1,self.v2,self.v1,self.roe,self.Q,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1,self.m2,self.m1,self.u2,self.u1,self.s2,self.s1,self.se,self.si,self.T,self.k,self.Cp,self.Cv,self.Cavg = (np.nan,)*28
-		self.inputList = [[],[],[]]
+		self.inputList,self.zeroList = [[],[],[]],[]
 		#Build GUI
 		Frm_ThermoSetup.__init__(self, parent)
 		
@@ -111,12 +111,12 @@ class LogicThermoSetup(Frm_ThermoSetup):
             #Give them a scrollable dropdown list of gases to choose from
 
 		if self.system == 'Closed':
-			self.me,self.mi,self.hi,self.he,self.si,self.se = (0,)*6
+			self.zeroList.extend(['me','mi','hi','he','si','se'])
 			self.inputList[0].extend(['P1','u1','s1','m1','x1'])
 			self.inputList[1].extend(['P2','u2','s2','m2','x2'])
 			self.inputList[2].extend(['roe'])
 		if self.system == 'Steady':
-			self.m2,self.m1,self.u2,self.u1,self.s2,self.s1 = (0,)*6
+			self.zeroList.extend(['m2','m1','u2','u1','s2','s1'])
 			self.inputList[0].extend(['P1','ui','si','mi','x1'])
 			self.inputList[1].extend(['P2','ue','se','me','x2'])
 			self.inputList[2].extend(['roe'])
@@ -126,41 +126,41 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.inputList[2].extend(['roe'])
 
 		if self.container == 'Rigid':
-			self.V2,self.V1,self.v2,self.v1,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*12
+			self.zeroList(['V2','V1','v2','v1','pe: h','pi: h','p2: h','p1:h ','ke: v','ki: v','k2: v','k1: v'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Piston':
-			self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*8
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Membrane':
-			self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*8
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Nozzle':
-			self.W,self.pe,self.pi,self.p2,self.p1 = (0,)*5
-			self.inputList[0].extend(['ki','k1','V1','v1'])
-			self.inputList[1].extend(['ke','k2','V2','v2'])
+			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h'])
+			self.inputList[0].extend(['ki: v','k1: v','V1','v1'])
+			self.inputList[1].extend(['ke: v','k2: v','V2','v2'])
 		if self.container == 'Turbine':
-			self.pe,self.pi,self.p2,self.p1 = (0,)*4
-			self.inputList[0].extend(['ki','k1','V1','v1'])
-			self.inputList[1].extend(['ke','k2','V2','v2'])
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h'])
+			self.inputList[0].extend(['ki: v','k1: v','V1','v1'])
+			self.inputList[1].extend(['ke: v','k2: v','V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Mixing':
-			self.W,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*9
+			self.zeroList.extend(['W','pe: h','pi: h','p2': h,'p1: h','ke: v','ki: v','k2: v','k1: v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 		if self.container == 'HeatExch':
-			self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*8
+			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
 		
 		if self.valve == 'Valve': #make it smart with the containers. Some modifications may have to be done to the .kv file. Example: Heat Exchangers don't have valves.
-			self.W,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*9
+			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h','ke: v','ki: v','k2: v','k1: v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 
 		if self.etc1 == 'Adiabadic':
-			self.Q = (0,)*1 #Make it smart with the adiabatic. Maybe it confirms if they don't choose it for a Turbine, or if they do for a Heat Exchanger.
+			self.zeroList.extend(['Q']) #Make it smart with the adiabatic. Maybe it confirms if they don't choose it for a Turbine, or if they do for a Heat Exchanger.
 		else:
 			self.inputList[2].extend(['Q'])
 		
@@ -175,7 +175,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		if self.etc4 == 'Polytropic':
 			self.inputList[2].extend(['k','Cp','Cv','Cavg'])
 		else:
-			self.k,self.Cp,self.Cv,self.Cavg = (0,)*4
+			self.zeroList.extend(['k','Cp','Cv','Cavg'])
 
 		args = self.inputList
 		LogicThermoInput(self.parent,*args).Show()

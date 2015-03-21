@@ -1,5 +1,6 @@
 import wx
 from ..views import Frm_ThermoInput #Needed to communicate with the frame
+from .logicThermoCalculator import LogicThermoCalculator #Needed to do the calculations before showing the next screen.
 import numpy as np
 
 class LogicThermoInput(Frm_ThermoInput):
@@ -316,6 +317,12 @@ class LogicThermoInput(Frm_ThermoInput):
 #The button at the end controller
 	def onBtnClick_ContinueToResults( self, event ):
 		print('continue')
+		#The args are split up for ease of reading it and ease of changing it.
+		args = [self.P1,self.V1,self.v1,self.T1,self.u1,self.hi,self.si,self.s1,self.x1,self.m1,self.mi]
+		args.extend([self.P2,self.V2,self.v2,self.T2,self.u2,self.he,self.se,self.s2,self.x2,self.m2,self.me])
+		args.extend([self.W,self.Q,self.k,self.Cp,self.Cv,self.roe,self.R])
+		LogicThermoEquations(self.parent,*args).Show()
+		#after the calculator runs, show the next frame and destroy this one.
 		event.Skip()
 
 if __name__ == '__main__':
