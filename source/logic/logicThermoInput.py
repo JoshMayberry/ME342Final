@@ -76,8 +76,8 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up Other')
 		for i in range(len(self.inputList[2])):
 			#Make the text label
-			txtName = 'txt_TI_'+ str(self.inputList[0][i])
-			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[0][i], wx.DefaultPosition, wx.DefaultSize, 0  )
+			txtName = 'txt_TI_'+ str(self.inputList[2][i])
+			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[2][i], wx.DefaultPosition, wx.DefaultSize, 0  )
 			self.txtName.Wrap( -1 )
 			sz_TI_Other.Add( self.txtName, 0, wx.ALL, 5 )
 
@@ -97,17 +97,16 @@ class LogicThermoInput(Frm_ThermoInput):
 		#self.FindWindowById(999).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
 		for i in range(len(self.inputList[0])):
 			#print(500+i)
-			eventName = 'self.onVal_TI_'+ str(self.inputList[0][i])
-			print(eventName)
-			self.FindWindowById(500+i).Bind( wx.EVT_TEXT_ENTER, exec(eventName))
+			eventName = 'onVal_TI_'+ str(self.inputList[0][i])
+			self.FindWindowById(500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
 		for i in range(len(self.inputList[1])):
 			#print(1000+i)
-			self.eventName = 'onVal_TI_'+ str(self.inputList[1][i])
-			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#eventName )
+			eventName = 'onVal_TI_'+ str(self.inputList[1][i])
+			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
 		for i in range(len(self.inputList[2])):
 			#print(1500+i)
-			self.eventName = 'onVal_TI_'+ str(self.inputList[2][i])
-			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1)#eventName )
+			eventName = 'onVal_TI_'+ str(self.inputList[2][i])
+			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
 
 	def findWhich(self,item):
 		"""

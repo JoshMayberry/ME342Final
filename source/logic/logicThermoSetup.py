@@ -11,7 +11,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		#Initialize Variables
 		self.medium,self.system,self.container = 'IdealGas','Closed','Rigid'
 		self.etc1,self.etc2,self.etc3,self.etc4,self.etc5,self.valve = ('N/A',)*6
-		self.W,self.Wdot,self.V2,self.V1,self.v2,self.v1,self.roe,self.Q,self.Qdot,self.m2dot,self.m1dot,self.midot,self.medot,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1,self.m2,self.m1,self.u2,self.u1,self.s2,self.s1,self.se,self.si,self.T,self.k,self.Cp,self.Cv,self.Cavg = (np.nan,)*34
+		self.W,self.V2,self.V1,self.v2,self.v1,self.roe,self.Q,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1,self.m2,self.m1,self.u2,self.u1,self.s2,self.s1,self.se,self.si,self.T,self.k,self.Cp,self.Cv,self.Cavg = (np.nan,)*28
 		self.inputList = [[],[],[]]
 		#Build GUI
 		Frm_ThermoSetup.__init__(self, parent)
@@ -126,43 +126,43 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.inputList[2].extend(['roe'])
 
 		if self.container == 'Rigid':
-			self.V2,self.V1,self.v2,self.v1,self.m2dot,self.m1dot,self.midot,self.medot,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*16
-			self.inputList[2].extend(['W','Wdot'])
+			self.V2,self.V1,self.v2,self.v1,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*12
+			self.inputList[2].extend(['W'])
 		if self.container == 'Piston':
 			self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*8
-			self.inputList[0].extend(['V1','v1','m1dot','midot'])
-			self.inputList[1].extend(['V2','v2','m2dot','medot'])
-			self.inputList[2].extend(['W','Wdot'])
+			self.inputList[0].extend(['V1','v1'])
+			self.inputList[1].extend(['V2','v2'])
+			self.inputList[2].extend(['W'])
 		if self.container == 'Membrane':
 			self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*8
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
-			self.inputList[2].extend(['W','Wdot'])
+			self.inputList[2].extend(['W'])
 		if self.container == 'Nozzle':
-			self.W,self.Wdot,self.pe,self.pi,self.p2,self.p1 = (0,)*6
+			self.W,self.pe,self.pi,self.p2,self.p1 = (0,)*5
 			self.inputList[0].extend(['ki','k1','V1','v1'])
 			self.inputList[1].extend(['ke','k2','V2','v2'])
 		if self.container == 'Turbine':
 			self.pe,self.pi,self.p2,self.p1 = (0,)*4
 			self.inputList[0].extend(['ki','k1','V1','v1'])
 			self.inputList[1].extend(['ke','k2','V2','v2'])
-			self.inputList[2].extend(['W','Wdot'])
+			self.inputList[2].extend(['W'])
 		if self.container == 'Mixing':
-			self.W,self.Wdot,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*10
+			self.W,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*9
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 		if self.container == 'HeatExch':
-			self.m2dot,self.m1dot,self.midot,self.medot,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*12
+			self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*8
 		
 		if self.valve == 'Valve': #make it smart with the containers. Some modifications may have to be done to the .kv file. Example: Heat Exchangers don't have valves.
-			self.W,self.Wdot,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*10
+			self.W,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1 = (0,)*9
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 
 		if self.etc1 == 'Adiabadic':
-			self.Q,self.Qdot = (0,)*2 #Make it smart with the adiabatic. Maybe it confirms if they don't choose it for a Turbine, or if they do for a Heat Exchanger.
+			self.Q = (0,)*1 #Make it smart with the adiabatic. Maybe it confirms if they don't choose it for a Turbine, or if they do for a Heat Exchanger.
 		else:
-			self.inputList[2].extend(['Q','Qdot'])
+			self.inputList[2].extend(['Q'])
 		
 		if self.etc2 == 'Isothermal':
 			self.inputList[0].extend(['T'])
