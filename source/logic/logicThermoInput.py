@@ -6,8 +6,11 @@ import numpy as np
 class LogicThermoInput(Frm_ThermoInput):
 	def __init__(self, parent,*args):
 		#Set variables
-		self.inputList = args #This is a list used to generate the text boxes
-		#self.nameList = [] #This is a list of the generated text boxes so events can be created for them.
+		self.inputList = args[0] #This is a list used to generate the text boxes
+		self.units = args[1] #This is wether the problem is in Metric or English Units
+		#self.nameList = [] #This is a list of the generated text boxes so you know the order the units are listed in.
+			#All 'nameList' things can be deleted if this does not show a use later on.
+
 		#Build GUI
 		print ("Building ", self.__class__)
 		Frm_ThermoInput.__init__(self, parent)
@@ -111,7 +114,7 @@ class LogicThermoInput(Frm_ThermoInput):
 
 	def CreateEvents(self):
 		x = 1
-		print('\n','hi')
+		print('Creating Events')
 		#Add an event to that box
 		#self.FindWindowById(999).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
 		for i in range(len(self.inputList[0])):
@@ -158,133 +161,78 @@ class LogicThermoInput(Frm_ThermoInput):
 		"""
 			This finds the appropriate units to display for the given variable
 		"""
-		if var in 'a':
-			#Acceleration Units (Metric)
-			unitList = ['m/s','cm/s']
+		if var in 'a': #Acceleration Units
+			if self.units == 0: unitList = ['m/s','cm/s']
+			else: unitList = ['ft/s','in/s']
 
-			#Acceleration Units (English)
-			unitList = ['ft/s','in/s']
+		elif 'A' in var: #Area Units
+			if self.units == 0: unitList = ['m2','cm2','mm2','km2']
+			else: unitList = ['ft2','in2']
 
-		elif 'A' in var:
-			#Area Units (Metric)
-			unitList = ['m2','cm2','mm2','km2']
+		elif 'roe' in var: #Density Units
+			if self.units == 0: unitList = ['kg/m3','g/cm3','kg/L']
+			else: unitList = ['lbm/ft3','lbm/in3']
 
-			#Area Units (English)
-			unitList = ['ft2','in2']
-
-		elif 'roe' in var:
-			#Density Units (Metric)
-			unitList = ['kg/m3','g/cm3','kg/L']
-
-			#Density Units (English)
-			unitList = ['lbm/ft3','lbm/in3']
-
-		elif ('W' in var) or ('Q' in var) or ('u' in var) or ('h' in var):
-			#Energy Units (Metric)
-			unitList = ['kJ','J','N*m','kWh','kPa*m3','kJ/kg','kJ/kmol','m2/s2','cal','Cal']
-
-			#Energy Units (English)
-			unitList = ['Btu','MMBTU','psia*ft3','lbf*ft','Btu/lbm','ft2/s2','therm']
+		elif ('W' in var) or ('Q' in var) or ('u' in var) or ('h' in var): #Energy Units
+			if self.units == 0: unitList = ['kJ','J','N*m','kWh','kPa*m3','kJ/kg','kJ/kmol','m2/s2','cal','Cal']
+			else: unitList = ['Btu','MMBTU','psia*ft3','lbf*ft','Btu/lbm','ft2/s2','therm']
 #?
-		elif 'F' in var:
-			#Force Units (Metric)
-			unitList = ['N','kg*m/s2','dyne','kgf']
-
-			#Force Units (English)
-			unitList = ['lbf','lbm*ft/s2']
+		elif 'F' in var: #Force Units
+			if self.units == 0: unitList = ['N','kg*m/s2','dyne','kgf']
+			else: unitList = ['lbf','lbm*ft/s2']
 #?
-		elif 'HF' in var:
-			#Heat Flux Units (Metric)
-			unitList = ['W/cm2','W/m2']
-
-			#Heat Flux Units (English)
-			unitList = ['Btu/h*ft2']
+		elif 'HF' in var: #Heat Flux Units
+			if self.units == 0: unitList = ['W/cm2','W/m2']
+			else: unitList = ['Btu/h*ft2']
 #?
-		elif 'HT' in var:
-			#Heat Transfer Coefficient Units (Metric)
-			unitList = ['W/m2*C','W/m2*K']
-
-			#Heat Transfer Coefficient Units (English)
-			unitList = ['Btu/h*ft2*F','Btu/h*ft2*R']
+		elif 'HT' in var: #Heat Transfer Coefficient Units
+			if self.units == 0: unitList = ['W/m2*C','W/m2*K']
+			else: unitList = ['Btu/h*ft2*F','Btu/h*ft2*R']
 #?
-		elif 'L' in var:
-			#Length Units (Metric)
-			unitList = ['m','cm','mm','nm','km']
+		elif 'L' in var: #Length Units
+			if self.units == 0: unitList = ['m','cm','mm','nm','km']
+			else: unitList = ['ft','in','yd','mile']
 
-			#Length Units (English)
-			unitList = ['ft','in','yd','mile']
-
-		elif 'm' in var:
-			#Mass Units (Metric)
-			unitList = ['kg','g','metric_ton']
-
-			#Mass Units (English)
-			unitList = ['lbm','oz','slug','short_ton']
+		elif 'm' in var: #Mass Units
+			if self.units == 0: unitList = ['kg','g','metric_ton']
+			else: unitList = ['lbm','oz','slug','short_ton']
 #?
-		elif 'Pow' in var:
-			#Power Units (Metric)
-			unitList = ['W','kW','J/s','hp']
+		elif 'Pow' in var: #Power Units
+			if self.units == 0: unitList = ['W','kW','J/s','hp']
+			else: unitList = ['Btu/h','Btu/min','Btu/s','lbf*ft/s','hp','boiler_hp','ton_of_ref']
 
-			#Power Units (English)
-			unitList = ['Btu/h','Btu/min','Btu/s','lbf*ft/s','hp','boiler_hp','ton_of_ref']
+		elif 'P' in var: #Pressure Units
+			if self.units == 0: unitList = ['Pa','kPa','MPa','N/m2','atm','bars','mm_Hg','kgf/cm2']
+			else: unitList = ['psi','psia','ksi','lbf/ft2','in Hg']
 
-		elif 'P' in var:
-			#Pressure Units (Metric)
-			unitList = ['Pa','kPa','MPa','N/m2','atm','bars','mm_Hg','kgf/cm2']
+		elif ('q' in var) or ('s' in var): #Specific Heat Units
+			if self.units == 0: unitList = ['kJ/kmol*C','kJ/kmol*K','kJ/kg*C','kJ/kg*K','J/g*C','J/g*K']
+			else: unitList = ['Btu/lbm*F','Btu/lbm*R','Btu/lbmol*F','Btu/lbmol*R']
 
-			#Pressure Units (Englsih)
-			unitList = ['psi','psia','ksi','lbf/ft2','in Hg']
+		elif ('v' in var) and ('_' not in var): #Specific Volume Units. The _ accounts for kenetic energy
+			if self.units == 0: unitList = ['m3/kg','L/kg','cm3/g']
+			else: unitList = ['ft3/lbm']
 
-		elif ('q' in var) or ('s' in var):
-			#Specific Heat Units (Metric)
-			unitList = ['kJ/kmol*C','kJ/kmol*K','kJ/kg*C','kJ/kg*K','J/g*C','J/g*K']
-
-			#Specific Heat Units (English)
-			unitList = ['Btu/lbm*F','Btu/lbm*R','Btu/lbmol*F','Btu/lbmol*R']
-
-		elif ('v' in var) and ('_' not in var): #The _ accounts for kenetic energy
-			#Specific Volume Units (Metric)
-			unitList = ['m3/kg','L/kg','cm3/g']
-
-			#Specific Volume Units (English)
-			unitList = ['ft3/lbm']
-
-		elif 'T' in var:
-			#Temperature Units (Metric)
-			unitList = ['C','K']
-
-			#Temperature Units (English)
-			unitList = ['F','R']
+		elif 'T' in var: #Temperature Units
+			if self.units == 0: unitList = ['C','K']
+			else: unitList = ['F','R']
 #?
-		elif 'TC' in var:
-			#Thermal Conductivity Units (Metric)
-			unitList = ['W/m*C','W/m*K']
+		elif 'TC' in var: #Thermal Conductivity Units
+			if self.units == 0: unitList = ['W/m*C','W/m*K']
+			else: unitList = ['Btu/h*ft*F','Btu/h*ft*R']
 
-			#Thermal Conductivity Units (English)
-			unitList = ['Btu/h*ft*F','Btu/h*ft*R']
+		elif '_v' in var: #Velocity Units
+			if self.units == 0: unitList = ['m/s','km/h']
+			else: unitList = ['ft/s','mi/h']
 
-		elif '_v' in var:
-			#Velocity Units (Metric)
-			unitList = ['m/s','km/h']
+		elif 'V' in var: #Volume Units
+			if self.units == 0: unitList = ['L','m3','cm3','cc']
+			else: unitList = ['in3','ft3','US_gal','fl_oz']
 
-			#Velocity Units (English)
-			unitList = ['ft/s','mi/h']
-
-		elif 'V' in var:
-			#Volume Units (Metric)
-			unitList = ['L','m3','cm3','cc']
-
-			#Volume Units (English)
-			unitList = ['in3','ft3','US_gal','fl_oz']
-
-		elif 'Vdot' in var:
-			#Volume Flow Rate Units (Metric)
-			unitList = ['m3/s','cm3/s','L/min','L/s']
-
-			#Volume Flow Rate Units (English)
-			unitList = ['gal/s','gal/min','ft3/s','ft3/min']
-		else:
-			unitList = ['unitless']
+		elif 'Vdot' in var: #Volume Flow Rate Units
+			if self.units == 0: unitList = ['m3/s','cm3/s','L/min','L/s']
+			else: unitList = ['gal/s','gal/min','ft3/s','ft3/min']
+		else: unitList = ['unitless']
 
 		return unitList
 

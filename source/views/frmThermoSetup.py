@@ -150,6 +150,7 @@ class Frm_ThermoSetup ( wx.Frame ):
 		self.btn_TS_Reversable.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Reversable )
 		self.btn_TS_Polytropic.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Polytropic )
 		self.btn_TS_Valve.Bind( wx.EVT_CHECKBOX, self.onBtnClick_Etc_Valve )
+		self.units_TS_Choose.Bind( wx.EVT_CHOICE, self.onUnits_TS_Choice )
 		self.btn_TS_Continue.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToInput )
 	
 	def __del__( self ):

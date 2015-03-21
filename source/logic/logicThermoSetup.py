@@ -13,6 +13,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		self.etc1,self.etc2,self.etc3,self.etc4,self.etc5,self.valve = ('N/A',)*6
 		self.W,self.V2,self.V1,self.v2,self.v1,self.roe,self.Q,self.pe,self.pi,self.p2,self.p1,self.ke,self.ki,self.k2,self.k1,self.m2,self.m1,self.u2,self.u1,self.s2,self.s1,self.se,self.si,self.T,self.k,self.Cp,self.Cv,self.Cavg = (np.nan,)*28
 		self.inputList,self.zeroList = [[],[],[]],[]
+		self.units = 0
 		#Build GUI
 		Frm_ThermoSetup.__init__(self, parent)
 		
@@ -97,6 +98,11 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.valve = 'Valve'
 		else: self.valve = 'N/A'
 		event.Skip()
+
+	def onUnits_TS_Choice(self,event):
+		"""0 = Metric; 1 = English"""
+		self.units = self.units_TS_Choose.GetSelection()
+		event.Skip()
 	
 	def onBtnClick_ContinueToInput( self, event ):
 		"""
@@ -177,7 +183,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		else:
 			self.zeroList.extend(['k','Cp','Cv','Cavg'])
 
-		args = self.inputList
+		args = self.inputList,self.units
 		LogicThermoInput(self.parent,*args).Show()
 		self.Destroy()
 		event.Skip()
