@@ -183,7 +183,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		else:
 			self.zeroList.extend(['k','Cp','Cv','Cavg'])
 
-		args = self.inputList,self.units
+		args = self.inputList,self.units, self.zeroList
 		LogicThermoInput(self.parent,*args).Show()
 		self.Destroy()
 		event.Skip()

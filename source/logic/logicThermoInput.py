@@ -8,12 +8,28 @@ class LogicThermoInput(Frm_ThermoInput):
 		#Set variables
 		self.inputList = args[0] #This is a list used to generate the text boxes
 		self.units = args[1] #This is wether the problem is in Metric or English Units
+		self.zeroList = args[2] #This is a list of all the units that are zero by default.
 		#self.nameList = [] #This is a list of the generated text boxes so you know the order the units are listed in.
-			#All 'nameList' things can be deleted if this does not show a use later on.
+			#Every 'nameList' thing can be deleted if this does not show a use later on.
+
+			#Also, get the box to inteligently pick which unit should be the default.
 
 		#Build GUI
 		print ("Building ", self.__class__)
 		Frm_ThermoInput.__init__(self, parent)
+
+		#Store Defaults in the system.
+		for j in range(3):
+			for i in range(len(self.inputList[j])):
+				#Set the default for the vars on the screen
+				setattr(self,self.inputList[j][i],'unknown')
+			for i in range(len(self.zeroList[j])):
+				#Set the zero vars as zero
+				setattr(self,self.zeroList[j][i],0)
+			for i in range(len(self.inputList[j])):
+				#Set the units for the vars on the screen.
+				unitEvent = 'self.onUnits_TI_'+self.inputList[j][i]+'(wx.EVT_CHOICE)'
+				exec(unitEvent)
 
 	def setSize(self):
 		"""
@@ -34,19 +50,19 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up State 1')
 		for i in range(len(self.inputList[0])):
 			#Make the text label
-			txtName = 'txt_TI_'+ str(self.inputList[0][i])
+			#txtName = 'txt_TI_'+ str(self.inputList[0][i])
 			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[0][i], wx.DefaultPosition, wx.DefaultSize, 0  )
 			self.txtName.Wrap( -1 )
 			sz_TI_State1.Add( self.txtName, 0, wx.ALL, 5 )
 
 			#Make the input box
-			valName = 'self.val_TI_'+ str(self.inputList[0][i])
+			#valName = 'self.val_TI_'+ str(self.inputList[0][i])
 			valId = 500 + i #This is so I can find it later
 			valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0  )
 			sz_TI_State1.Add( valName, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list
-			unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
+			#unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
 			unit_Choices = self.findUnits(self.inputList[0][i])
 			valId += 2000
 			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
@@ -65,19 +81,19 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up State 2')
 		for i in range(len(self.inputList[1])):
 			#Make the text label
-			txtName = 'txt_TI_'+ str(self.inputList[1][i])
+			#txtName = 'txt_TI_'+ str(self.inputList[1][i])
 			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[1][i], wx.DefaultPosition, wx.DefaultSize, 0 )
 			self.txtName.Wrap( -1 )
 			sz_TI_State2.Add( self.txtName, 0, wx.ALL, 5 )
 
 			#Make the input box
-			valName = 'val_TI_'+ str(self.inputList[1][i])
+			#valName = 'val_TI_'+ str(self.inputList[1][i])
 			valId = 1000 + i
 			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 			sz_TI_State2.Add( self.valName, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list
-			unitName = 'self.unit_TI_'+ str(self.inputList[1][i])
+			#unitName = 'self.unit_TI_'+ str(self.inputList[1][i])
 			unit_Choices = self.findUnits(self.inputList[1][i])
 			valId += 2000
 			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
@@ -94,19 +110,19 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up Other')
 		for i in range(len(self.inputList[2])):
 			#Make the text label
-			txtName = 'txt_TI_'+ str(self.inputList[2][i])
+			#txtName = 'txt_TI_'+ str(self.inputList[2][i])
 			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[2][i], wx.DefaultPosition, wx.DefaultSize, 0  )
 			self.txtName.Wrap( -1 )
 			sz_TI_Other.Add( self.txtName, 0, wx.ALL, 5 )
 
 			#Make the input box
-			valName = 'val_TI_'+ str(self.inputList[2][i])
+			#valName = 'val_TI_'+ str(self.inputList[2][i])
 			valId = 1500 + i
 			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 			sz_TI_Other.Add( self.valName, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list
-			unitName = 'self.unit_TI_'+ str(self.inputList[2][i])
+			#unitName = 'self.unit_TI_'+ str(self.inputList[2][i])
 			unit_Choices = self.findUnits(self.inputList[2][i])
 			valId += 2000
 			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
@@ -165,7 +181,7 @@ class LogicThermoInput(Frm_ThermoInput):
 				if item == self.inputList[2][i]: 
 					answer = 1500+i
 					break
-		print(answer)
+		#print(answer)
 		return answer
 
 	def findUnits(self,var):
@@ -259,8 +275,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UP1 = self.FindWindowById(myId).GetString(n)
 		print('P1 Units',self.UP1)
-		print('hi')
-		event.Skip()
+		#event.Skip()
 	
 	def onVal_TI_V1( self, event ):
 		myId = self.findWhich('V1')
@@ -272,7 +287,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UV1 = self.FindWindowById(myId).GetString(n)
 		print('V1 Units',self.UV1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_v1( self, event ):
 		myId = self.findWhich('v1')
@@ -284,7 +299,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uv1 = self.FindWindowById(myId).GetString(n)
 		print('v1 Units',self.Uv1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_T1( self, event ):
 		myId = self.findWhich('T1')
@@ -296,7 +311,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UT1 = self.FindWindowById(myId).GetString(n)
 		print('T1 Units',self.UT1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_u1( self, event ):
 		myId = self.findWhich('u1')
@@ -308,7 +323,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uu1 = self.FindWindowById(myId).GetString(n)
 		print('u1 Units',self.Uu1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_hi( self, event ):
 		myId = self.findWhich('hi')
@@ -320,7 +335,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uhi = self.FindWindowById(myId).GetSelection(n)
 		print(' Units',self.Uhi)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_s1( self, event ):
 		myId = self.findWhich('s1')
@@ -332,7 +347,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Us1 = self.FindWindowById(myId).GetString(n)
 		print('s1 Units',self.Us1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_si( self, event ):
 		myId = self.findWhich('si')
@@ -344,7 +359,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Usi = self.FindWindowById(myId).GetString(n)
 		print('si Units',self.Usi)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_x1( self, event ):
 		myId = self.findWhich('x1')
@@ -356,7 +371,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Ux1 = self.FindWindowById(myId).GetString(n)
 		print('x1 Units',self.Ux1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_m1( self, event ):
 		myId = self.findWhich('m1')
@@ -368,7 +383,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Um1 = self.FindWindowById(myId).GetString(n)
 		print('m1 Units',self.Um1)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_mi( self, event ):
 		myId = self.findWhich('mi')
@@ -380,7 +395,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Umi = self.FindWindowById(myId).GetString(n)
 		print('mi Units',self.Umi)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_pi_h( self, event ):
 		myId = self.findWhich('pi_h')
@@ -392,7 +407,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Upi_h = self.FindWindowById(myId).GetString(n)
 		print('pi_h Units',self.Upi_h)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_p1_h( self, event ):
 		myId = self.findWhich('p1_h')
@@ -404,7 +419,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Up1_h = self.FindWindowById(myId).GetString(n)
 		print('p1_h Units',self.Up1_h)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_ki_v( self, event ):
 		myId = self.findWhich('ki_v')
@@ -416,7 +431,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uki_v = self.FindWindowById(myId).GetString(n)
 		print('ki_v Units',self.Uki_v)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_k1_v( self, event ):
 		myId = self.findWhich('k1_v')
@@ -428,7 +443,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uk1_v = self.FindWindowById(myId).GetString(n)
 		print('k1_v Units',self.Uk1_v)
-		event.Skip()
+		#event.Skip()
 
 #The State 2 Variable Conrollers
 	def onVal_TI_P2( self, event ):
@@ -441,7 +456,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UP2 = self.FindWindowById(myId).GetString(n)
 		print('P2 Units',self.UP2)
-		event.Skip()
+		#event.Skip()
 	
 	def onVal_TI_V2( self, event ):
 		myId = self.findWhich('V2')
@@ -453,7 +468,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UV2 = self.FindWindowById(myId).GetString(n)
 		print('V2 Units',self.UV2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_v2( self, event ):
 		myId = self.findWhich('v2')
@@ -465,7 +480,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uv2 = self.FindWindowById(myId).GetString(n)
 		print('v2 Units',self.Uv2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_T2( self, event ):
 		myId = self.findWhich('T2')
@@ -477,7 +492,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UT2 = self.FindWindowById(myId).GetString(n)
 		print('T2 Units',self.UT2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_u2( self, event ):
 		myId = self.findWhich('u2')
@@ -489,7 +504,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uu2 = self.FindWindowById(myId).GetString(n)
 		print('u2 Units',self.Uu2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_he( self, event ):
 		myId = self.findWhich('he')
@@ -501,7 +516,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uhe = self.FindWindowById(myId).GetString(n)
 		print('he Units',self.Uhe)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_s2( self, event ):
 		myId = self.findWhich('s2')
@@ -513,7 +528,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Us2 = self.FindWindowById(myId).GetString(n)
 		print('s2 Units',self.Us2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_se( self, event ):
 		myId = self.findWhich('se')
@@ -525,7 +540,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Use = self.FindWindowById(myId).GetString(n)
 		print('se Units',self.Use)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_x2( self, event ):
 		myId = self.findWhich('x2')
@@ -537,7 +552,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Ux2 = self.FindWindowById(myId).GetString(n)
 		print('x2 Units',self.Ux2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_m2( self, event ):
 		myId = self.findWhich('m2')
@@ -549,7 +564,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Um2 = self.FindWindowById(myId).GetString(n)
 		print('m2 Units',self.Um2)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_me( self, event ):
 		myId = self.findWhich('me')
@@ -561,7 +576,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Ume = self.FindWindowById(myId).GetString(n)
 		print('me Units',self.Ume)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_pe_h( self, event ):
 		myId = self.findWhich('pe_h')
@@ -573,7 +588,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Upe_h = self.FindWindowById(myId).GetString(n)
 		print('pe_h Units',self.Upe_h)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_p2_h( self, event ):
 		myId = self.findWhich('p2_h')
@@ -585,7 +600,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Up2_h = self.FindWindowById(myId).GetString(n)
 		print('p2_h Units',self.Up2_h)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_ke_v( self, event ):
 		myId = self.findWhich('ke_v')
@@ -597,7 +612,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uke_v = self.FindWindowById(myId).GetString(n)
 		print('ke_v Units',self.Uke_v)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_k2_v( self, event ):
 		myId = self.findWhich('k2_v')
@@ -609,7 +624,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uk2_v = self.FindWindowById(myId).GetString()
 		print('k2_v Units',self.Uk2_v)
-		event.Skip()
+		#event.Skip()
 
 #The Other Variable Controllers
 	def onVal_TI_W( self, event ):
@@ -622,7 +637,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UW = self.FindWindowById(myId).GetString(n)
 		print('W Units',self.UW)
-		event.Skip()
+		#event.Skip()
 	
 	def onVal_TI_Q( self, event ):
 		myId = self.findWhich('Q')
@@ -634,7 +649,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UQ = self.FindWindowById(myId).GetString(n)
 		print('Q Units',self.UQ)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_k( self, event ):
 		myId = self.findWhich('k')
@@ -646,7 +661,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uk = self.FindWindowById(myId).GetString(n)
 		print('k Units',self.Uk)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_Cp( self, event ):
 		myId = self.findWhich('Cp')
@@ -658,7 +673,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UCp = self.FindWindowById(myId).GetString(n)
 		print('Cp Units',self.UCp)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_Cv( self, event ):
 		myId = self.findWhich('Cv')
@@ -670,7 +685,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UCv = self.FindWindowById(myId).GetString(n)
 		print('Cv Units',self.UCv)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_Cavg( self, event ):
 		myId = self.findWhich('Cavg')
@@ -682,7 +697,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UCavg = self.FindWindowById(myId).GetString(n)
 		print('Cavg Units',self.UCavg)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_roe( self, event ):
 		myId = self.findWhich('roe')
@@ -694,7 +709,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.Uroe = self.FindWindowById(myId).GetString(n)
 		print('roe Units',self.Uroe)
-		event.Skip()
+		#event.Skip()
 
 	def onVal_TI_R( self, event ):
 		myId = self.findWhich('R')
@@ -706,16 +721,22 @@ class LogicThermoInput(Frm_ThermoInput):
 		n = self.FindWindowById(myId).GetSelection()
 		self.UR = self.FindWindowById(myId).GetString(n)
 		print('R Units',self.UR)
-		event.Skip()
+		#event.Skip()
 
 #The button at the end controller
 	def onBtnClick_ContinueToResults( self, event ):
 		print('continue')
-		print(self.UP2)
+		#print(self.UP2)
 		#The args are split up for ease of reading it and ease of changing it.
-	#	args = [self.P1,self.V1,self.v1,self.T1,self.u1,self.hi,self.si,self.s1,self.x1,self.m1,self.mi]
-	#	args.extend([self.P2,self.V2,self.v2,self.T2,self.u2,self.he,self.se,self.s2,self.x2,self.m2,self.me])
-	#	args.extend([self.W,self.Q,self.k,self.Cp,self.Cv,self.roe,self.R])
+		#args = [[values],[units]]
+		args = [[self.P1,self.V1,self.v1,self.T1,self.u1,self.hi,self.si,self.s1,self.x1,self.m1,self.mi,self.p1_h,self.pi_h,self.k1_v,self.ki_v],[]]
+		args[0].extend([self.P2,self.V2,self.v2,self.T2,self.u2,self.he,self.se,self.s2,self.x2,self.m2,self.me,self.p2_h,self.pe_h,self.k2_v,self.ke_v])
+		args[0].extend([self.W,self.Q,self.k,self.Cp,self.Cv,self.roe,self.R])
+		
+		args[1].extend([self.UP1,self.UV1,self.Uv1,self.UT1,self.Uu1,self.Uhi,self.Usi,self.Us1,self.Ux1,self.Um1,self.Umi,self.Up1_h,self.Upi_h,self.Uk1_v,self.Uki_v])
+		args[1].extend([self.UP2,self.UV2,self.Uv2,self.UT2,self.Uu2,self.Uhe,self.Use,self.Us2,self.Ux2,self.Um2,self.Ume,self.Up2_h,self.Upe_h,self.Uk2_v,self.Uke_v])
+		args[1].extend([self.UW,self.UQ,self.Uk,self.UCp,self.UCv,self.Uroe,self.UR])
+
 	#	LogicThermoEquations(self.parent,*args).Show()
 		#after the calculator runs, show the next frame and destroy this one.
 		event.Skip()
