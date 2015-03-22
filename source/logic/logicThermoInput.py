@@ -14,6 +14,9 @@ class LogicThermoInput(Frm_ThermoInput):
 
 			#Also, get the box to inteligently pick which unit should be the default.
 
+		print(self.inputList)
+		print(self.zeroList)
+
 		#Build GUI
 		print ("Building ", self.__class__)
 		Frm_ThermoInput.__init__(self, parent)
@@ -23,13 +26,14 @@ class LogicThermoInput(Frm_ThermoInput):
 			for i in range(len(self.inputList[j])):
 				#Set the default for the vars on the screen
 				setattr(self,self.inputList[j][i],'unknown')
-			for i in range(len(self.zeroList[j])):
-				#Set the zero vars as zero
-				setattr(self,self.zeroList[j][i],0)
-			for i in range(len(self.inputList[j])):
+				print(self.inputList[j][i],getattr(self,self.inputList[j][i]))
 				#Set the units for the vars on the screen.
 				unitEvent = 'self.onUnits_TI_'+self.inputList[j][i]+'(wx.EVT_CHOICE)'
 				exec(unitEvent)
+		for i in range(len(self.zeroList)):
+			#Set the zero vars as zero
+			setattr(self,self.zeroList[i],0)
+			print(self.zeroList[i],getattr(self,self.zeroList[i]))
 
 	def setSize(self):
 		"""

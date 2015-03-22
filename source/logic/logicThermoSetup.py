@@ -110,7 +110,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			This difference in configration is controlled by a multi-dimensional list.
 		"""
 		#To check variables: #print('medium',self.medium,'system',self.system,'container',self.container,'etc1',self.etc1,'etc2',self.etc2,'etc3',self.etc3,'etc4',self.etc4,'etc5',self.etc5,'valve',self.valve)
-
+	#	if medium == 'Water':
     #    if medium == 'R132a':
             #Use the R132a tables for calculations
     #    if medium == 'IdealGas':
@@ -132,36 +132,36 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			self.inputList[2].extend(['roe'])
 
 		if self.container == 'Rigid':
-			self.zeroList.extend(['V2','V1','v2','v1','pe: h','pi: h','p2: h','p1:h ','ke_v','ki_v','k2_v','k1_v'])
+			self.zeroList.extend(['V2','V1','v2','v1','pe_h','pi_h','p2_h','p1_h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Piston':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
+			self.zeroList.extend(['pe_h','pi_h','p2_h','p1_h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Membrane':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
+			self.zeroList.extend(['pe_h','pi_h','p2_h','p1_h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Nozzle':
-			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h'])
+			self.zeroList.extend(['W','pe:_h','pi:_h','p2:_h','p1:_h'])
 			self.inputList[0].extend(['ki_v','k1_v','V1','v1'])
 			self.inputList[1].extend(['ke_v','k2_v','V2','v2'])
 		if self.container == 'Turbine':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h'])
+			self.zeroList.extend(['pe:_h','pi:_h','p2:_h','p1:_h'])
 			self.inputList[0].extend(['ki_v','k1_v','V1','v1'])
 			self.inputList[1].extend(['ke_v','k2_v','V2','v2'])
 			self.inputList[2].extend(['W'])
 		if self.container == 'Mixing':
-			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
+			self.zeroList.extend(['W','pe:_h','pi:_h','p2:_h','p1:_h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 		if self.container == 'HeatExch':
-			self.zeroList.extend(['pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
+			self.zeroList.extend(['pe:_h','pi:_h','p2:_h','p1:_h','ke_v','ki_v','k2_v','k1_v'])
 		
 		if self.valve == 'Valve': #make it smart with the containers. Some modifications may have to be done to the .kv file. Example: Heat Exchangers don't have valves.
-			self.zeroList.extend(['W','pe: h','pi: h','p2: h','p1: h','ke_v','ki_v','k2_v','k1_v'])
+			self.zeroList.extend(['W','pe:_h','pi:_h','p2:_h','p1:_h','ke_v','ki_v','k2_v','k1_v'])
 			self.inputList[0].extend(['V1','v1'])
 			self.inputList[1].extend(['V2','v2'])
 
