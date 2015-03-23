@@ -34,6 +34,8 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Set the zero vars as zero
 			setattr(self,self.zeroList[i],0)
 			print(self.zeroList[i],getattr(self,self.zeroList[i]))
+			#Set default units for all zero vars
+			setattr(self,'U'+self.zeroList[i],'unitless')
 
 	def setSize(self):
 		"""
@@ -42,7 +44,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		lengthList = [len(self.inputList[0]),len(self.inputList[1]),len(self.inputList[2])]
 		Lmax = np.array(lengthList).argmax()
 		n = lengthList[Lmax] #The length of the longest column
-		x = 850
+		x = 650
 		y = 36*(n+3) #n +2 for the title and +1 for the button
 		return [x,y]
 
@@ -93,7 +95,7 @@ class LogicThermoInput(Frm_ThermoInput):
 			#Make the input box
 			#valName = 'val_TI_'+ str(self.inputList[1][i])
 			valId = 1000 + i
-			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
 			sz_TI_State2.Add( self.valName, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list

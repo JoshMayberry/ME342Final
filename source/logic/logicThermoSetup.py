@@ -115,6 +115,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
             #Use the R132a tables for calculations
     #    if medium == 'IdealGas':
             #Give them a scrollable dropdown list of gases to choose from
+		self.inputList[2].extend(['R'])
 
 		if self.system == 'Closed':
 			self.zeroList.extend(['me','mi','hi','he','si','se'])
