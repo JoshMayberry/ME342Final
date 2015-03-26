@@ -1,7 +1,8 @@
 import wx
+import numpy as np #For the argmax() functionality
 #from .logicThermoInput import LogicThermoInput
 
-class LogicCalculator:#LogicThermoInput):
+class LogicCalculator(wx.Process):#LogicThermoInput):
 	"""
 	This is the main class for the calculator function.
 
@@ -28,8 +29,11 @@ class LogicCalculator:#LogicThermoInput):
 		'args' is [subject,goal]. There can be multiple goals, because goals is a list
 		'kwargs' is a dictionary containing all the variables, known and unknown.
 		"""
+		print('Begin Calculation')
+		self = LogicCalculator
 	#What have I been given?
-		self.subject = args[0]
+		self.subject = args[0][0]
+		#print('\n',self.subject)
 
 	#What is known? What is not known?
 		self.unknown,self.known = {},{} #Blank dictionaries
@@ -39,32 +43,36 @@ class LogicCalculator:#LogicThermoInput):
 					if i[0][0] != 'U': self.unknown.update({i[0]:i[1]})
 				else: 
 					if i[0][0] != 'U': self.known.update({i[0]:i[1]})
+		#print('unknown',self.unknown)
+		#print('known',self.known)
 
 	#What do  I need to find?
 		self.goal = args[1]
+		#print(self.goal)
 
 	#Equations
 	##Retrieve the correct Equation Database
+		print('Loading Database')
 		if self.subject == 'thermo':
 			from .logicThermoEquations import LogicThermoEquations
 			self.eqnDatabase = LogicThermoEquations.eqnDatabase(self)
+			print('    ~ Thermo Database Loaded')
 #		elif self.subject == 'statics': 		#This is to show how to add another subject.
 #			from .logicStaticsEquations import LogicStaticsEquations
 #			self.eqnDatabase = LogicStaticsEquations.eqnDatabase(self)
 
 	##Search through that Database for the relevant equations
-		equations = self.equationFinder()
+		self.equationFinder(self)
 
 	#Solve the equations
-		solved = self.solver(equations)
+#		self.solver(self,self.equations)
 
 	#Return your answer
 		#Have it go through the answers and return only the ones that we want.
 
-	def equationFinder:
+	def equationFinder(self):
 		"""
 		What needs to happen is that a path must be generated for Gauss-Sidel.
-		Known variables constants
 
 		Psudocode:
 			- Make known variables constants.
@@ -98,27 +106,101 @@ class LogicCalculator:#LogicThermoInput):
 		Note: Equations come in as turples of (eqnName,List of what vars are in it)
 		"""
 		print('Finding Equations')
+
 	#Make known variables constants.
 
+		#What equations contain what I know?
+		self.myEqns = {} #The equations I will use
+		for var in self.known.items(): #Look at each known variable in turn
+			if var[1] != 0: #Don't waste time on the zero value variables
+				for eqn in self.eqnDatabase.items():
+					if var[0] in eqn[1]: #If it contains somthing I am looking for
+						self.myEqns.update({eqn[0]:eqn[1]}) #Add that equation to myEqns.
+		#print('\n',self.myEqns)
 
 	#What equations contain what I need to find?
-		self.myEqns = {} #The equations I will use
-		for j in range(len(goal)): #There can be multiple goals
-			for i in self.eqnDatabase.items():
-				if goal[j] in i[1]: #If it contains somthing I am looking for
-					self.myEqns.update({i[0]:i[1]}) #Add that equation to myEqns.
+		for j in range(len(self.goal)): #Look at each goal in turn
+			for eqn in self.eqnDatabase.items():
+			#	print(i[1])
+			#	print(self.goal[j][0])
+				if self.goal[j][0] in eqn[1]: #If it contains somthing I am looking for
+					self.myEqns.update({eqn[0]:eqn[1]}) #Add that equation to myEqns.
+		#print('\n',self.myEqns)
 
-	#Which of those equations include the variables I have been given?
-		for eqn in self.myEqns.items(): #Look at each equation in turn
+	#What variables within those eqns do I not know?
+		for j in range(len(self.goal)): #Look at each goal in turn
+			for eqnVar in self.myEqns.values(): #Look at each equation in turn
+				for i in range(len(eqnVar)): #Look at each variable in turn
+					if eqnVar[i] not in self.known.keys(): #If this equation variable is unknown
+						self.unknown.update({eqnVar[i]:'unknown'})
+
+	#Start Loop Here
+	#What equations contain a variable I do not yet know?
+		possibleEqns = {} #This is a dictionary of the possible equations to choose
+		j,i = 0,0
+		for var in self.unknown.keys(): #Look for each unknown variable in the current database equation in turn
 			j+=1
-			for i in range(len(eqn[1][j])): #Look at each variable the equation has in it in turn
-				var = eqn[1][j] #This makes it easier to understand the code
-				if self.known.has_key(var[i]) == False: #If it has a variable that is 'unknown'	
-					self.unknown.update({var[i]}:'unknown') #Add this to my list of unknown variables (or affirm it's continued existance)
-				else: #If that variable is present in the eqns:
+			for eqn in self.eqnDatabase.items(): #Look at each database equation in turn
+				i+=1
+				if var in eqn[1]: #If the unknown variable is in the current equation
+					#print(eqn[0],possibleEqns.keys())
+					if eqn[0] not in possibleEqns.keys():
+						#print('yes')
+						setattr(self,var + 'dict',{})
+						getattr(self,var + 'dict').update({eqn[0]:eqn[1]}) #Put it into the temp dict for that var
+						#print(getattr(self,var + 'dict'))
+			if hasattr(self,var + 'dict'): possibleEqns.update(getattr(self,var + 'dict')) #Put all those eqns into a list as [var, eqns it is in]
+#			if hasattr(self,var + 'dict'): possibleEqns.append([var, getattr(self,var + 'dict')]) #Put all those eqns into a list as [var, eqns it is in]
+	##Compare the dictionaries for each unknown variables and choose the one that has the most unknowns in it
+		#How many vars from self.unknown are in each?
+		i,countList,countEqnList = 0,[],[]
+		for eqn in possibleEqns.items():
+			i+=1
+			count = 0
+			for var in self.unknown.keys(): #Count how many of the unknowns the equation contains
+				#print(var,eqn)
+				if var in eqn[1]:
+					#print('yes')
+					count+=1
+			countList.extend([count]) #[how many vars eqn1 contains, how many vars eqn2 contains,...]
+			countEqnList.extend([eqn[0]])
+		n = np.array(countList).argmax() #The index of the one that contains the most
+		self.myEqns.update({countEqnList[n]:self.eqnDatabase[countEqnList[n]]}) #Add this equation to self.myEqns.
 
+		#we're done now, so free up the memory
+		for var in self.unknown.keys():
+			if hasattr(self,var + 'dict'): delattr(self,var + 'dict')
+			del possibleEqns,countList,countEqnList,i,j
 
-	#What equations can I use to get the variables that I still need? (This will be a loop)
+	#What is the arrangement of these equations?
+
+		#Set the order at random.
+
+		#If the equation after one of them has the same unknown in it, lock it in place.
+		
+	#This is only to be done once for an equation.
+		
+	#else: Shift it down to the next break in the path. Check if it works
+		
+	#If it does not work, shift it again.
+		
+	#If it returns t it's origonal position
+		
+	#Find a new eqn that contains that unknown and one in the next eqn.
+		
+	#If this doesn't work, have it shift to the next break and try again.
+		
+	#If it returns to it's origonal position, just find a new eqn that contains that unknown.
+		
+	#Lock the new eqn to after this eqn.
+	
+	#If it runs out of possible new eqns, remove all locks and randomly mix the eqns. Do it all agian.
+		
+	#If this still doesn't work, start over from the start.
+
+	#Once the path is complete, return a list of just the eqn names as a list in the order they are to be done.
+#		self.equations = 
+	
 
 
 	def solver(self,eqns):

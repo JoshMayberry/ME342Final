@@ -33,11 +33,11 @@ class LogicThermoInput(Frm_ThermoInput):
 				#Set the units for the vars on the screen.
 				unitEvent = 'self.onUnits_TI_'+self.inputList[j][i]+'(wx.EVT_CHOICE)'
 				exec(unitEvent)
-		for i in range(len(self.zeroList)):
+#		for i in range(len(self.zeroList)):
 			#Set the zero vars as zero
-			setattr(self,self.zeroList[i],0)
+#			setattr(self,self.zeroList[i],0)				#Let's try it without the zeroList
 			#Set default units for all zero vars
-			setattr(self,'U'+self.zeroList[i],'unitless')
+#			setattr(self,'U'+self.zeroList[i],'unitless')
 
 	def setSize(self):
 		"""
@@ -758,16 +758,22 @@ class LogicThermoInput(Frm_ThermoInput):
 		kwargs is a dictionary of values and units.
 		"""
 		#print('continue')
-		kwargs = {'P1':self.P1,'V1':self.V1,'v1':self.v1,'T1':self.T1,'u1':self.u1,'hi':self.hi,'si':self.si,'s1':self.s1,'x1':self.x1,'m1':self.m1,'mi':self.mi,'p1_h':self.p1_h,'pi_h':self.pi_h,'k1_v':self.k1_v,'ki_v':self.ki_v}
-		kwargs.update({'P2':self.P2,'V2':self.V2,'v2':self.v2,'T2':self.T2,'u2':self.u2,'he':self.he,'se':self.se,'s2':self.s2,'x2':self.x2,'m2':self.m2,'m2':self.me,'p2_h':self.p2_h,'pe_h':self.pe_h,'k2_v':self.k2_v,'ke_v':self.ke_v})
-		kwargs.update({'W':self.W,'Q':self.Q,'k':self.k,'Cp':self.Cp,'Cv':self.Cv,'roe':self.roe,'R':self.R})
+		kwargs = {}
+		#print(self.inputList)
+		for j in range(len(self.inputList)):
+			for i in range(len(self.inputList[j])):	#This will generate the kwargs to have just the values shown on the input screen.
+				kwargs.update({self.inputList[j][i]:getattr(self,self.inputList[j][i])})
+#		kwargs = {'P1':self.P1,'V1':self.V1,'v1':self.v1,'T1':self.T1,'u1':self.u1,'hi':self.hi,'si':self.si,'s1':self.s1,'x1':self.x1,'m1':self.m1,'mi':self.mi,'p1_h':self.p1_h,'pi_h':self.pi_h,'k1_v':self.k1_v,'ki_v':self.ki_v}
+#		kwargs.update({'P2':self.P2,'V2':self.V2,'v2':self.v2,'T2':self.T2,'u2':self.u2,'he':self.he,'se':self.se,'s2':self.s2,'x2':self.x2,'m2':self.m2,'m2':self.me,'p2_h':self.p2_h,'pe_h':self.pe_h,'k2_v':self.k2_v,'ke_v':self.ke_v})
+#		kwargs.update({'W':self.W,'Q':self.Q,'k':self.k,'Cp':self.Cp,'Cv':self.Cv,'roe':self.roe,'R':self.R})
 	
-		kwargs.update({'UP1':self.P1,'UV1':self.V1,'Uv1':self.v1,'UT1':self.T1,'Uu1':self.u1,'Uhi':self.hi,'Usi':self.si,'Us1':self.s1,'Ux1':self.x1,'Um1':self.m1,'Umi':self.mi,'Up1_h':self.p1_h,'Upi_h':self.pi_h,'Uk1_v':self.k1_v,'Uki_v':self.ki_v})
-		kwargs.update({'UP2':self.P2,'UV2':self.V2,'Uv2':self.v2,'UT2':self.T2,'Uu2':self.u2,'Uhe':self.he,'Use':self.se,'Us2':self.s2,'Ux2':self.x2,'Um2':self.m2,'Um2':self.me,'Up2_h':self.p2_h,'Upe_h':self.pe_h,'Uk2_v':self.k2_v,'Uke_v':self.ke_v})
-		kwargs.update({'UW':self.W,'UQ':self.Q,'Uk':self.k,'UCp':self.Cp,'UCv':self.Cv,'Uroe':self.roe,'UR':self.R})
+#		kwargs.update({'UP1':self.P1,'UV1':self.V1,'Uv1':self.v1,'UT1':self.T1,'Uu1':self.u1,'Uhi':self.hi,'Usi':self.si,'Us1':self.s1,'Ux1':self.x1,'Um1':self.m1,'Umi':self.mi,'Up1_h':self.p1_h,'Upi_h':self.pi_h,'Uk1_v':self.k1_v,'Uki_v':self.ki_v})
+#		kwargs.update({'UP2':self.P2,'UV2':self.V2,'Uv2':self.v2,'UT2':self.T2,'Uu2':self.u2,'Uhe':self.he,'Use':self.se,'Us2':self.s2,'Ux2':self.x2,'Um2':self.m2,'Um2':self.me,'Up2_h':self.p2_h,'Upe_h':self.pe_h,'Uk2_v':self.k2_v,'Uke_v':self.ke_v})
+#		kwargs.update({'UW':self.W,'UQ':self.Q,'Uk':self.k,'UCp':self.Cp,'UCv':self.Cv,'Uroe':self.roe,'UR':self.R})
 
 		args = [['thermo'],[]]
 		#Create a list of the goals
+		#print(kwargs)
 		for i in kwargs.items():
 			if '@' in i:
 				if i[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.

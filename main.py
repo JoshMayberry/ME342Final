@@ -12,3 +12,4 @@ frame = logic.LogicSubject(None)
 #frame = views.title.MyApp(None)
 frame.Show()
 app.MainLoop()
+
