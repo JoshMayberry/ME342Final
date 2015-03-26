@@ -1,6 +1,6 @@
 import wx
 from ..views import Frm_ThermoInput #Needed to communicate with the frame
-from .logicThermoCalculator import LogicThermoCalculator #Needed to do the calculations before showing the next screen.
+from .logicCalculator import LogicCalculator #Needed to do the calculations before showing the next screen.
 import numpy as np
 
 class LogicThermoInput(Frm_ThermoInput):
@@ -18,8 +18,8 @@ class LogicThermoInput(Frm_ThermoInput):
 
 			#Also, get the box to inteligently pick which unit should be the default.
 
-		print(self.inputList)
-		print(self.zeroList)
+		#print(self.inputList)
+		#print(self.zeroList)
 
 		#Build GUI
 		print ("Building ", self.__class__)
@@ -30,14 +30,12 @@ class LogicThermoInput(Frm_ThermoInput):
 			for i in range(len(self.inputList[j])):
 				#Set the default for the vars on the screen
 				setattr(self,self.inputList[j][i],'unknown')
-				print(self.inputList[j][i],getattr(self,self.inputList[j][i]))
 				#Set the units for the vars on the screen.
 				unitEvent = 'self.onUnits_TI_'+self.inputList[j][i]+'(wx.EVT_CHOICE)'
 				exec(unitEvent)
 		for i in range(len(self.zeroList)):
 			#Set the zero vars as zero
 			setattr(self,self.zeroList[i],0)
-			print(self.zeroList[i],getattr(self,self.zeroList[i]))
 			#Set default units for all zero vars
 			setattr(self,'U'+self.zeroList[i],'unitless')
 
@@ -149,21 +147,21 @@ class LogicThermoInput(Frm_ThermoInput):
 		for i in range(len(self.inputList[0])):
 			#print(500+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[0][i])
-			self.FindWindowById(500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
+			self.FindWindowById(500+i).Bind( wx.EVT_TEXT, getattr(self,eventName))
 			unitsName = 'onUnits_TI_'+ str(self.inputList[0][i])
 			self.FindWindowById(2500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
 		
 		for i in range(len(self.inputList[1])):
 			#print(1000+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[1][i])
-			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
+			self.FindWindowById(1000+i).Bind( wx.EVT_TEXT, getattr(self,eventName))
 			unitsName = 'onUnits_TI_'+ str(self.inputList[1][i])
 			self.FindWindowById(3000+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
 		
 		for i in range(len(self.inputList[2])):
 			#print(1500+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[2][i])
-			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT_ENTER, getattr(self,eventName))
+			self.FindWindowById(1500+i).Bind( wx.EVT_TEXT, getattr(self,eventName))
 			unitsName = 'onUnits_TI_'+ str(self.inputList[2][i])
 			self.FindWindowById(3500+i).Bind( wx.EVT_CHOICE, getattr(self,unitsName))
 
@@ -754,28 +752,30 @@ class LogicThermoInput(Frm_ThermoInput):
 
 #The button at the end controller
 	def onBtnClick_ContinueToResults( self, event ):
-		print('continue')
-		#The args are split up for ease of reading it and ease of changing it.
-		#args = [[values],[units],[goal],[ToFind]]
-	#Values
-		args = [[self.P1,self.V1,self.v1,self.T1,self.u1,self.hi,self.si,self.s1,self.x1,self.m1,self.mi,self.p1_h,self.pi_h,self.k1_v,self.ki_v],[],[],[]]
-		args[0].extend([self.P2,self.V2,self.v2,self.T2,self.u2,self.he,self.se,self.s2,self.x2,self.m2,self.me,self.p2_h,self.pe_h,self.k2_v,self.ke_v])
-		args[0].extend([self.W,self.Q,self.k,self.Cp,self.Cv,self.roe,self.R])
-	#Units
-		args[1].extend([self.UP1,self.UV1,self.Uv1,self.UT1,self.Uu1,self.Uhi,self.Usi,self.Us1,self.Ux1,self.Um1,self.Umi,self.Up1_h,self.Upi_h,self.Uk1_v,self.Uki_v])
-		args[1].extend([self.UP2,self.UV2,self.Uv2,self.UT2,self.Uu2,self.Uhe,self.Use,self.Us2,self.Ux2,self.Um2,self.Ume,self.Up2_h,self.Upe_h,self.Uk2_v,self.Uke_v])
-		args[1].extend([self.UW,self.UQ,self.Uk,self.UCp,self.UCv,self.Uroe,self.UR])
-	#Goal
-		for i in range(len(args[0])):
-			if args[0][i] == '@':
-				args[3].extend([args[0][i]])
-	#ToFind
-		for i in range(len(args[0])):
-			if args[0][i] == '-':
-				args[4].extend([args[0][i]])
+		"""
+		The args are split up for ease of reading it and ease of changing it.
+		args = [[goal]]
+		kwargs is a dictionary of values and units.
+		"""
+		#print('continue')
+		kwargs = {'P1':self.P1,'V1':self.V1,'v1':self.v1,'T1':self.T1,'u1':self.u1,'hi':self.hi,'si':self.si,'s1':self.s1,'x1':self.x1,'m1':self.m1,'mi':self.mi,'p1_h':self.p1_h,'pi_h':self.pi_h,'k1_v':self.k1_v,'ki_v':self.ki_v}
+		kwargs.update({'P2':self.P2,'V2':self.V2,'v2':self.v2,'T2':self.T2,'u2':self.u2,'he':self.he,'se':self.se,'s2':self.s2,'x2':self.x2,'m2':self.m2,'m2':self.me,'p2_h':self.p2_h,'pe_h':self.pe_h,'k2_v':self.k2_v,'ke_v':self.ke_v})
+		kwargs.update({'W':self.W,'Q':self.Q,'k':self.k,'Cp':self.Cp,'Cv':self.Cv,'roe':self.roe,'R':self.R})
+	
+		kwargs.update({'UP1':self.P1,'UV1':self.V1,'Uv1':self.v1,'UT1':self.T1,'Uu1':self.u1,'Uhi':self.hi,'Usi':self.si,'Us1':self.s1,'Ux1':self.x1,'Um1':self.m1,'Umi':self.mi,'Up1_h':self.p1_h,'Upi_h':self.pi_h,'Uk1_v':self.k1_v,'Uki_v':self.ki_v})
+		kwargs.update({'UP2':self.P2,'UV2':self.V2,'Uv2':self.v2,'UT2':self.T2,'Uu2':self.u2,'Uhe':self.he,'Use':self.se,'Us2':self.s2,'Ux2':self.x2,'Um2':self.m2,'Um2':self.me,'Up2_h':self.p2_h,'Upe_h':self.pe_h,'Uk2_v':self.k2_v,'Uke_v':self.ke_v})
+		kwargs.update({'UW':self.W,'UQ':self.Q,'Uk':self.k,'UCp':self.Cp,'UCv':self.Cv,'Uroe':self.roe,'UR':self.R})
 
-	#	LogicThermoEquations(self.parent,*args).Show()
+		args = [['thermo'],[]]
+		#Create a list of the goals
+		for i in kwargs.items():
+			if '@' in i:
+				if i[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
+					args[1].append(i)
+
+		LogicCalculator.__init__(self,*args,**kwargs)
 		#after the calculator runs, show the next frame and destroy this one.
+		#self.destroy()
 		event.Skip()
 
 if __name__ == '__main__':
