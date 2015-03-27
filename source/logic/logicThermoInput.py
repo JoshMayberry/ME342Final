@@ -771,13 +771,13 @@ class LogicThermoInput(Frm_ThermoInput):
 #		kwargs.update({'UP2':self.P2,'UV2':self.V2,'Uv2':self.v2,'UT2':self.T2,'Uu2':self.u2,'Uhe':self.he,'Use':self.se,'Us2':self.s2,'Ux2':self.x2,'Um2':self.m2,'Um2':self.me,'Up2_h':self.p2_h,'Upe_h':self.pe_h,'Uk2_v':self.k2_v,'Uke_v':self.ke_v})
 #		kwargs.update({'UW':self.W,'UQ':self.Q,'Uk':self.k,'UCp':self.Cp,'UCv':self.Cv,'Uroe':self.roe,'UR':self.R})
 
-		args = [['thermo'],[]]
-		#Create a list of the goals
-		#print(kwargs)
-		for i in kwargs.items():
-			if '@' in i:
-				if i[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
-					args[1].append(i)
+		args = [['thermo'],{}]
+		#Create a dictionary of the goals
+		#print(kwargs.items())
+		for eqn in kwargs.items():
+			if '@' in eqn:
+				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
+					args[1].update({eqn[0]:'unknown'})
 
 		LogicCalculator.__init__(self,*args,**kwargs)
 		#after the calculator runs, show the next frame and destroy this one.

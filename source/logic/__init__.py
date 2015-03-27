@@ -2,6 +2,7 @@ from .logicThermoSetup import LogicThermoSetup
 from .logicThermoInput import LogicThermoInput
 from .logicSubject import LogicSubject
 from .logicCalculator import LogicCalculator
+from .logicUnitConverter import LogicUnitConverter
 
 #Equations
 from .logicThermoEquations import LogicThermoEquations

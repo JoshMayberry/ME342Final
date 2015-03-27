@@ -21,6 +21,10 @@ class Frm_Subject ( wx.Frame ):
 		self.btn_Thermo = wx.Button( self, wx.ID_ANY, u"Thermodynamics", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.btn_Thermo.SetDefault() 
 		sz_btns.Add( self.btn_Thermo, 0, wx.ALL, 5 )
+
+		self.btn_UC = wx.Button( self, wx.ID_ANY, u"Unit Conversion", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.btn_UC.SetDefault() 
+		sz_btns.Add( self.btn_UC, 0, wx.ALL, 5 )
 		
 		
 		sz_Subject.Add( sz_btns, 1, wx.EXPAND, 5 )
@@ -32,7 +36,8 @@ class Frm_Subject ( wx.Frame ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
-		self.btn_Thermo.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToSetup )
+		self.btn_Thermo.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToThermoSetup )
+		self.btn_UC.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToUnitConverter )
 	
 	def __del__( self ):
 		pass
