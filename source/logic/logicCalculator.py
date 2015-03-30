@@ -114,6 +114,15 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		What needs to happen is that a path must be generated for Gauss-Sidel.
 
 		Psudocode:
+			- Import all the equations as a matrix.
+			- Start at an equation with your goal.
+			- Go to the cell of an unknown var in that eqn.
+			- Go dowin the column to that same var in anotehr eqn.
+			- Go to the cell of a different unknown var in that eqn.
+			- 
+
+
+
 			- What is the best equation that contains what I know?
 			- What are the best equations that contain my goals?
 
@@ -133,18 +142,79 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		"""
 		print('Finding Equations')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	#Make known variables constants.
 
 	#What is the best equation that contains what I know?
-		self.myEqns = {} #The equations I will use
-		self.eqnDatabaseContains(self,self.known,self.goal)
+#		self.myEqns = {} #The equations I will use
+#		self.eqnDatabaseContains(self,self.known,self.goal)
 
 	#What are the best equations that contain my goals?
-		self.eqnDatabaseContains(self,self.goal,self.known)
+#		self.eqnDatabaseContains(self,self.goal,self.known)
 
 	##The current Equation order is [One with what I know, One for my goals]
 		#We need to see if it can flow from one variable in the first equation to the next equation, and back to the frist.
-		print(self.myEqns)		
+#		print(self.myEqns)		
 
 	#Move them around to see if that makes them work.
 	
