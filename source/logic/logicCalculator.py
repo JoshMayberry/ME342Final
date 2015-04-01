@@ -51,6 +51,8 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		self.goal = args[1]
 		#print(self.goal)
 
+	#Get everything in SI units
+
 	#Equations
 	##Retrieve the correct Equation Database
 		print('Loading Database')
@@ -265,21 +267,58 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		It then tries the next way. Theoretically, any way that is provided it should work. This is just a precaution.
 			~~~ A future update could handle requests for alternative ways to solve it.
 			Note: This does not handle gaussSidel equations yet.
+			~~~ For the goal, it would be nice if it returned (1) a rounded answer, and (2) in the units your goal is in.
 
 		"""
 		print('Solving')
 
 		for item in self.equations:
-			LinearSolve(item[0],item[1])
+			answer = ridder(self,item[0]+'Eqn',item[1])
+			setattr('self',item[1],answer[0])
+			if item != self.equations[-1]:
+				print('I used equation ',item[0],' and solved for ',item[1],'. The answer was ',answer[0],' with a percent error of ',answer[1])
+			else:
+				print('I used equation ',item[0],' and solved for ',item[1],', your goal. The answer was ',answer[0],' with a percent error of ',answer[1])
+		print('Thank You for using our program.')
 
-#Linear Solve
-	def linearSolve(self,eqn,var):
+	def f(self,fn):
+		"""
+			This function simply runs a function and returns the answer.
+		"""
+		if self.subject == 'thermo':
+			return LogicThermoEquations.fn(self)
+#		elif self.subject == 'statics':
+#			return LogicStaticsEquations.fn(self)
 
-#Gauss-Sidel
-	def f(self,fn,var):
-		return fn(var)
+	def ri(self,eq,var,guess=[-10*10**90,10*10**90],erdes=0.00001):
+		"""
+			Solves one equation for one unknown using ridder's methood.
+			'eq' is the equation to be solved.
+			'var' is the variable that is being solved for.
+			'guess' is the bounds which the answer is in.
+			'erdes' is the desired error
+		"""
+		x1, x2, erdes = guess[0], guess[1], erdes/100
+		n = math.ceil(math.log(abs(x1-x2)/erdes)/math.log(2))
+		for i in range(int(n)):
+			setattr('self',var,x1)
+			f1 = f(eq)
+			setattr('self',var,x2)
+			f2 = f(eq)
+			x3 = (x1+x2)/2
+			setattr('self',var,x3)
+			f3 = f(eq)
+			x4 = x3+(x3-x1)*np.sign(f1-f2)*f3/math.sqrt(f3**2-f1*f2)
+			setattr('self',var,x4)
+			f4 = f(eq)
+			if f3*f4<0: x1,x2 = x3,x4
+			elif f1*f4<0: x2 = x4
+			elif f2*f4<0: x1 = x4
+			else: break
+		error = abs((x1-x2)/x2)*100
+		return x4,error
 
-	def gaussSolve(self,eqns,erdes=0.00001):
+	def gauss(self,eqns,erdes=0.00001):
 		"""
 		'eqns' is the equation names. [eq1,eq2,eq3]. They are solved in that order.
 		'erdes' is the desired error.
@@ -304,7 +343,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 					n=i
 					nHistory.append(varNew[n])
 
-			count,var = count + 1,varNew[:]
+			count,var = count + 1,copy.deepcopy(varNew)
 			if count == 10: #This Must always be an even Number. #It hasn't begun to converge within 10 iterations. So, Is it diverging?
 				var = [3.14688]*noFun 
 				varNew = var[:]
@@ -321,4 +360,4 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 					sys.exit(0)
 			#    else:
 			#        print('It converges. I shall continue.')
-		return varNew,count,error
+		return varNew,error

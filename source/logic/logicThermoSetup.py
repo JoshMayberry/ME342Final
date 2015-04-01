@@ -184,6 +184,9 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		else:
 			self.zeroList.extend(['k','Cp','Cv','Cavg'])
 
+		##For now, we'll not worry about these.
+		self.zeroList.extend(['We','Ws'])
+
 		args = self.inputList,self.units, self.zeroList
 		LogicThermoInput(self.parent,*args).Show()
 		self.Destroy()
