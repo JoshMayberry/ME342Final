@@ -1,5 +1,6 @@
 import wx
 import numpy as np #For the argmax() functionality
+import copy #This is needed because sometimes the temp lists modify their parent lists. So, deep copies are made.
 #from .logicThermoInput import LogicThermoInput
 
 class LogicCalculator(wx.Process):#LogicThermoInput):
@@ -62,10 +63,11 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 #			self.eqnDatabase = LogicStaticsEquations.eqnDatabase(self)
 
 	##Search through that Database for the relevant equations
-		self.equationFinder(self)
+		temp = self.unknownGoalSetup(self)
+		self.equationFinder(self,temp)
 
 	#Solve the equations
-#		self.solver(self,self.equations)
+		self.solver(self,self.equations)
 
 	#Return your answer
 		#Have it go through the answers and return only the ones that we want.
@@ -109,226 +111,175 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		if countList[1][indexList[1]] > 0: self.myEqns.update({possibleNames[indexList[1]]:self.eqnDatabase[possibleNames[indexList[1]]]})
 		else: self.myEqns.update({possibleNames[indexList[0]]:self.eqnDatabase[possibleNames[indexList[0]]]})
 
-	def equationFinder(self):
+	def unknownGoalSetup(self):
 		"""
-		What needs to happen is that a path must be generated for Gauss-Sidel.
-
-		Psudocode:
-			- Import all the equations as a matrix.
-			- Start at an equation with your goal.
-			- Go to the cell of an unknown var in that eqn.
-			- Go dowin the column to that same var in anotehr eqn.
-			- Go to the cell of a different unknown var in that eqn.
-			- 
-
-
-
-			- What is the best equation that contains what I know?
-			- What are the best equations that contain my goals?
-
-			Loop until all the equations flow into and back from eachother.
-				Move them around to see if that makes them work.
-				If they all get back to their origonal position, you need another equation.
-					Search for one that contains a variable from the first and a variable from the second.
-						If you find it, then lock that in place.
-						If you don't, then just look for one with a variable from the first. Choose the best one.
-
-			- Once the path is complete, return a list of just the eqn names as a list in the order they are to be done.
-
-
-		'myEqns' is a growing list where each element contains a list for each level of analysis.
-
-		Note: Equations come in as turples of (eqnName,List of what vars are in it)
+			This creates a list of all the unknowns, with the goal tagged onto the end.
 		"""
-		print('Finding Equations')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	#Make known variables constants.
-
-	#What is the best equation that contains what I know?
-#		self.myEqns = {} #The equations I will use
-#		self.eqnDatabaseContains(self,self.known,self.goal)
-
-	#What are the best equations that contain my goals?
-#		self.eqnDatabaseContains(self,self.goal,self.known)
-
-	##The current Equation order is [One with what I know, One for my goals]
-		#We need to see if it can flow from one variable in the first equation to the next equation, and back to the frist.
-#		print(self.myEqns)		
-
-	#Move them around to see if that makes them work.
-	
-	#If they all get back to their origonal position, you need another equation.
-	
-	#Search for one that contains a variable from the first and a variable from the second.
-	
-	#If you find it, then lock that in place.
-	
-	#If you don't, then just look for one with a variable from the first. Choose the best one.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#	#What variables within those eqns do I not know?
-#		for j in range(len(self.goal)): #Look at each goal in turn
-#			for eqnVar in self.myEqns.values(): #Look at each equation in turn
-#				for i in range(len(eqnVar)): #Look at each variable in turn
-#					if eqnVar[i] not in self.known.keys(): #If this equation variable is unknown
-#						self.unknown.update({eqnVar[i]:'unknown'})
-
-	#Start Loop Here
-	#What equations contain a variable I do not yet know?
-#		possibleEqns = {} #This is a dictionary of the possible equations to choose
-#		j,i = 0,0
-#		for var in self.unknown.keys(): #Look for each unknown variable in the current database equation in turn
-#			j+=1
-#			for eqn in self.eqnDatabase.items(): #Look at each database equation in turn
-#				i+=1
-#				if var in eqn[1]: #If the unknown variable is in the current equation
-#					#print(eqn[0],possibleEqns.keys())
-#					if eqn[0] not in possibleEqns.keys():
-#						#print('yes')
-#						setattr(self,var + 'dict',{})
-#						getattr(self,var + 'dict').update({eqn[0]:eqn[1]}) #Put it into the temp dict for that var
-#						#print(getattr(self,var + 'dict'))
-#			if hasattr(self,var + 'dict'): possibleEqns.update(getattr(self,var + 'dict')) #Put all those eqns into a list as [var, eqns it is in]
-#			if hasattr(self,var + 'dict'): possibleEqns.append([var, getattr(self,var + 'dict')]) #Put all those eqns into a list as [var, eqns it is in]
-	##Compare the dictionaries for each unknown variables and choose the one that has the most unknowns in it
-		#How many vars from self.unknown are in each?
-#		i,countList,countEqnList = 0,[],[]
-#		for eqn in possibleEqns.items():
-#			i+=1
-#			count = 0
-#			for var in self.unknown.keys(): #Count how many of the unknowns the equation contains
-#				#print(var,eqn)
-#				if var in eqn[1]:
-#					#print('yes')
-#					count+=1
-#			countList.extend([count]) #[how many vars eqn1 contains, how many vars eqn2 contains,...]
-#			countEqnList.extend([eqn[0]])
-#		n = np.array(countList).argmax() #The index of the one that contains the most
-#		self.myEqns.update({countEqnList[n]:self.eqnDatabase[countEqnList[n]]}) #Add this equation to self.myEqns.
-#
-#		#we're done now, so free up the memory
-#		for var in self.unknown.keys():
-#			if hasattr(self,var + 'dict'): delattr(self,var + 'dict')
-#			del possibleEqns,countList,countEqnList,i,j
-
-	#What is the arrangement of these equations?
-
-		#Set the order at random.
-
-		#If the equation after one of them has the same unknown in it, lock it in place.
-		
-	#This is only to be done once for an equation.
-		
-	#else: Shift it down to the next break in the path. Check if it works
-		
-	#If it does not work, shift it again.
-		
-	#If it returns t it's origonal position
-		
-	#Find a new eqn that contains that unknown and one in the next eqn.
-		
-	#If this doesn't work, have it shift to the next break and try again.
-		
-	#If it returns to it's origonal position, just find a new eqn that contains that unknown.
-		
-	#Lock the new eqn to after this eqn.
-	
-	#If it runs out of possible new eqns, remove all locks and randomly mix the eqns. Do it all agian.
-		
-	#If this still doesn't work, start over from the start.
-
-	#Once the path is complete, return a list of just the eqn names as a list in the order they are to be done.
-#		self.equations = 
-	
-
+		goal = goalList[0] #CHANGE THIS when teh function equationFinder can support more than one goal.
+		temp = copy.deepcopy(self.unknown)
+		temp.append(goal)
+
+	def equationFinder(self,unknownList):
+		"""
+			This searches through the equation database for which equations can be used.
+			It then follows every pathway possible to get to the goal, and puts it in a dictionary.
+			The pathways that do not work are deleted from the dictionary.
+			It returns the equations with the variable you solve it for as a list that is in the order to be solved.
+
+			Limitations: This does not setup to solve 2 equations with 2 unknowns. 
+			It sets up o solve solves 1 equation with 1 unknown, then another equation with 2 unknowns,
+			where one of the unknowns happens to be the same as the one that was just solved for.
+		"""
+		print('Searching the database')
+		n = (len(dataBase))
+		col,row = -1,-1
+		earlyPaths = {} #These are the pathways that were completed before all unknowns were used up.
+		temp = {} #A dictionary of all the ways
+		wayCount = 0 #How many ways there are to solve it
+		myMatrix = [[],[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]]
+
+		#First, have it search for the 1 step solutions.
+		for j in range(len(goalList)):
+			for eqn in dataBase.items():
+				row += 1
+				myMatrix[0].append(eqn[0])
+				col = 0
+				for var in unknownList:
+					col += 1
+					if var in eqn[1]: myMatrix[1][row].append(1)
+					else: myMatrix[1][row].append(0)
+				if (1 not in myMatrix[1][row][0:-1]) and (myMatrix[1][row][-1] == 1): #Delete all that contain only my goal & store them (which is the last one in the list. Always.)   
+					wayCount += 1
+					earlyPaths.update({'way'+str(wayCount):[[],[],[],[myMatrix[0][row],unknownList[-1]]]})
+					del myMatrix[1][row],myMatrix[0][row]
+					row -= 1
+				elif 1 not in myMatrix[1][row]: #Delete all that contain pure zeros  
+					del myMatrix[1][row],myMatrix[0][row]
+					row -= 1
+
+		#{way1: [[eqnsLeft],[[varAvailable],[varToSolveFor]],[eqnsPathway]], way2: ...
+					#eqnsPathway: [[eqn1,var1],[eqn2,var2],...
+
+
+		#Re-order it so that one with just one 1 is at the top
+			##How many contain just 1 on the top? Make a separate matrix for each of those. Delete the others from eachother's matrix. This means that Each matrix will start with a differet eqn.
+		for i in range(len(myMatrix[1])):
+			if (sum(myMatrix[1][i][0:-1]) == 1) and (myMatrix[1][i][-1] != 1):
+				wayCount += 1
+				j = 0
+				for element in myMatrix[1][i]: #find which unknown is being solved for
+					j+=1
+					if element == 1: n = j #where the 1 is located
+				#print(unknownList[n])
+				unknownListTemp = copy.deepcopy(unknownList)
+				del unknownListTemp[n]
+				temp.update({'way'+str(wayCount):[[myMatrix[0]],[unknownListTemp],[],[[myMatrix[0][i],unknownList[n]]]]})
+				myMatrix[1][i] = 'used'
+		while 'used' in myMatrix[1]: #Remove the used rows from the matrix
+			n = myMatrix[1].index('used')
+			del myMatrix[0][n], myMatrix[1][n]
+		for item in temp.items():
+			newList = item[1]
+			newList[2] = myMatrix[1]
+			newList[1] = [unknownList,newList[1][0]]
+			newList[0] = newList[0][0]
+			temp.update({item[0]:newList})
+
+		#Loop until just the goal var remains:
+			#Get one that contains that one and another one below it. This can be done by searching for a line that has that var and another 1.
+				##After this is done, delete the entire column of the previous variable. Add the name of that variable to another list.
+		for k in range(len(unknownList)-1):#This loop will end just before only the goal var remains
+			tempNew = copy.deepcopy(temp)
+			#print('Iteration', k)
+			for item in temp.items(): #Look at each way
+				#print(item,'\n')
+				unknownHaveList = copy.deepcopy(item[1][1][1]) #Vars to solve for
+				unknownNeedList = copy.deepcopy(item[1][1][0]) #Vars available.
+				tempMatrix = copy.deepcopy([item[1][0],item[1][2]])
+				eqnPath = copy.deepcopy(item[1][3])
+				for var in unknownNeedList: #Lets remove the variable that is solved in this way.
+					if var not in unknownHaveList:
+						n = unknownNeedList.index(var)
+						for row in tempMatrix[1]:
+							del row[n]
+							unknownNeedListTemp = copy.deepcopy(unknownNeedList) #And record which variable was solved
+							unknownNeedListTemp.remove(var)
+							
+				passed,i = False,0 #For if there is another way that branches off of this way.
+				for i in range(len(tempMatrix[1])):
+					eqnPathTemp = copy.deepcopy(eqnPath)
+					if (sum(tempMatrix[1][i][0:-1]) == 1) and (tempMatrix[1][i][-1] != 1):
+						j = 0
+						for element in tempMatrix[1][i]: #find which unknown is being solved for
+							j+=1
+							if element == 1: n = j #where the 1 is located
+						unknownListTemp = copy.deepcopy(unknownHaveList)
+						eqnPathTemp.append([tempMatrix[0][i],unknownListTemp[n]])
+						del unknownListTemp[n] #Remove the column that has been solved for already           
+						tempMatrix[1][i] = 'used' #Set the eqn up to be removed
+						if passed == True: #If there is another way
+							wayCount += 1
+							tempNew.update({'way'+str(wayCount):[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]})
+						else: tempNew.update({item[0]:[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]}) #If this is the first way of the many or just the only way.
+						passed = True
+
+					elif (1 not in tempMatrix[1][i][0:-1]) and (tempMatrix[1][i][-1] == 1): #This is for the case that it can be solved early
+						tempMatrix[1][i] = 'used'
+						eqnPathTemp.append([tempMatrix[0][i],unknownHaveList[-1]])
+						if passed == True: #If there is another way
+							wayCount += 1
+							earlyPaths.update({'way'+str(wayCount):[[],[],[],[eqnPathTemp]]})
+						else:earlyPaths.update({item[0]:[[],[],[],[tempMatrix[0][i],unknownList[-1]]]}) #If this is the first way of the many or just the only way.
+						passed = True
+						
+					elif (len(unknownHaveList) == 1) and (tempMatrix[1][i][0] == 1): #This runs instead for the last run.
+						tempMatrix[1][i] = 'used'
+						eqnPathTemp.append([tempMatrix[0][i],unknownHaveList[0]])
+						if passed == True: #If there is another way
+							wayCount += 1
+							tempNew.update({'way'+str(wayCount):[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]})
+						else: tempNew.update({item[0]:[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]}) #If this is the first way of the many or just the only way.
+						passed = True
+					
+				if passed != True: #There were none that could follow it.
+					del tempNew[item[0]] #This means that this path cannot continue. So, let's get rid of it.
+			for item in tempNew.items():
+				while 'used' in item[1][2]: #Remove the used rows from the matrix
+					n = item[1][2].index('used')
+					del item[1][0][n], item[1][2][n]
+			temp = copy.deepcopy(tempNew) #update the new myMatrix
+
+	#Once the path is complete, return a list of just the eqn names as a list in the order they are to be done. Return all possibilities
+			temp.update(earlyPaths) #Include the pathways that were found early
+			self.equations = []
+			for item in temp.items():
+				self.equations.append(item[1][3])
 
 	def solver(self,eqns):
 		"""
-		This takes all the equations given to it and does Gauss-Sidel until it finds an answer.
-		If it diverges, it re-arranges the equations using sympy.
-		It returns all the variables.
+		This takes all the equations given to it and does either 'Linear Solve' or 'Gauss-Sidel' until it finds an answer.
+		If it diverges during Gauss-Sidel, it re-arranges the equations using sympy.
+		It saves all the variables to the class function.
+
+		If there are multiple ways to solve the problem, it chooses one at random, and if that doesn't work it deletes it.
+		It then tries the next way. Theoretically, any way that is provided it should work. This is just a precaution.
+			~~~ A future update could handle requests for alternative ways to solve it.
+			Note: This does not handle gaussSidel equations yet.
+
 		"""
 		print('Solving')
 
+		for item in self.equations:
+			LinearSolve(item[0],item[1])
+
+#Linear Solve
+	def linearSolve(self,eqn,var):
+
+#Gauss-Sidel
 	def f(self,fn,var):
 		return fn(var)
 
-	def gauss(self,eqns,erdes=0.00001):
+	def gaussSolve(self,eqns,erdes=0.00001):
 		"""
 		'eqns' is the equation names. [eq1,eq2,eq3]. They are solved in that order.
 		'erdes' is the desired error.
