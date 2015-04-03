@@ -2,6 +2,7 @@ import wx
 from ..views import Frm_ThermoInput #Needed to communicate with the frame
 from .logicCalculator import LogicCalculator #Needed to do the calculations before showing the next screen.
 import numpy as np
+from .logicUnitConverter import LogicUnitConverter as LUC
 
 class LogicThermoInput(Frm_ThermoInput):
 	"""
@@ -46,7 +47,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		lengthList = [len(self.inputList[0]),len(self.inputList[1]),len(self.inputList[2])]
 		Lmax = np.array(lengthList).argmax()
 		n = lengthList[Lmax] #The length of the longest column
-		x = 650
+		x = 750
 		y = 36*(n+3) #n +2 for the title and +1 for the button
 		return [x,y]
 
@@ -71,7 +72,7 @@ class LogicThermoInput(Frm_ThermoInput):
 
 			#Make the unit dropdown list
 			#unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
-			unit_Choices,defaultIndex = self.findUnits(self.inputList[0][i])
+			unit_Choices,defaultIndex = self.findUnits(self.inputList[0][i],'disp')
 			valId += 2000
 			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
 			unitName.SetSelection( defaultIndex )
@@ -102,7 +103,7 @@ class LogicThermoInput(Frm_ThermoInput):
 
 			#Make the unit dropdown list
 			#unitName = 'self.unit_TI_'+ str(self.inputList[1][i])
-			unit_Choices,defaultIndex = self.findUnits(self.inputList[1][i])
+			unit_Choices,defaultIndex = self.findUnits(self.inputList[1][i],'disp')
 			valId += 2000
 			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
 			unitName.SetSelection( defaultIndex )
@@ -131,7 +132,7 @@ class LogicThermoInput(Frm_ThermoInput):
 
 			#Make the unit dropdown list
 			#unitName = 'self.unit_TI_'+ str(self.inputList[2][i])
-			unit_Choices,defaultIndex = self.findUnits(self.inputList[2][i])
+			unit_Choices,defaultIndex = self.findUnits(self.inputList[2][i],'disp')
 			valId += 2000
 			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
 			unitName.SetSelection( defaultIndex )
@@ -192,103 +193,125 @@ class LogicThermoInput(Frm_ThermoInput):
 		#print(answer)
 		return answer
 
-	def findUnits(self,var):
+	def findUnits(self,var,application):
 		"""
 			This finds the appropriate units to display for the given variable
+			'application' is why you are using this.
+				'disp' is for setting up the display.
+				'SI' is to just convert to SI units.
 		"""
 		if var in 'a': #Acceleration Units
-			if self.units == 0: unitList = ['m/s','cm/s']
-			else: unitList = ['ft/s','in/s']
+			if self.units == 0: unitList = ['m/s^2','cm/s^2']
+			else: unitList = ['ft/s^2','in/s^2']
+			unitType = 'Acceleration'
 			defaultIndex = 0
 
 		elif 'A' in var: #Area Units
-			if self.units == 0: unitList = ['m2','cm2','mm2','km2']
-			else: unitList = ['ft2','in2']
+			if self.units == 0: unitList = ['m^2','cm^2','mm^2','km^2']
+			else: unitList = ['ft^2','in^2']
+			unitType = 'Area'
 			defaultIndex = 0
 
 		elif 'roe' in var: #Density Units
-			if self.units == 0: unitList = ['kg/m3','g/cm3','kg/L']
-			else: unitList = ['lbm/ft3','lbm/in3']
+			if self.units == 0: unitList = ['kg/m^3','g/cm^3','kg/liter']
+			else: unitList = ['lbm/ft^3','lbm/in^3']
+			unitType = 'Density'
 			defaultIndex = 0
 
 		elif ('W' in var) or ('Q' in var) or ('u' in var) or ('h' in var): #Energy Units
-			if self.units == 0: unitList = ['kJ','J','N*m','kWh','kPa*m3','kJ/kg','kJ/kmol','m2/s2','cal','Cal']
-			else: unitList = ['Btu','MMBTU','psia*ft3','lbf*ft','Btu/lbm','ft2/s2','therm']
+			if self.units == 0: unitList = ['kJ','J','N-m','kW-h','kPa-m^3','kJ/kg','kJ/kmol','m^2/s^2','cal (thermal)','kcal (thermal)']
+			else: unitList = ['BTU (thermal)','MMBTU','psia-ft^3','ft-lbf','BTU/lbm','ft^2/s^2','therm (US)']
 			if ('W' in var) or ('Q' in var): defaultIndex = 1
 			if ('u' in var) or ('h' in var): defaultIndex = 5
+			unitType = 'Energy, Work or Heat'
 #?
 		elif 'F' in var: #Force Units
-			if self.units == 0: unitList = ['N','kg*m/s2','dyne','kgf']
-			else: unitList = ['lbf','lbm*ft/s2']
+			if self.units == 0: unitList = ['N (Newtons)','kg-m/s^2','dyne','kgf (kilogram force)']
+			else: unitList = ['lbf (Pound force)','lbm-ft/s^2']
+			unitType = 'Force'
 			defaultIndex = 0
 #?
 		elif 'HF' in var: #Heat Flux Units
-			if self.units == 0: unitList = ['W/cm2','W/m2']
+			if self.units == 0: unitList = ['W/cm^2','W/m^2']
 			else: unitList = ['Btu/h*ft2']
+			unitType = 'Heat Flux'
 			defaultIndex = 0
 #?
 		elif 'HT' in var: #Heat Transfer Coefficient Units
-			if self.units == 0: unitList = ['W/m2*C','W/m2*K']
-			else: unitList = ['Btu/h*ft2*F','Btu/h*ft2*R']
+			if self.units == 0: unitList = ['W/m^2-C','W/m^2-K']
+			else: unitList = ['BTU/h-ft^2-F','BTU/h-ft^2-R']
+			unitType = 'Heat Transfer'
 			defaultIndex = 0
 #?
 		elif 'L' in var: #Length Units
-			if self.units == 0: unitList = ['m','cm','mm','nm','km']
-			else: unitList = ['ft','in','yd','mile']
+			if self.units == 0: unitList = ['m','cm','mm','nm (nanometer)','km']
+			else: unitList = ['ft','in','yd (yard)','mi (mile)']
+			unitType = 'Length or Distance'
 			defaultIndex = 0
 
 		elif 'm' in var: #Mass Units
-			if self.units == 0: unitList = ['kg','g','metric_ton']
-			else: unitList = ['lbm','oz','slug','short_ton']
+			if self.units == 0: unitList = ['kg','g','ton, metric (tonne)']
+			else: unitList = ['lbm (pound)','oz','slug (lbf-s^2/ft)','ton, short (2000 lbm)']
+			unitType = 'Mass'
 			defaultIndex = 0
 #?
 		elif 'Pow' in var: #Power Units
-			if self.units == 0: unitList = ['W','kW','J/s','hp']
-			else: unitList = ['Btu/h','Btu/min','Btu/s','lbf*ft/s','hp','boiler_hp','ton_of_ref']
+			if self.units == 0: unitList = ['W','kW','J/s','hp (horsepower']
+			else: unitList = ['BTU/h','BTU/min','BTU/s','lbf-ft/s','hp (horsepower)','hp (boiler hp)','tons of refrig.']
+			unitType = 'Power or Energy/Time'
 			defaultIndex = 0
 
 		elif 'P' in var: #Pressure Units
-			if self.units == 0: unitList = ['Pa','kPa','MPa','N/m2','atm','bars','mm_Hg','kgf/cm2']
-			else: unitList = ['psi','psia','ksi','lbf/ft2','in Hg']
+			if self.units == 0: unitList = ['Pa','kPa','MPa','N/m2','atmosphere','bar','mm Hg (0 C)','kgf/cm^2']
+			else: unitList = ['psi (lbf/in^2)','psia','ksi (1000 psi)','lbf/ft^2','inch Hg (32 F)']
+			unitType = 'Pressure or Stress'
 			defaultIndex = 1
 
 		elif ('q' in var) or ('s' in var): #Specific Heat Units
-			if self.units == 0: unitList = ['kJ/kmol*C','kJ/kmol*K','kJ/kg*C','kJ/kg*K','J/g*C','J/g*K']
-			else: unitList = ['Btu/lbm*F','Btu/lbm*R','Btu/lbmol*F','Btu/lbmol*R']
+			if self.units == 0: unitList = ['kJ/(kmol-C)','kJ/(kmol-K)','kJ/(kg-C)','kJ/(kg-K)','J/(g-C)','J/g*K']
+			else: unitList = ['BTU/(lbm-F)','BTU/(lbm-R)','BTU/(lbmol-F)','BTU/(lbmol-R)']
+			unitType = 'Specific Heat'
 			defaultIndex = 1
 
 		elif ('v' in var) and ('_' not in var): #Specific Volume Units. The _ accounts for kenetic energy
-			if self.units == 0: unitList = ['m3/kg','L/kg','cm3/g']
-			else: unitList = ['ft3/lbm']
+			if self.units == 0: unitList = ['m^3/kg','liter/kg','cm^3/g']
+			else: unitList = ['ft^3/lbm']
+			unitType = 'Specific Volume'
 			defaultIndex = 0
 
 		elif 'T' in var: #Temperature Units
-			if self.units == 0: unitList = ['C','K']
-			else: unitList = ['F','R']
+			if self.units == 0: unitList = ['Centigrade (C)','Kelvin (K)']
+			else: unitList = ['Fahrenheit (F)','Rankine (R)']
+			unitType = 'Temperature'
 			defaultIndex = 0
 #?
 		elif 'TC' in var: #Thermal Conductivity Units
-			if self.units == 0: unitList = ['W/m*C','W/m*K']
-			else: unitList = ['Btu/h*ft*F','Btu/h*ft*R']
+			if self.units == 0: unitList = ['W/(m-C)','W/(m-K)']
+			else: unitList = ['BTU/(ft-h-F)','BTU/(ft-h-R)']
+			unitType = 'Thermal Conductivity'
 			defaultIndex = 1
 
 		elif '_v' in var: #Velocity Units
 			if self.units == 0: unitList = ['m/s','km/h']
-			else: unitList = ['ft/s','mi/h']
+			else: unitList = ['ft/s','miles/h']
+			unitType = 'Velocity or Speed'
 			defaultIndex = 0
 
 		elif 'V' in var: #Volume Units
-			if self.units == 0: unitList = ['L','m3','cm3','cc']
-			else: unitList = ['in3','ft3','US_gal','fl_oz']
+			if self.units == 0: unitList = ['liter','m^3','cc (cm^3)']
+			else: unitList = ['in^3','ft^3','gallon (US liquid)','gallon (US dry)','fl oz (US fluid oz)']
+			unitType = 'Volume'
 			defaultIndex = 0
 
 		elif 'Vdot' in var: #Volume Flow Rate Units
-			if self.units == 0: unitList = ['m3/s','cm3/s','L/min','L/s']
-			else: unitList = ['ft3/s','ft3/min','gal/s','gal/min']
+			if self.units == 0: unitList = ['m^3/s','cm^3/s','liter/min','liter/s']
+			else: unitList = ['ft^3/s','ft^3/min','gallon/s (US liquid)','gallon/min (US liquid)']
 			defaultIndex = 0
-		else: unitList, defaultIndex = ['unitless'], 0
+			unitType = 'Volume Flow Rate'
+		else: unitList, defaultIndex, unitType = ['unitless'], 0, 'None'
 
-		return unitList, defaultIndex
+		if application == 'disp': return unitList, defaultIndex
+		elif application == 'SI': return unitList, defaultIndex, unitType
 
 #The State 1 Variable Controllers
 	def onVal_TI_P1( self, event ):
@@ -774,10 +797,19 @@ class LogicThermoInput(Frm_ThermoInput):
 		args = [['thermo'],{}]
 		#Create a dictionary of the goals
 		#print(kwargs.items())
+		
 		for eqn in kwargs.items():
-			if '@' in eqn:
+			if '@' in eqn: #Label the goal as an unknown
 				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
 					args[1].update({eqn[0]:'unknown'})
+			elif eqn[1] != 'unknown': #Get knowns in SI units
+				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
+					unitFrom = getattr(self,'U'+eqn[0])
+					unitList,defaultIndex,unitType = self.findUnits(unitFrom,'SI')
+					unitTo = unitList[defaultIndex]
+					x = getattr(self,eqn[0])
+					#print(eqn)
+					setattr(self,eqn[0],LUC.convert(self,x,unitFrom,unitTo,unitType))
 
 		LogicCalculator.__init__(self,*args,**kwargs)
 		#after the calculator runs, show the next frame and destroy this one.

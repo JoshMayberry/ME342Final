@@ -35,6 +35,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 	#What have I been given?
 		self.subject = args[0][0]
 		#print('\n',self.subject)
+		print('\n',kwargs,'\n')
 
 	#What is known? What is not known?
 		self.unknown,self.known = {},{} #Blank dictionaries
@@ -43,15 +44,13 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 				if ('unknown' in i) or ('' in i): 
 					if i[0][0] != 'U': self.unknown.update({i[0]:i[1]})
 				else: 
-					if i[0][0] != 'U': self.known.update({i[0]:i[1]})
+					if i[0][0] != 'U':  self.known.update({i[0]:i[1]})
 		#print('unknown',self.unknown)
 		#print('known',self.known)
 
 	#What do  I need to find?
 		self.goal = args[1]
 		#print(self.goal)
-
-	#Get everything in SI units
 
 	#Equations
 	##Retrieve the correct Equation Database
@@ -60,6 +59,20 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 			from .logicThermoEquations import LogicThermoEquations
 			self.eqnDatabase = LogicThermoEquations.eqnDatabase(self)
 			print('    ~ Thermo Database Loaded')
+
+
+
+
+
+##############START HERE
+			##Lookup all unknown values that can be gotten from the Thermo Tables
+			for item in self.unknown.items():
+				print(item)
+				print(stop)
+##############END HERE
+
+
+
 #		elif self.subject == 'statics': 		#This is to show how to add another subject.
 #			from .logicStaticsEquations import LogicStaticsEquations
 #			self.eqnDatabase = LogicStaticsEquations.eqnDatabase(self)

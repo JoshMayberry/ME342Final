@@ -3,7 +3,7 @@ import wx
 class Frm_Subject ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 345,135 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Problem Solver", pos = wx.DefaultPosition, size = wx.Size( 340,165), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		sz_Subject = wx.BoxSizer( wx.VERTICAL )
 		
@@ -25,6 +25,10 @@ class Frm_Subject ( wx.Frame ):
 		self.btn_UC = wx.Button( self, wx.ID_ANY, u"Unit Conversion", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.btn_UC.SetDefault() 
 		sz_btns.Add( self.btn_UC, 0, wx.ALL, 5 )
+
+		self.btn_TT = wx.Button( self, wx.ID_ANY, u"Thermo Tables", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.btn_TT.SetDefault() 
+		sz_btns.Add( self.btn_TT, 0, wx.ALL, 5 )
 		
 		
 		sz_Subject.Add( sz_btns, 1, wx.EXPAND, 5 )
@@ -38,6 +42,7 @@ class Frm_Subject ( wx.Frame ):
 		# Connect Events
 		self.btn_Thermo.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToThermoSetup )
 		self.btn_UC.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToUnitConverter )
+		self.btn_TT.Bind( wx.EVT_BUTTON, self.onBtnClick_ContinueToThermoTableLookup )
 	
 	def __del__( self ):
 		pass

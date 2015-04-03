@@ -1,0 +1,548 @@
+Unit IDs
+
+self.expression = 1001
+Clear Button = 1002
+self.answer = 1003
+self.convFromList = 1004
+self.answer2 = 1005
+self.convToList = 1006
+Conv Check Box = 1007
+Types of Units List = 1008
+Delete Button = 1009
+UD List = 1010
+
+Acceleration
+cm/s^2
+ft/s^2
+g (standard gravity)
+in/s^2
+m/s^2
+mm/s^2
+
+Angle
+degree
+microRadian
+minute
+radian
+second
+
+Area
+acre (US Survey ft)
+barn
+circular mil
+cm^2
+ft^2
+in^2
+km^2
+m^2
+mi^2
+mm^2
+yd^2
+
+Area Mom. of Inertia
+cm^4
+ft^4
+in^4
+m^4
+mm^4
+
+Computer Storage
+bit
+byte
+GB (gigabyte)
+gigabit
+KB (kilobyte)
+kilobit
+MB (megabyte)
+megabit
+TB (terabyte)
+terabit
+
+Density
+grain/gallon (US)
+g/cm^3
+g/liter
+g/mm^3
+kg/cm^3
+kg/liter
+kg/m^3
+kg/mm^3
+lbm/ft^3
+lbm/gal (UK)
+lbm/gal (US)
+lbm/in^3
+lbm/yd^3
+mg/cm^3
+mg/liter
+mg/mm^3
+oz/ft^3
+oz/gal (UK)
+oz/gal (US)
+oz/in^3
+oz/yd^3
+slug/ft^3
+slug/gal (UK)
+slug/gal (US)
+slug/in^3
+slug/yd^3
+ton(2000 lbm)/ft^3
+ton(2000 lbm)/gal (UK)
+ton(2000 lbm)/gal (US)
+ton(2000 lbm)/in^3
+ton(2000 lbm)/yd^3
+
+Energy, Work or Heat
+BTU (international)
+BTU (thermal)
+cal (international)
+cal (thermal)
+ergs
+eV
+ft-lbf
+ft^2/s^2
+hp-h
+J
+kcal (international)
+kcal (thermal)
+kJ
+kW-h
+	kPa-m^3
+	m^2/s^2
+	MMBTU
+mJ
+MJ
+	psia-ft^3
+quad (10^15 BTU IT.)
+therm (Europe)
+therm (US)
+ton of TNT (equivalent)
+W-h
+	N-m
+
+Energy/Mass
+BTU/lbm
+cal/g
+cal/kg
+J/g
+J/kg
+kJ/kg
+	kJ/kmol
+
+Force
+dyne
+kip (1000 lbf)
+kgf (kilogram force)
+kN (10^3 N)
+lbf (Pound force)
+N (Newtons)
+	kg-m/s^2
+	lbm-ft/s^2
+
+Force/Length
+dyne/cm
+dyne/mm
+kip/in
+kip/ft
+kN/cm
+kN/m
+kN/mm
+lbf/in
+lbf/ft
+N/m
+N/cm
+N/mm
+oz/in
+oz/ft
+
+	Heat Flux
+	W/cm^2
+	W/m^2
+	BTU/h-ft^2
+
+	Heat Transfer Coefficent
+	W/m^2-C
+	W/m^2-K
+	BTU/h-ft^2-F
+	BTU/h-ft^2-R
+
+Length or Distance
+angstrom
+astronomical unit
+caliber
+chain
+chain, US survey
+cm
+cubit
+fathom
+fermi
+ft
+ft, US survey
+furlong
+in
+km
+leagues
+light year
+m
+mi (mile)
+mi, US survey
+microinch
+micron
+mil (0.001 in)
+mm
+nm (nanometer)
+nm (nautical mile)
+parsec
+rod
+rod, US survey
+yd (yard)
+
+Light Intensity
+footcandle
+lumens/ft^2
+lumens/in^2
+lumens/cm^2
+lux (lumens/m^2)
+phots
+
+Mass
+carat, metric
+grain (troy)
+g
+hundredweight, short
+kg
+lbf-s^2/in
+lbm (pound)
+mg
+oz
+pennyweight
+slug (lbf-s^2/ft)
+ton, long (2240 lbm)
+ton, metric (tonne)
+ton, short (2000 lbm)
+
+Mass Flow Rate
+g/h
+g/min
+g/s
+kg/h
+kg/min
+kg/s
+lbm/h
+lbm/min
+lbm/s
+oz/h
+oz/min
+oz/s
+slug/h
+slug/min
+slug/s
+ton(2000 lbm)/h
+ton(2000 lbm)/min
+ton(2000 lbm)/s
+
+Mass Mom. of Inertia
+kg-m^2
+lbm-in^2
+lbm-ft^2
+slug-ft^2
+
+Mass/Area
+g/cm^2
+g/m^2
+g/mm^2
+kg/cm^2
+kg/m^2
+kg/mm^2
+lbm/ft^2
+lbm/in^2
+lbm/yd^2
+oz/ft^2
+oz/in^2
+oz/yd^2
+slug/ft^2
+slug/in^2
+slug/yd^2
+ton(2000 lbm)/ft^2
+ton(2000 lbm)/in^2
+ton(2000 lbm)/yd^2
+
+Mass/Length
+denier
+g/cm
+g/m
+g/mm
+kg/cm
+kg/m
+kg/mm
+lbm/ft
+lbm/in
+lbm/yd
+oz/ft
+oz/in
+oz/yd
+slug/ft
+slug/in
+slug/yd
+tex
+ton(2000 lbm)/ft
+ton(2000 lbm)/in
+ton(2000 lbm)/yd
+
+Power or Energy/Time
+BTU/h
+BTU/min
+BTU/s
+cal/h
+cal/min
+cal/s
+erg/h
+erg/min
+erg/s
+ft-lbf/h
+ft-lbf/min
+ft-lbf/s
+hp (horsepower)
+hp (boiler hp)
+J/h
+J/min
+J/s
+kcal/h
+kcal/min
+kcal/s
+kW (kiloWatt)
+tons of refrig.
+W (Watt)
+
+Pressure or Stress
+atmosphere
+bar
+cm Hg (0 C)
+cm water (4 C)
+dyne/cm^2
+ft Hg (32 F)
+ft Hg (60 F)
+ft water (39.2 F)
+ft water (60 F)
+GPa
+inch Hg (32 F)
+inch Hg (60 F)
+inch water (39.2 F)
+inch water (60 F)
+kgf/cm^2
+kgf/m^2
+kgf/mm^2
+kPa
+ksi (1000 psi)
+lbf/ft^2
+mbar (millibar)
+mm Hg (0 C)
+mm water (4 C)
+MPa
+Pa (Pascal)
+psi (lbf/in^2)
+	psia
+torr
+
+Specific Heat
+BTU/(lbm-F)
+	BTU/(lbm-R)
+	BTU/(lbmol-F)
+	BTU/(lbmol-R)
+cal/(g-C)
+cal/(kg-C)
+kcal/(g-C)
+kcal/(kg-C)
+	kJ/(kg-C)
+kJ/(kg-K)
+	kJ/(kmol-C)
+	kJ/(kmol-K)
+J/(kg-K)
+	J/(g-C)
+J/(g-K)
+
+	Specific Volume
+	m^3/kg
+	liter/kg
+	cm^3/g
+	ft^3/lbm
+
+Stress Intensity
+kPa-m^(0.5)
+ksi-in^(0.5)
+MPa-m^(0.5)
+psi-in^(0.5)
+Pa-m^(0.5)
+
+Temperature
+Centigrade (C)
+Fahrenheit (F)
+Kelvin (K)
+Rankine (R)
+
+Thermal Conductance
+BTU/(ft^2-h-F)
+BTU/(ft^2-s-F)
+cal/(cm^2-h-C)
+cal/(cm^2-s-C)
+W/(m^2-K)
+
+Thermal Conductivity
+BTU/(ft-h-F)
+	BTU/(ft-h-R)
+BTU/(ft-s-F)
+cal/(cm-h-C)
+cal/(cm-s-C)
+W/(m-K)
+
+Time
+d (day)
+day (sidereal)
+h (hour)
+hour (sidereal)
+microsecond
+min (minutes)
+minutes (sidereal)
+ms (milisecond)
+ns (nanosecond)
+s (seconds)
+seconds (sidereal)
+week
+year (365 days)
+year (sidereal)
+
+Torque or Moment
+dyne-mm
+dyne-cm
+kip-ft
+kip-in
+lbf-ft
+lbf-in
+ozf-ft
+ozf-in
+N-cm
+N-m
+N-mm
+
+Velocity or Speed
+cm/h
+cm/min
+cm/s
+ft/h
+ft/min
+ft/s
+in/h
+in/min
+in/s
+km/h
+km/min
+km/s
+knots (naut. mi/h)
+m/h
+m/min
+m/s
+miles/h
+miles/min
+miles/s
+mm/h
+mm/min
+mm/s
+
+Viscosity, Dynamic
+centipoise
+lbf-h/in^2
+lbf-s/ft^2
+lbf-s/in^2
+lbm/(ft-s)
+lbm/(ft-h)
+Pa-S (Pascal-second)
+poise
+slug/(ft-s)
+
+Viscosity, Kinematic
+centistokes
+ft^2/s
+in^2/s
+m^2/s
+stokes
+
+Volume
+acre-ft (US Survey ft)
+acre-in (US Survey ft)
+barrel (42 US gal)
+bushel (US dry)
+	cc (cm^3)
+cord (128 ft^3)
+cup (US liquid)
+fl oz (US fluid oz)
+ft^3
+gallon (US dry)
+gallon (US liquid)
+gallon (UK & Can.)
+in^3
+liter
+m^3
+mi^3
+ml (mililiter)
+mm^3 (cubic mm)
+peck (US dry)
+pint (US liquid)
+pint (US dry)
+quart (US liquid)
+quart (US dry)
+tablespoon
+teaspoon
+yd^3
+
+Volume Flow Rate
+acre-ft/h (US Survey fit)
+acre-ft/min (US Survey)
+barrel/h (42 gal)
+barrel/min (42 gal)
+cm^3/h
+cm^3/min
+cm^3/s
+ft^3/h
+ft^3/min
+ft^3/s
+gallon/h (US liquid)
+gallon/min (US liquid)
+gallon/s (US liquid)
+in^3/h
+in^3/min
+in^3/s
+liter/h
+liter/min
+liter/s
+m^3/h
+m^3/min
+m^3/s
+mm^3/h
+mm^3/min
+mm^3/s
+quart/h (US liquid)
+quart/min (US liquid)
+quart/s (US liquid)
+yd^3/h
+yd^3/min
+yd^3/s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

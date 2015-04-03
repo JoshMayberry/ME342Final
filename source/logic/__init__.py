@@ -1,5 +1,6 @@
 from .logicThermoSetup import LogicThermoSetup
 from .logicThermoInput import LogicThermoInput
+from .logicThermoTableLookup import LogicThermoTableLookup
 from .logicSubject import LogicSubject
 from .logicCalculator import LogicCalculator
 from .logicUnitConverter import LogicUnitConverter
