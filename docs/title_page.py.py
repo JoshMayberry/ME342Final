@@ -313,11 +313,11 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State1.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_State1, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer11 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer11 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_spacer11.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_spacer11, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer12 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer12 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_spacer12.Wrap( -1 )
 		sz_TI_State1.Add( self.txt_TI_spacer12, 0, wx.ALL, 5 )
 		
@@ -356,11 +356,11 @@ class Frm_ThermoInput ( wx.Frame ):
 		self.txt_TI_State2.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_State2, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer21 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer21 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_spacer21.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_spacer21, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer22 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_spacer22 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_spacer22.Wrap( -1 )
 		sz_TI_State2.Add( self.txt_TI_spacer22, 0, wx.ALL, 5 )
 		
@@ -391,21 +391,37 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		sz_ThermoInput_Inputs.Add( sz_TI_State2, 1, wx.EXPAND, 5 )
 		
-		sz_TI_Other = wx.FlexGridSizer( 0, 3, 0, 0 )
-		sz_TI_Other.SetFlexibleDirection( wx.BOTH )
-		sz_TI_Other.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		sz_TI_OtherMain = wx.FlexGridSizer( 0, 1, 0, 0 )
+		sz_TI_OtherMain.SetFlexibleDirection( wx.BOTH )
+		sz_TI_OtherMain.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		sz_TI_OtherTitle = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sz_TI_OtherTitle.SetFlexibleDirection( wx.BOTH )
+		sz_TI_OtherTitle.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.txt_TI_Other = wx.StaticText( self, wx.ID_ANY, u"Other", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_Other.Wrap( -1 )
-		sz_TI_Other.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
+		sz_TI_OtherTitle.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer31 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer31.Wrap( -1 )
-		sz_TI_Other.Add( self.txt_TI_spacer31, 0, wx.ALL, 5 )
+		self.m_staticText24 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText24.Wrap( -1 )
+		sz_TI_OtherTitle.Add( self.m_staticText24, 0, wx.ALL, 5 )
 		
-		self.txt_TI_spacer32 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_spacer32.Wrap( -1 )
-		sz_TI_Other.Add( self.txt_TI_spacer32, 0, wx.ALL, 5 )
+		self.m_staticText25 = wx.StaticText( self, wx.ID_ANY, u"MyLabel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText25.Wrap( -1 )
+		sz_TI_OtherTitle.Add( self.m_staticText25, 0, wx.ALL, 5 )
+		
+		m_choice8Choices = []
+		self.m_choice8 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice8Choices, 0 )
+		self.m_choice8.SetSelection( 0 )
+		sz_TI_OtherTitle.Add( self.m_choice8, 0, wx.ALL, 5 )
+		
+		
+		sz_TI_OtherMain.Add( sz_TI_OtherTitle, 1, wx.EXPAND, 5 )
+		
+		sz_TI_Other = wx.FlexGridSizer( 0, 3, 0, 0 )
+		sz_TI_Other.SetFlexibleDirection( wx.BOTH )
+		sz_TI_Other.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.txt_TI_W = wx.StaticText( self, wx.ID_ANY, u"W", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_W.Wrap( -1 )
@@ -432,7 +448,10 @@ class Frm_ThermoInput ( wx.Frame ):
 		sz_TI_Other.Add( self.m_choice6, 0, wx.ALL, 5 )
 		
 		
-		sz_ThermoInput_Inputs.Add( sz_TI_Other, 1, wx.EXPAND, 5 )
+		sz_TI_OtherMain.Add( sz_TI_Other, 1, wx.EXPAND, 5 )
+		
+		
+		sz_ThermoInput_Inputs.Add( sz_TI_OtherMain, 1, wx.EXPAND, 5 )
 		
 		
 		siz_ThermoInput_Title.Add( sz_ThermoInput_Inputs, 1, wx.EXPAND, 5 )

@@ -1,9 +1,10 @@
 import wx
 import numpy as np #For the argmax() functionality
 import copy #This is needed because sometimes the temp lists modify their parent lists. So, deep copies are made.
-#from .logicThermoInput import LogicThermoInput
+from .logicThermoEquations import LogicThermoEquations
+from .logicThermoTableLookup import TableUtilities
 
-class LogicCalculator(wx.Process):#LogicThermoInput):
+class LogicCalculator:
 	"""
 	This is the main class for the calculator function.
 
@@ -34,6 +35,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		self = LogicCalculator
 	#What have I been given?
 		self.subject = args[0][0]
+		self.medium = args[2]
 		#print('\n',self.subject)
 		print('\n',kwargs,'\n')
 
@@ -45,31 +47,48 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 					if i[0][0] != 'U': self.unknown.update({i[0]:i[1]})
 				else: 
 					if i[0][0] != 'U':  self.known.update({i[0]:i[1]})
-		#print('unknown',self.unknown)
-		#print('known',self.known)
+		#For now, we will not worry about these.			
+		self.unknown.update({'MM':'unknown','R':'unknown','Tcr':'unknown','Pcr':'unknown','Vcr':'unknown'})
 
 	#What do  I need to find?
 		self.goal = args[1]
-		#print(self.goal)
+
+		for element in ['known','unknown','goal']: #Set the values in the system
+			for item in getattr(self,element).items(): 
+				setattr(self,item[0],item[1])
 
 	#Equations
 	##Retrieve the correct Equation Database
 		print('Loading Database')
 		if self.subject == 'thermo':
-			from .logicThermoEquations import LogicThermoEquations
+			constants = LogicThermoEquations.constants()
+			for item in constants.items():
+				setattr(self,item[0],item[1])
 			self.eqnDatabase = LogicThermoEquations.eqnDatabase(self)
 			print('    ~ Thermo Database Loaded')
 
+			table_utils = TableUtilities()
 
-
-
-
-##############START HERE
 			##Lookup all unknown values that can be gotten from the Thermo Tables
-			for item in self.unknown.items():
-				print(item)
-				print(stop)
-##############END HERE
+			if self.medium in ['Water', 'R134a']:
+				pass #Get this working
+			else:
+				if 'MM' in self.unknown: 
+					self.MM = table_utils.TableDecider(['A1',['Molar Mass',self.medium,'N/A']])
+				if 'R' in self.unknown: 
+					self.R = table_utils.TableDecider(['A1',['Gas Constant R',self.medium,'N/A']])
+			#	if 'Tcr' in self.unknown: 
+			#		self.Tcr = table_utils.TableDecider(['A1',['Critical Temperature',self.medium,'N/A']])
+			#	if 'Pcr' in self.unknown: 
+			#		self.Pcr = table_utils.TableDecider(['A1',['Critical Pressure',self.medium,'N/A']])
+			#	if 'Vcr' in self.unknown: 
+			#		self.Vcr = table_utils.TableDecider(['A1',['Critical Volume',self.medium,'N/A']])
+				for element in ['MM','R','Tcr','Pcr','Vcr']:
+					if element in self.unknown: 
+						del self.unknown[element] #Remove found values from the unknown list
+					self.known.update({element:getattr(self,element)}) #Add found values to the known list
+
+			table_utils.TableEnough(self.unknown, self.known, self.medium) #Find any others that can be found
 
 
 
@@ -78,11 +97,11 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 #			self.eqnDatabase = LogicStaticsEquations.eqnDatabase(self)
 
 	##Search through that Database for the relevant equations
-		temp = self.unknownGoalSetup(self)
-		self.equationFinder(self,temp)
+			temp = self.unknownGoalSetup(self)
+			self.equationFinder(self,temp)
 
 	#Solve the equations
-		self.solver(self,self.equations)
+			self.solver(self,self.equations)
 
 	#Return your answer
 		#Have it go through the answers and return only the ones that we want.
@@ -130,9 +149,12 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		"""
 			This creates a list of all the unknowns, with the goal tagged onto the end.
 		"""
-		goal = goalList[0] #CHANGE THIS when teh function equationFinder can support more than one goal.
-		temp = copy.deepcopy(self.unknown)
-		temp.append(goal)
+		temp = []
+		for item in self.unknown.items():
+			temp.append(item[0])
+		for item in self.goal.items():
+			temp.append(item[0])
+		return temp
 
 	def equationFinder(self,unknownList):
 		"""
@@ -146,7 +168,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 			where one of the unknowns happens to be the same as the one that was just solved for.
 		"""
 		print('Searching the database')
-		n = (len(dataBase))
+		n = (len(self.eqnDatabase))
 		col,row = -1,-1
 		earlyPaths = {} #These are the pathways that were completed before all unknowns were used up.
 		temp = {} #A dictionary of all the ways
@@ -154,22 +176,27 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 		myMatrix = [[],[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]]
 
 		#First, have it search for the 1 step solutions.
-		for j in range(len(goalList)):
-			for eqn in dataBase.items():
+		for j in range(len(self.goal)):
+			for eqn in self.eqnDatabase.items():
 				row += 1
 				myMatrix[0].append(eqn[0])
 				col = 0
 				for var in unknownList:
 					col += 1
-					if var in eqn[1]: myMatrix[1][row].append(1)
-					else: myMatrix[1][row].append(0)
+					if var in eqn[1]: 
+						myMatrix[1][row].append(1)
+					else: 
+						myMatrix[1][row].append(0)
 				if (1 not in myMatrix[1][row][0:-1]) and (myMatrix[1][row][-1] == 1): #Delete all that contain only my goal & store them (which is the last one in the list. Always.)   
 					wayCount += 1
-					earlyPaths.update({'way'+str(wayCount):[[],[],[],[myMatrix[0][row],unknownList[-1]]]})
-					del myMatrix[1][row],myMatrix[0][row]
+					tempInside = {
+						'way'+str(wayCount):[[],[[-1],[-1]],[], [myMatrix[0][row], unknownList[-1]]]
+						}
+					earlyPaths.update(tempInside)
+					del myMatrix[1][row], myMatrix[0][row]
 					row -= 1
 				elif 1 not in myMatrix[1][row]: #Delete all that contain pure zeros  
-					del myMatrix[1][row],myMatrix[0][row]
+					del myMatrix[1][row], myMatrix[0][row]
 					row -= 1
 
 		#{way1: [[eqnsLeft],[[varAvailable],[varToSolveFor]],[eqnsPathway]], way2: ...
@@ -188,7 +215,15 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 				#print(unknownList[n])
 				unknownListTemp = copy.deepcopy(unknownList)
 				del unknownListTemp[n]
-				temp.update({'way'+str(wayCount):[[myMatrix[0]],[unknownListTemp],[],[[myMatrix[0][i],unknownList[n]]]]})
+				tempInside = {
+					'way'+str(wayCount):[
+					[myMatrix[0]],
+					[unknownListTemp],
+					[],
+					[[myMatrix[0][i],
+					unknownList[n]]]]
+					}
+				temp.update(tempInside)
 				myMatrix[1][i] = 'used'
 		while 'used' in myMatrix[1]: #Remove the used rows from the matrix
 			n = myMatrix[1].index('used')
@@ -205,7 +240,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 				##After this is done, delete the entire column of the previous variable. Add the name of that variable to another list.
 		for k in range(len(unknownList)-1):#This loop will end just before only the goal var remains
 			tempNew = copy.deepcopy(temp)
-			#print('Iteration', k)
+			print('Iteration', k)
 			for item in temp.items(): #Look at each way
 				#print(item,'\n')
 				unknownHaveList = copy.deepcopy(item[1][1][1]) #Vars to solve for
@@ -243,8 +278,8 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 						eqnPathTemp.append([tempMatrix[0][i],unknownHaveList[-1]])
 						if passed == True: #If there is another way
 							wayCount += 1
-							earlyPaths.update({'way'+str(wayCount):[[],[],[],[eqnPathTemp]]})
-						else:earlyPaths.update({item[0]:[[],[],[],[tempMatrix[0][i],unknownList[-1]]]}) #If this is the first way of the many or just the only way.
+							earlyPaths.update({'way'+str(wayCount):[[],[[-1],[-1]],[],[eqnPathTemp]]})
+						else:earlyPaths.update({item[0]:[[],[[-1],[-1]],[],[tempMatrix[0][i],unknownList[-1]]]}) #If this is the first way of the many or just the only way.
 						passed = True
 						
 					elif (len(unknownHaveList) == 1) and (tempMatrix[1][i][0] == 1): #This runs instead for the last run.
@@ -284,6 +319,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 
 		"""
 		print('Solving')
+		print(self.equations)
 
 		for item in self.equations:
 			answer = ridder(self,item[0]+'Eqn',item[1])
@@ -303,7 +339,7 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 #		elif self.subject == 'statics':
 #			return LogicStaticsEquations.fn(self)
 
-	def ri(self,eq,var,guess=[-10*10**90,10*10**90],erdes=0.00001):
+	def ridder(self,eq,var,guess=[-10*10**90,10*10**90],erdes=0.00001):
 		"""
 			Solves one equation for one unknown using ridder's methood.
 			'eq' is the equation to be solved.
@@ -373,4 +409,4 @@ class LogicCalculator(wx.Process):#LogicThermoInput):
 					sys.exit(0)
 			#    else:
 			#        print('It converges. I shall continue.')
-		return varNew,error
+		return varNew,error 

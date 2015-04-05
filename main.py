@@ -5,9 +5,8 @@ import source.logic as logic
 import wx
 
 app = wx.App()
-print ("Modules logic: ", dir(logic)) #Debugging Trick
-print ("Modules views: ", dir(views)) #Debugging Trick
+#print ("Modules logic: ", dir(logic)) #Debugging Trick
+#print ("Modules views: ", dir(views)) #Debugging Trick
 frame = logic.LogicSubject(None)
 frame.Show()
 app.MainLoop()
-

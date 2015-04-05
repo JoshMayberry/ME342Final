@@ -14,6 +14,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		self.inputList = args[0] #This is a list used to generate the text boxes
 		self.units = args[1] #This is wether the problem is in Metric or English Units
 		self.zeroList = args[2] #This is a list of all the units that are zero by default.
+		self.medium = args[3]
 		#self.nameList = [] #This is a list of the generated text boxes so you know the order the units are listed in.
 			#Every 'nameList' thing can be deleted if this does not show a use later on.
 
@@ -34,11 +35,6 @@ class LogicThermoInput(Frm_ThermoInput):
 				#Set the units for the vars on the screen.
 				unitEvent = 'self.onUnits_TI_'+self.inputList[j][i]+'(wx.EVT_CHOICE)'
 				exec(unitEvent)
-#		for i in range(len(self.zeroList)):
-			#Set the zero vars as zero
-#			setattr(self,self.zeroList[i],0)				#Let's try it without the zeroList
-			#Set default units for all zero vars
-#			setattr(self,'U'+self.zeroList[i],'unitless')
 
 	def setSize(self):
 		"""
@@ -59,28 +55,21 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up State 1')
 		for i in range(len(self.inputList[0])):
 			#Make the text label
-			#txtName = 'txt_TI_'+ str(self.inputList[0][i])
-			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[0][i], wx.DefaultPosition, wx.DefaultSize, 0  )
-			self.txtName.Wrap( -1 )
-			sz_TI_State1.Add( self.txtName, 0, wx.ALL, 5 )
+			temp = wx.StaticText( self, wx.ID_ANY, self.inputList[0][i], wx.DefaultPosition, wx.DefaultSize, 0  )
+			temp.Wrap( -1 )
+			sz_TI_State1.Add( temp, 0, wx.ALL, 5 )
 
 			#Make the input box
-			#valName = 'self.val_TI_'+ str(self.inputList[0][i])
 			valId = 500 + i #This is so I can find it later
-			valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0  )
-			sz_TI_State1.Add( valName, 0, wx.ALL, 5 )
+			temp = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0  )
+			sz_TI_State1.Add( temp, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list
-			#unitName = 'self.unit_TI_'+ str(self.inputList[0][i])
 			unit_Choices,defaultIndex = self.findUnits(self.inputList[0][i],'disp')
 			valId += 2000
-			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
-			unitName.SetSelection( defaultIndex )
-			sz_TI_State1.Add( unitName, 0, wx.ALL, 5 )
-			#self.nameList.append(valName)
-			#print(valId)
-
-		#print('\n',self.FindWindowById(999))
+			temp = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			temp.SetSelection( defaultIndex )
+			sz_TI_State1.Add( temp, 0, wx.ALL, 5 )
 
 	def CreateState2(self,sz_TI_State2):
 		"""
@@ -90,26 +79,21 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up State 2')
 		for i in range(len(self.inputList[1])):
 			#Make the text label
-			#txtName = 'txt_TI_'+ str(self.inputList[1][i])
-			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[1][i], wx.DefaultPosition, wx.DefaultSize, 0 )
-			self.txtName.Wrap( -1 )
-			sz_TI_State2.Add( self.txtName, 0, wx.ALL, 5 )
+			temp = wx.StaticText( self, wx.ID_ANY, self.inputList[1][i], wx.DefaultPosition, wx.DefaultSize, 0 )
+			temp.Wrap( -1 )
+			sz_TI_State2.Add( temp, 0, wx.ALL, 5 )
 
 			#Make the input box
-			#valName = 'val_TI_'+ str(self.inputList[1][i])
 			valId = 1000 + i
-			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
-			sz_TI_State2.Add( self.valName, 0, wx.ALL, 5 )
+			temp = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+			sz_TI_State2.Add( temp, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list
-			#unitName = 'self.unit_TI_'+ str(self.inputList[1][i])
 			unit_Choices,defaultIndex = self.findUnits(self.inputList[1][i],'disp')
 			valId += 2000
-			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
-			unitName.SetSelection( defaultIndex )
-			sz_TI_State2.Add( unitName, 0, wx.ALL, 5 )
-			#self.nameList.append(valName)
-			#print(valId)
+			temp = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			temp.SetSelection( defaultIndex )
+			sz_TI_State2.Add( temp, 0, wx.ALL, 5 )
 
 	def CreateOther(self,sz_TI_Other):
 		"""
@@ -119,32 +103,29 @@ class LogicThermoInput(Frm_ThermoInput):
 		print('Setting up Other')
 		for i in range(len(self.inputList[2])):
 			#Make the text label
-			#txtName = 'txt_TI_'+ str(self.inputList[2][i])
-			self.txtName = wx.StaticText( self, wx.ID_ANY, self.inputList[2][i], wx.DefaultPosition, wx.DefaultSize, 0  )
-			self.txtName.Wrap( -1 )
-			sz_TI_Other.Add( self.txtName, 0, wx.ALL, 5 )
+			temp = wx.StaticText( self, wx.ID_ANY, self.inputList[2][i], wx.DefaultPosition, wx.DefaultSize, 0  )
+			temp.Wrap( -1 )
+			sz_TI_Other.Add( temp, 0, wx.ALL, 5 )
 
 			#Make the input box
-			#valName = 'val_TI_'+ str(self.inputList[2][i])
 			valId = 1500 + i
-			self.valName = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
-			sz_TI_Other.Add( self.valName, 0, wx.ALL, 5 )
+			temp = wx.TextCtrl( self, valId, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+			sz_TI_Other.Add( temp, 0, wx.ALL, 5 )
 
 			#Make the unit dropdown list
-			#unitName = 'self.unit_TI_'+ str(self.inputList[2][i])
 			unit_Choices,defaultIndex = self.findUnits(self.inputList[2][i],'disp')
 			valId += 2000
-			unitName = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
-			unitName.SetSelection( defaultIndex )
-			sz_TI_Other.Add( unitName, 0, wx.ALL, 5 )
-			#self.nameList.append(valName)
-			#print(valId)
+			temp = wx.Choice( self, valId, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			temp.SetSelection( defaultIndex )
+			sz_TI_Other.Add( temp, 0, wx.ALL, 5 )
 
 	def CreateEvents(self):
 		x = 1
 		print('Creating Events')
 		#Add an event to that box
 		#self.FindWindowById(999).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
+		if self.medium not in ['Water','R134a']:
+			self.FindWindowById(4000).Bind( wx.EVT_CHOICE, self.onChoice_TI_IdealGas)
 		for i in range(len(self.inputList[0])):
 			#print(500+i)
 			eventName = 'onVal_TI_'+ str(self.inputList[0][i])
@@ -218,12 +199,17 @@ class LogicThermoInput(Frm_ThermoInput):
 			unitType = 'Density'
 			defaultIndex = 0
 
-		elif ('W' in var) or ('Q' in var) or ('u' in var) or ('h' in var): #Energy Units
-			if self.units == 0: unitList = ['kJ','J','N-m','kW-h','kPa-m^3','kJ/kg','kJ/kmol','m^2/s^2','cal (thermal)','kcal (thermal)']
-			else: unitList = ['BTU (thermal)','MMBTU','psia-ft^3','ft-lbf','BTU/lbm','ft^2/s^2','therm (US)']
-			if ('W' in var) or ('Q' in var): defaultIndex = 1
-			if ('u' in var) or ('h' in var): defaultIndex = 5
+		elif ('W' in var) or ('Q' in var): #Energy Units
+			if self.units == 0: unitList = ['kJ','J','N-m','kW-h','kPa-m^3','m^2/s^2','cal (thermal)','kcal (thermal)']
+			else: unitList = ['BTU (thermal)','MMBTU','psia-ft^3','ft-lbf','ft^2/s^2','therm (US)']
+			defaultIndex = 1
 			unitType = 'Energy, Work or Heat'
+
+		elif ('w' in var) or ('q' in var) or ('u' in var) or ('h' in var): #Energy/mass Units
+			if self.units == 0: unitList = ['kJ/kg','kJ/kmol']
+			else: unitList = ['BTU/lbm']
+			defaultIndex = 0
+			unitType = 'Energy/Mass'
 #?
 		elif 'F' in var: #Force Units
 			if self.units == 0: unitList = ['N (Newtons)','kg-m/s^2','dyne','kgf (kilogram force)']
@@ -310,8 +296,10 @@ class LogicThermoInput(Frm_ThermoInput):
 			unitType = 'Volume Flow Rate'
 		else: unitList, defaultIndex, unitType = ['unitless'], 0, 'None'
 
-		if application == 'disp': return unitList, defaultIndex
-		elif application == 'SI': return unitList, defaultIndex, unitType
+		if application == 'disp': 
+			return unitList, defaultIndex
+		elif application == 'SI': 
+			return unitList[defaultIndex], unitType
 
 #The State 1 Variable Controllers
 	def onVal_TI_P1( self, event ):
@@ -677,6 +665,10 @@ class LogicThermoInput(Frm_ThermoInput):
 		#event.Skip()
 
 #The Other Variable Controllers
+	def onChoice_TI_IdealGas( self, event):
+		n = self.FindWindowById(4000).GetSelection()
+		self.medium = self.FindWindowById(4000).GetString(n)
+
 	def onVal_TI_W( self, event ):
 		myId = self.findWhich('W')
 		self.W = self.FindWindowById(myId).GetLineText(0)
@@ -780,36 +772,30 @@ class LogicThermoInput(Frm_ThermoInput):
 		args = [[goal]]
 		kwargs is a dictionary of values and units.
 		"""
-		#print('continue')
 		kwargs = {}
-		#print(self.inputList)
 		for j in range(len(self.inputList)):
 			for i in range(len(self.inputList[j])):	#This will generate the kwargs to have just the values shown on the input screen.
 				kwargs.update({self.inputList[j][i]:getattr(self,self.inputList[j][i])})
-#		kwargs = {'P1':self.P1,'V1':self.V1,'v1':self.v1,'T1':self.T1,'u1':self.u1,'hi':self.hi,'si':self.si,'s1':self.s1,'x1':self.x1,'m1':self.m1,'mi':self.mi,'p1_h':self.p1_h,'pi_h':self.pi_h,'k1_v':self.k1_v,'ki_v':self.ki_v}
-#		kwargs.update({'P2':self.P2,'V2':self.V2,'v2':self.v2,'T2':self.T2,'u2':self.u2,'he':self.he,'se':self.se,'s2':self.s2,'x2':self.x2,'m2':self.m2,'m2':self.me,'p2_h':self.p2_h,'pe_h':self.pe_h,'k2_v':self.k2_v,'ke_v':self.ke_v})
-#		kwargs.update({'W':self.W,'Q':self.Q,'k':self.k,'Cp':self.Cp,'Cv':self.Cv,'roe':self.roe,'R':self.R})
-	
-#		kwargs.update({'UP1':self.P1,'UV1':self.V1,'Uv1':self.v1,'UT1':self.T1,'Uu1':self.u1,'Uhi':self.hi,'Usi':self.si,'Us1':self.s1,'Ux1':self.x1,'Um1':self.m1,'Umi':self.mi,'Up1_h':self.p1_h,'Upi_h':self.pi_h,'Uk1_v':self.k1_v,'Uki_v':self.ki_v})
-#		kwargs.update({'UP2':self.P2,'UV2':self.V2,'Uv2':self.v2,'UT2':self.T2,'Uu2':self.u2,'Uhe':self.he,'Use':self.se,'Us2':self.s2,'Ux2':self.x2,'Um2':self.m2,'Um2':self.me,'Up2_h':self.p2_h,'Upe_h':self.pe_h,'Uk2_v':self.k2_v,'Uke_v':self.ke_v})
-#		kwargs.update({'UW':self.W,'UQ':self.Q,'Uk':self.k,'UCp':self.Cp,'UCv':self.Cv,'Uroe':self.roe,'UR':self.R})
 
-		args = [['thermo'],{}]
-		#Create a dictionary of the goals
-		#print(kwargs.items())
+		args = [['thermo'],{},self.medium]
 		
 		for eqn in kwargs.items():
 			if '@' in eqn: #Label the goal as an unknown
 				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
 					args[1].update({eqn[0]:'unknown'})
+
 			elif eqn[1] != 'unknown': #Get knowns in SI units
 				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
 					unitFrom = getattr(self,'U'+eqn[0])
-					unitList,defaultIndex,unitType = self.findUnits(unitFrom,'SI')
-					unitTo = unitList[defaultIndex]
+					unitTo,unitType = self.findUnits(eqn[0],'SI')
 					x = getattr(self,eqn[0])
 					#print(eqn)
-					setattr(self,eqn[0],LUC.convert(self,x,unitFrom,unitTo,unitType))
+					if (x != '') and (x != ' '):
+						print('eqn',eqn,'x',x,'unitFrom',unitFrom,'unitTo',unitTo,'unitType',unitType)
+						setattr(self,eqn[0],LUC.convert(self,eval(x),unitFrom,unitTo,unitType))
+
+		print('args',args)
+		print('kwargs',kwargs)
 
 		LogicCalculator.__init__(self,*args,**kwargs)
 		#after the calculator runs, show the next frame and destroy this one.

@@ -3,15 +3,15 @@ from ..views import Frm_ThermoTableLookup
 #from ..views import Frm_ThermoTableShow
 from xlrd import open_workbook, cellname
 from xlrd import XL_CELL_TEXT, XL_CELL_NUMBER, XL_CELL_EMPTY, XL_CELL_BLANK
-
 class LogicThermoTableLookup(Frm_ThermoTableLookup):
-	#def __init__(self,parent):
-	#	super(LogicThermoTableLookup, self).__init__(parent)
+	def __init__(self,parent):
+		Frm_ThermoTableLookup.__init__(self, parent)
+		self.table_utils = TableUtilities()
 
 	def onChoiceMedium( self, event): #Setup the rest of the enteries
 		self.input[1][1] = self.choice_TT_Medium.GetString(self.choice_TT_Medium.GetSelection())
 		if self.input[1][1] in ['Water','R134a']: choices = ['','N/A','Temperature','Sat Pressure','x','vf','vg','uf','ufg','ug','hf','hfg','hg','sf','sfg','sg']
-		else: choices = ['','N/A','Molar Mass','Gas Constant R','Critical Temperature','Critical Pressure','Critical Volume','Cp','Cv','k'] #It is an ideal Gas
+		else: choices = ['','N/A','Temperature','Molar Mass','Gas Constant R','Cp','Cv','k','Critical Temperature','Critical Pressure','Critical Volume'] #It is an ideal Gas
 		self.choice_TT_Goal_ColOf.Clear()
 		self.choice_TT_Goal_ColOf.Append(choices)
 		self.choice_TT_Goal_ColOf.SetSelection(0)
@@ -34,7 +34,7 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 			self.txtCtrl_TT_Ref_RowOf.SetValue(self.input[1][2])
 			self.txtCtrl_TT_Ref2_RowOf.SetValue(self.input[1][2])
 		else: 
-			self.input[1][2][0][1] = temp
+			self.input[1][2][0][0] = temp
 		event.Skip()
 	
 	def onTxtRefRowOf( self, event ):
@@ -42,29 +42,37 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 		if temp == 'N/A': 
 			self.input[1][2] = 'N/A'
 			self.txtCtrl_TT_Ref_RowOf.SetValue('N/A')
-		else: self.input[1][2][0][0] = self.txtCtrl_TT_Ref_RowOf.GetLineText(0)
+		else: self.input[1][2][0][1] = eval(self.txtCtrl_TT_Ref_RowOf.GetLineText(0))
 		event.Skip()
 
 	def onChoiceRef2ColOf( self, event ):
-		temp = self.choice_TT_Ref_ColOf.GetString(self.choice_TT_Ref2_ColOf.GetSelection())
+		temp = self.choice_TT_Ref_ColOf.GetString(self.choice_TT_Ref_ColOf.GetSelection())
+		temp2 = self.choice_TT_Ref2_ColOf.GetString(self.choice_TT_Ref2_ColOf.GetSelection())
 		if self.input[1][1] in ['Water','R134a']: #Get this working
 			pass
 		else:
 			if temp == 'N/A': 
-				self.input[1][2] = temp
+				self.input[1][2] = 'N/A'
 				self.txtCtrl_TT_Ref2_RowOf.SetValue('N/A')
-			else: self.input[1][2][1][1] = temp
+			if temp2 == 'N/A': 
+				self.input[1][2][1] = ['N/A']
+				self.txtCtrl_TT_Ref2_RowOf.SetValue('N/A')
+			else: self.input[1][2][1][0] = temp2
 		event.Skip()
 	
 	def onTxtRef2RowOf( self, event ):
-		temp = self.choice_TT_Ref2_ColOf.GetString(self.choice_TT_Ref2_ColOf.GetSelection())
+		temp = self.choice_TT_Ref_ColOf.GetString(self.choice_TT_Ref_ColOf.GetSelection())
+		temp2 = self.choice_TT_Ref2_ColOf.GetString(self.choice_TT_Ref2_ColOf.GetSelection())
 		if self.input[1][1] in ['Water','R134a']:
 			pass
 		else:
 			if temp == 'N/A': 
 				self.input[1][2] = 'N/A'
-				self.txtCtrl_TT_Ref_RowOf.SetValue('N/A')
-			else: self.input[1][2][1][0] = self.txtCtrl_TT_Ref2_RowOf.GetLineText(0)
+				self.txtCtrl_TT_Ref2_RowOf.SetValue('N/A')
+			if temp2 == 'N/A': 
+				self.input[1][2][1] = ['N/A']
+				self.txtCtrl_TT_Ref2_RowOf.SetValue('N/A')
+			else: self.input[1][2][1][1] = eval(self.txtCtrl_TT_Ref2_RowOf.GetLineText(0))
 		event.Skip()
 
 	def onBtnClickGo( self, event ):
@@ -72,7 +80,7 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 			A1 - Molar mass, gas constant & critical point properties
 			A2 - Ideal-gas specific heats of various common gases
 				(a) At 300 K
-				(b) At various temperatures
+				(b) At various tmeperatures
 			A3 - Properties of common liquids, solids, and foods
 				(a) Liquids
 				(b) Solids
@@ -90,13 +98,55 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 
 			self.input Syntax: ['WhichTable',['In the col of','In the rows of',[['Reference col','Reference value'],['Reference2 col','Reference2 value']]]]
 		"""
-		#print('DONE!',self.input)
-		self.myBook = open_workbook('source/logic/thermoTable.xlsx')
-		value = self.TableDecider(self.input)
+		#print(self.input)
+		if self.input[0] == -1:
+			self.input = self.table_utils.TableInquiry(self.input)
+		value = self.table_utils.TableDecider(self.input)
 		#args = [given,value]					##This is for when it has an option to display All
 		#Frm_ThermoTableShow(self,*args).Show() ##This is for when it has an option to display All
-		self.txt_TT_AnswerValue.SetLabel(str(value))
+		self.txt_TT_AnswerValue.SetLabel(str(value)) ##DELETE THIS when it can support the display All option
 		event.Skip()
+
+class TableUtilities:
+	def __init__(self):
+		self.myBook = open_workbook('source/logic/thermoTable.xlsx')
+	
+	def TableEnough(self,unknown,known,medium):
+		""" This checks if there are enough known variables to look up values in the table."""
+		given, passed, temperatureCheck = [-1,[-1,medium,[[-1,-1],[-1,-1]]]], 0, False
+		if 'T1' in known: #Finds if you know the temperature or not. Assumes that T1 determines the Cp. CHANGE THIS so it is smarter.
+			temperatureCheck = True
+
+		for item in known.items():
+			#print('known',item)
+			if medium in ['Water','R134a']: #FIX THIS: Make it smart with the criteria for the tables A4, A5, & A6.
+				pass
+			else: #It is an ideal gas [-1,['Cp','Air',[['Temperature',300],['N/A']]]]
+				if temperatureCheck == True:
+					if item[0] in ['Cp','Cv','n']:
+						given[1][2][0] = ['Temperature',self.known['T1'][1]]
+
+			for item in unknown.items(): #Find the unknowns that can be found.
+				#print('unknown',item)
+				if 'T' in item[0]: given[1][0] = 'Temperature'
+				elif 'Cp' in item[0]: given[1][0] = 'Cp'
+				elif 'Cv' in item[0]: given[1][0] = 'Cv'
+				elif 'n' in item[0]: given[1][0] = 'k'
+				elif 'P' in item[0]: given[1][0] = 'Pressure'
+				#elif 'x' in item[0]: #make the rest of the cirteria for Water and R134a.
+				given = self.TableInquiry(given) #Which table should be used?
+
+	def TableInquiry(self,given):
+		""" This decides which table should be used."""
+		if given[1][1] in ['Water','R134a']:
+			pass #Make criteria for finding wether it is super heated or not.
+		else:
+			if given[1][0] in ['Molar Mass','Gas Constant R','Critical']:
+				given[0] = 'A1'
+				if given[1][2][0] == ['Temperature', 300]: given[1][2] = 'N/A'
+			elif given[1][2][0] == ['Temperature', 300]: given[0] = 'A2a'
+			else: given[0] = 'A2b'
+		return given
 
 	def TableDecider(self,given):
 		"""
@@ -110,19 +160,12 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 			Example Input: TableDecider(['A4',['vf','Water',[['Temperature',40],['x',0.5]]]])
 			Example Input: TableDecider(['A4',['vf','Water',['Temp',37.5]]])
 		"""
-
-		if given[1][1] in ['Water','R134a']:
-			pass #Make criteria for finding wether it is super heated or not.
-		else:
-			if given[1][0] in ['Molar Mass','Gas Constant R','Critical Temperature','Critical Pressure','Critical Volume']:
-				given[0] = 'A1'
-				if given[1][2][0] == ['Temperature', 300]: given[1][2] = 'N/A'
-			elif given[1][2][0] == ['Temperature', 300]: given[0] = 'A2a'
-			else: given[0] = 'A2b'
+		if given[0] == -1: 
+			given = self.TableInquiry(given) #Find which sheet, if not specified
 
 		self.mySheet = self.myBook.sheet_by_name(given[0]) #Load the needed sheet
 		exists = True
-		if type(given[1][2][0]) == list: #Interpolation is possibly needed
+		if isinstance(given[1][2][0], list): #Don't use "if type(given[1][2][0]) == list:"" #Interpolation is possibly needed
 			exists = self.TableLookup(given)[1]
 		if exists == True: #No interpolation is needed
 			answer = self.TableLookup(given)[3]
@@ -135,6 +178,7 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 			This finds values on the tables.
 			Those that call it take what they need from the return statement and ignore the rest of what is returned.
 		"""
+		#print('TableLookup',given)
 		rowRef, exists, between, answer = -1, False, [-1,-1], -1
 		for i in range(self.mySheet.ncols): #The variable I am looking up
 			if self.mySheet.cell(2,i).value == given[1][0]: 
@@ -169,9 +213,10 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 
 	def TableInterpolation(self,given):
 		""" 
-			This interpolates using the tables.
+			This interpolates using the tables. It supports quality.
 
-			Example Input: TableLookup(['A2b',['Cp','Air',['Temperature',275]]])
+			Example Input: TableLookup(['A2b',['Cp','Air',[['Temperature',275],['N/A']]]])
+			Example Input: TableLookup(['A4',['vf','Water',[['Temperature',40],['x',0.5]]]])
 		"""
 		between = self.TableLookup(given)[2]	#Get the spots between
 		x1 = given[1][2][0][1]					#The current reference spot 
@@ -182,4 +227,5 @@ class LogicThermoTableLookup(Frm_ThermoTableLookup):
 		x2 = between[1]							#The refernce spot after
 		y2 = self.TableLookup(given)[3]			#The goal spot after
 		#print('(',x1,'-',x0,')/(',x2,'-',x0,')=(y1-',y0,')/(',y2,'-',y0,')')
-		return (x1-x2)*(y0-y2)/(x0-x2)+y2		#The current goal spot
+		if given[1][2][1][0] == 'x': return y0-(y0-y2)*given[1][2][1][1]
+		else: return (x1-x2)*(y0-y2)/(x0-x2)+y2 #The current goal spot

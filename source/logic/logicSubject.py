@@ -10,17 +10,20 @@ class LogicSubject(Frm_Subject):
 		self.parent = parent
 
 	def onBtnClick_ContinueToThermoSetup( self, event ):
-		LogicThermoSetup(self.parent).Show()
-		self.Destroy()
+		lts = LogicThermoSetup(self)
+		lts.Show()
+		self.Hide()
 		event.Skip()
 
 	def onBtnClick_ContinueToUnitConverter( self, event ):
-		LogicUnitConverter(self.parent).Show()
+		luc = LogicUnitConverter(self)
+		luc.Show()
 		self.Hide()
 		event.Skip()
 
 	def onBtnClick_ContinueToThermoTableLookup( self, event ):
-		LogicThermoTableLookup(self.parent).Show()
+		ltt = LogicThermoTableLookup(self)
+		ltt.Show()
 		self.Hide()
 		event.Skip()
 

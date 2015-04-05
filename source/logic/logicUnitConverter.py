@@ -4,6 +4,7 @@ from math import *
 
 class LogicUnitConverter(Frm_UnitConverter):
 	def __init__(self, parent):
+		self.parent = parent
 		Frm_UnitConverter.__init__(self,parent)
 		self.Type = 'Acceleration'
 		self.ConvYes = False
@@ -59,8 +60,10 @@ class LogicUnitConverter(Frm_UnitConverter):
 		event.Skip()
 
 	def onBackToMain( self, event ):
-		LogicSubject(self.parent).Show()
-		#self.Destroy()
+		print('HI!!!!!!!!')
+		self.parent.Show()
+		# LogicSubject(self.parent.Show())
+		self.Destroy()
 		event.Skip()
 
 	def updateLists(self):
@@ -126,10 +129,10 @@ class LogicUnitConverter(Frm_UnitConverter):
 		#x = eval(x)
 		print('Converting...')
 
-		#print('x',x)
-		#print('unitForm',unitForm)
-		#print('unitTo',unitTo)
-		#print('unitType',unitType)
+		print('x',x)
+		print('unitForm',unitForm)
+		print('unitTo',unitTo)
+		print('unitType',unitType)
 
 		if unitType != 'Temperature':
 			for i in range(2):

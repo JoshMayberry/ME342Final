@@ -30,7 +30,7 @@ class Frm_ThermoSetup ( wx.Frame ):
 		self.btn_TS_Medium2 = wx.RadioButton( self, wx.ID_ANY, u"Water", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sz_TS_Medium.Add( self.btn_TS_Medium2, 0, wx.ALL, 5 )
 		
-		self.btn_TS_Medium3 = wx.RadioButton( self, wx.ID_ANY, u"R-132a", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.btn_TS_Medium3 = wx.RadioButton( self, wx.ID_ANY, u"R-134a", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sz_TS_Medium.Add( self.btn_TS_Medium3, 0, wx.ALL, 5 )
 		
 		self.txt_TS_System = wx.StaticText( self, wx.ID_ANY, u"System", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -134,7 +134,7 @@ class Frm_ThermoSetup ( wx.Frame ):
 		# Connect Events
 		self.btn_TS_Medium1.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_IdealGas )
 		self.btn_TS_Medium2.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_Water )
-		self.btn_TS_Medium3.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_R132 )
+		self.btn_TS_Medium3.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_Medium_R134a )
 		self.btn_TS_System1.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_System_Closed )
 		self.btn_TS_System2.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_System_Steady )
 		self.btn_TS_System3.Bind( wx.EVT_RADIOBUTTON, self.onBtnClick_System_Unsteady )

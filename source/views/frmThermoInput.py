@@ -20,6 +20,7 @@ class Frm_ThermoInput ( wx.Frame ):
 
 		#This is the spacer
 			#You Cannot add the same spacer to the same sizer twice, so you need multiple ones.
+			#These are not being added yet. they will be added later on.
 		self.txt_TI_spacer1 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.txt_TI_spacer1.Wrap( -1 )
 		self.txt_TI_spacer2 = wx.StaticText( self, wx.ID_ANY, u" ", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -63,23 +64,47 @@ class Frm_ThermoInput ( wx.Frame ):
 		sz_ThermoInput_Inputs.Add( sz_TI_State2, 1, wx.EXPAND, 5 )
 		
 	#The input for Other sizer starts here
+		sz_TI_OtherMain = wx.FlexGridSizer( 0, 1, 0, 0 )
+		sz_TI_OtherMain.SetFlexibleDirection( wx.BOTH )
+		sz_TI_OtherMain.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		sz_TI_OtherTitle = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sz_TI_OtherTitle.SetFlexibleDirection( wx.BOTH )
+		sz_TI_OtherTitle.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
 		##Setup the title
+		self.txt_TI_Other = wx.StaticText( self, wx.ID_ANY, u"Other", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txt_TI_Other.Wrap( -1 )
+		sz_TI_OtherTitle.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
+		
+		#Setup the spacer
+		sz_TI_OtherTitle.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
+
+		if self.medium == 'IdealGas':
+			#Make the text label
+			temp = wx.StaticText( self, wx.ID_ANY, 'Ideal Gas', wx.DefaultPosition, wx.DefaultSize, 0  )
+			temp.Wrap( -1 )
+			sz_TI_OtherTitle.Add( temp, 0, wx.ALL, 5 )
+
+			#Make the ideal gas dropdown list
+			unit_Choices = ['Air','Ammonia','Argon','Benzene','Bromine','n-Butane','Carbon dioxide','Carbon monoxide','Carbon tetrachloride','Chlorine','Chloroform','R12','R21','Ethane','Ethyl alcohol','Ethylene','Helium','n-Hexane','Hydrogen','Krypton','Methane','Methyl alcohol','Methyl chloride','Neon','Nitrogen','Nitrous oxide','Oxygen','Propane','Propylene','Sulfur dioxide','R11','Xenon']
+			unitName = wx.Choice( self, 4000, wx.DefaultPosition, wx.DefaultSize, unit_Choices, 0 )
+			unitName.SetSelection(0)
+			self.medium = 'Air'
+			sz_TI_OtherTitle.Add( unitName, 0, wx.ALL, 5 )
+
+		sz_TI_OtherMain.Add( sz_TI_OtherTitle, 1, wx.EXPAND, 5 )
+		
 		sz_TI_Other = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sz_TI_Other.SetFlexibleDirection( wx.BOTH )
 		sz_TI_Other.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.txt_TI_Other = wx.StaticText( self, wx.ID_ANY, u"Other", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.txt_TI_Other.Wrap( -1 )
-		sz_TI_Other.Add( self.txt_TI_Other, 0, wx.ALL, 5 )
-		
-		#Setup the spacers
-		sz_TI_Other.Add( self.txt_TI_spacer1, 0, wx.ALL, 5 )
-		sz_TI_Other.Add( self.txt_TI_spacer2, 0, wx.ALL, 5 )
-		
 		##Generate all the Other input boxes
 		self.CreateOther(sz_TI_Other)
-		sz_ThermoInput_Inputs.Add( sz_TI_Other, 1, wx.EXPAND, 5 )
-		
+
+		sz_TI_OtherMain.Add( sz_TI_Other, 1, wx.EXPAND, 5 )		
+		sz_ThermoInput_Inputs.Add( sz_TI_OtherMain, 1, wx.EXPAND, 5 )	
+
 	#The button sizer starts here
 		siz_ThermoInput_Title.Add( sz_ThermoInput_Inputs, 1, wx.EXPAND, 5 )
 		
@@ -89,7 +114,6 @@ class Frm_ThermoInput ( wx.Frame ):
 		
 		self.SetSizer( siz_ThermoInput_Title )
 		self.Layout()
-		
 		self.Centre( wx.BOTH )
 		
 	# Connect Events

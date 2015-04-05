@@ -25,8 +25,8 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		self.medium = 'Water'
 		event.Skip()
 	
-	def onBtnClick_Medium_R132( self, event ):
-		self.medium = 'R132'
+	def onBtnClick_Medium_R134a( self, event ):
+		self.medium = 'R134a'
 		event.Skip()
 	
 	def onBtnClick_System_Closed( self, event ):
@@ -110,11 +110,6 @@ class LogicThermoSetup(Frm_ThermoSetup):
 			This difference in configration is controlled by a multi-dimensional list.
 		"""
 		#To check variables: #print('medium',self.medium,'system',self.system,'container',self.container,'etc1',self.etc1,'etc2',self.etc2,'etc3',self.etc3,'etc4',self.etc4,'etc5',self.etc5,'valve',self.valve)
-	#	if medium == 'Water':
-    #    if medium == 'R132a':
-            #Use the R132a tables for calculations
-    #    if medium == 'IdealGas':
-            #Give them a scrollable dropdown list of gases to choose from
 		self.inputList[2].extend(['R'])
 
 		if self.system == 'Closed':
@@ -187,7 +182,7 @@ class LogicThermoSetup(Frm_ThermoSetup):
 		##For now, we'll not worry about these.
 		self.zeroList.extend(['We','Ws'])
 
-		args = self.inputList,self.units, self.zeroList
+		args = [self.inputList,self.units, self.zeroList, self.medium]
 		LogicThermoInput(self.parent,*args).Show()
 		self.Destroy()
 		event.Skip()

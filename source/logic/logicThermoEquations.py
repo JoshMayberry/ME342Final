@@ -1,20 +1,19 @@
 	
 class LogicThermoEquations:
-	"""
-		This regulates all the Thermo Equations.
-	"""
-	def __init__(self,parent):
-		#This is a list of all the equations that will be solved
+	""" This regulates all the Thermo Equations."""
+	
+	def constants():
 		#All units must be previously changed to SI metric
 		Ru = 8.31447                #kJ/kmol*K  Universal Gas Constant
 		g = 9.81                    #m/s2       Standard Acceleration of Gravity
 		Patm = 101.325              #kPa        Standard Atmospheric Pressure
 		sigmaSB = 5.6704*10**-8     #W/m2*K4    Stefan-Boltzmann Constant
 		kSB = 1.380650*10**-23      #J/K        Boltzmann's Constant
-		c0 = 2.9979*10**8           #m/s        Speed of Light in a Vacuume
+		c0 = 2.9979*10**8           #m/s        Speed of Light in a Vacuume 
 		c = 331.36                  #m/s        Speed of Sound in Dry Air
 		hIF = 333.7                 #kJ/kg      Heat of Fusion of Water
 		hFG = 2256.5                #kJ/kg      Enthalpy of Vaporization of Water
+		return ({'Ru':Ru,'g':g,'Patm':Patm,'sigmaSB':sigmaSB,'kSB':kSB,'c0':c0,'c':c,'hIF':hIF,'hFG':hFG})
 
 	def eqnDatabase(self):
 		#A dictionary containing what each equation involves.

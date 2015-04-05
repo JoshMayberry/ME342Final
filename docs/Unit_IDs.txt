@@ -358,7 +358,7 @@ kJ/(kg-K)
 	kJ/(kmol-K)
 J/(kg-K)
 	J/(g-C)
-J/(g-K)
+	J/(g-K)
 
 	Specific Volume
 	m^3/kg

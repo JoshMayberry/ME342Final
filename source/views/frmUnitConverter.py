@@ -118,8 +118,8 @@ class Frm_UnitConverter ( wx.Frame ):
 		
 		sz_UC_Conversion.Add( sz_UC_ConvertBtn, 1, wx.EXPAND, 5 )
 		
-#		self.btn_UC_Back = wx.Button( self, wx.ID_ANY, u"Back to Main", wx.DefaultPosition, wx.DefaultSize, 0 )
-#		sz_UC_Conversion.Add( self.btn_UC_Back, 0, wx.ALL, 5 )
+		self.btn_UC_Back = wx.Button( self, wx.ID_ANY, u"Back to Main", wx.DefaultPosition, wx.DefaultSize, 0 )
+		sz_UC_Conversion.Add( self.btn_UC_Back, 0, wx.ALL, 5 )
 		
 		sz_UC_ExpressionResult.Add( sz_UC_Conversion, 1, wx.EXPAND, 5 )
 		
@@ -140,7 +140,7 @@ class Frm_UnitConverter ( wx.Frame ):
 		self.check_UC_UnitsConversion.Bind( wx.EVT_CHECKBOX, self.onConvYes )
 		self.choice_UC_TypeOfUnits.Bind( wx.EVT_CHOICE, self.onType )
 		self.btn_UC_Convert.Bind( wx.EVT_BUTTON, self.onConvBtn )
-#		self.btn_UC_Back.Bind( wx.EVT_BUTTON, self.onBackToMain )
+		self.btn_UC_Back.Bind( wx.EVT_BUTTON, self.onBackToMain )
 	
 	def __del__( self ):
 		pass
