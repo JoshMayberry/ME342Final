@@ -2,6 +2,7 @@ import wx
 #from ..logic import LogicThermoInput
 
 class Frm_ThermoInput ( wx.Frame ):
+	#Note: Most of this frame is built by logic, because it needs to determine what is to be shown.
 	
 	def __init__( self, parent ):
 		windowSize = self.setSize()

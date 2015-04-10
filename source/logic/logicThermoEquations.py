@@ -26,12 +26,12 @@ class LogicThermoEquations:
 			'vRoe2': ['v2','roe'], 'hupv2': ['he','u2','P2','v2'], 'pvrt2': ['P2','v2','R','T2'],
 			'pvmrt2': ['P2','V2','m2','R','T2'],
 			'Tconst': ['T1','T2'], 'Pconst': ['P1','P2'], 'hconst': ['hi','he'], 'uconst':['u1','u2'], 'vconst':['v1','v2'],
-			'Vconst': ['V1','V2'], 'mconst': ['m1','m2'], 'kcpcv': ['n','Cp','Cv'],
+			'Vconst': ['V1','V2'], 'mconst': ['m1','m2'], 'kcpcv': ['k','Cp','Cv'],
 			'cpcvr': ['Cp','Cv','R'], 'deltaU': ['u2','u1','Cv','T2','T1'],
 			'deltaH': ['he','hi','Cp','T2','T1'], 'deltaHIncom1': ['he','hi','Cp','v1','T2','T1','P2','P1'],
 			'wbIntEqn': ['Wb','P1','V2','V1'], 'wbDeltaVEqn': ['Wb','P1','V2','V1'],
-			'wbn': ['Wb','P2','P1','V2','V1','n'], 'wbnmr': ['Wb','T2','T1','m1','R','n'],
-			'wbnm': ['Wb','P2','P1','v2','v1','m1','R','n'], 'wbn1v': ['Wb','P1','V2','V1'],
+			'wbn': ['Wb','P2','P1','V2','V1','k'], 'wbnmr': ['Wb','T2','T1','m1','R','k'],
+			'wbnm': ['Wb','P2','P1','v2','v1','m1','R','k'], 'wbn1v': ['Wb','P1','V2','V1'],
 			'wbn1p': ['Wb','P2','P1','V1'], 'wbn1mrv': ['Wb','V2','V1','m1','R','T1'],
 			'wbn1mrp': ['Wb','P2','P1','m1','R','T1'],
 			'wbTotal': ['W','Wb','We','Ws'],
@@ -155,15 +155,15 @@ class LogicThermoEquations:
 	###Ideal Gas Boundary Work Equations
 	def wbnEqn(self):
 		"""Wb=(P2*V2-P1*V1)/(1-n)"""
-		return (self.P2*self.V2-self.P1*self.V1)/(1-self.n)-self.Wb
+		return (self.P2*self.V2-self.P1*self.V1)/(1-self.k)-self.Wb
 
 	def wbnmrEqn(self):
 		"""Wb=m*R*(T2-T1)/(1-n)"""
-		return self.m1*self.R*(self.T2-self.T1)/(1-self.n)-self.Wb
+		return self.m1*self.R*(self.T2-self.T1)/(1-self.k)-self.Wb
 
 	def wbnmEqn(self):
 		"""Wb = m*(P2*v2-P1*v1)/(1-n)"""
-		return self.m1*(self.P2*self.v2-self.P1*self.v1)/(1-self.n)-self.Wb
+		return self.m1*(self.P2*self.v2-self.P1*self.v1)/(1-self.k)-self.Wb
 
 	def wbn1vEqn(self):
 		"""Wb=P1*V1*ln(V2/V1)"""

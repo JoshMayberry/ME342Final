@@ -60,7 +60,6 @@ class LogicUnitConverter(Frm_UnitConverter):
 		event.Skip()
 
 	def onBackToMain( self, event ):
-		print('HI!!!!!!!!')
 		self.parent.Show()
 		# LogicSubject(self.parent.Show())
 		self.Destroy()
@@ -129,7 +128,7 @@ class LogicUnitConverter(Frm_UnitConverter):
 		#x = eval(x)
 		print('Converting...')
 
-		print('x',x)
+		print('x',x,type(x))
 		print('unitForm',unitForm)
 		print('unitTo',unitTo)
 		print('unitType',unitType)
@@ -703,5 +702,5 @@ class LogicUnitConverter(Frm_UnitConverter):
 			elif unitTo == 'Reaumur (Re)': x = (y-273.15)*4/5
 			elif unitTo == 'Romer (Ro)': x = (y-273.15)*21/40+7.5
 			else: print('Error in',unitType)
-		print('Conversion Sucessful\n')
+		print('Conversion Sucessful',x,'\n')
 		return x

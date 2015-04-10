@@ -120,7 +120,9 @@ class LogicThermoInput(Frm_ThermoInput):
 			sz_TI_Other.Add( temp, 0, wx.ALL, 5 )
 
 	def CreateEvents(self):
-		x = 1
+		"""
+			This assigns the correct event to the correct input box or drop list.
+		"""
 		print('Creating Events')
 		#Add an event to that box
 		#self.FindWindowById(999).Bind( wx.EVT_TEXT_ENTER, self.onVal_TI_P1 )
@@ -171,6 +173,7 @@ class LogicThermoInput(Frm_ThermoInput):
 				if item == self.inputList[2][i]: 
 					answer = 1500+i
 					break
+
 		#print(answer)
 		return answer
 
@@ -269,7 +272,7 @@ class LogicThermoInput(Frm_ThermoInput):
 			if self.units == 0: unitList = ['Centigrade (C)','Kelvin (K)']
 			else: unitList = ['Fahrenheit (F)','Rankine (R)']
 			unitType = 'Temperature'
-			defaultIndex = 0
+			defaultIndex = 1
 #?
 		elif 'TC' in var: #Thermal Conductivity Units
 			if self.units == 0: unitList = ['W/(m-C)','W/(m-K)']
@@ -284,7 +287,7 @@ class LogicThermoInput(Frm_ThermoInput):
 			defaultIndex = 0
 
 		elif 'V' in var: #Volume Units
-			if self.units == 0: unitList = ['liter','m^3','cc (cm^3)']
+			if self.units == 0: unitList = ['m^3','liter','cc (cm^3)']
 			else: unitList = ['in^3','ft^3','gallon (US liquid)','gallon (US dry)','fl oz (US fluid oz)']
 			unitType = 'Volume'
 			defaultIndex = 0
@@ -780,6 +783,7 @@ class LogicThermoInput(Frm_ThermoInput):
 		args = [['thermo'],{},self.medium]
 		
 		for eqn in kwargs.items():
+			print(eqn)
 			if '@' in eqn: #Label the goal as an unknown
 				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
 					args[1].update({eqn[0]:'unknown'})
@@ -788,14 +792,19 @@ class LogicThermoInput(Frm_ThermoInput):
 				if eqn[0][0] != 'U':  #Weeds out the unit turples that get added for some reason.
 					unitFrom = getattr(self,'U'+eqn[0])
 					unitTo,unitType = self.findUnits(eqn[0],'SI')
+					print('convert',eqn,unitTo)
 					x = getattr(self,eqn[0])
 					#print(eqn)
 					if (x != '') and (x != ' '):
 						print('eqn',eqn,'x',x,'unitFrom',unitFrom,'unitTo',unitTo,'unitType',unitType)
-						setattr(self,eqn[0],LUC.convert(self,eval(x),unitFrom,unitTo,unitType))
+						kwargs.update({eqn[0]:LUC.convert(self,eval(x),unitFrom,unitTo,unitType)})
 
-		print('args',args)
-		print('kwargs',kwargs)
+		#print('args',args)
+		#print('kwargs',kwargs)
+		##These next 2 lines are for debugging
+		args = [['thermo'], {'W': 'unknown'}, 'Nitrogen']
+		kwargs = {'v1': '', 'V1': 0.07, 'u1': 'unknown', 'v2': 'unknown', 'T2': 'unknown', 'x1': 'unknown', 'x2': 'unknown', 'u2': 'unknown', 'T1': 453.15, 'Cp': 'unknown', 'W': '@', 's2': 'unknown', 'Q': 'unknown', 'Cv': 'unknown', 's1': 'unknown', 'P1': 130.0, 'Cavg': 'unknown', 'm2': 'unknown', 'roe': 'unknown', 'k': 'unknown', 'P2': 80.0, 'V2': 'unknown', 'm1': 'unknown', 'R': 'unknown'}
+		##Answer: 2.96 kJ
 
 		LogicCalculator.__init__(self,*args,**kwargs)
 		#after the calculator runs, show the next frame and destroy this one.

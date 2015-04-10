@@ -113,28 +113,48 @@ class TableUtilities:
 	
 	def TableEnough(self,unknown,known,medium):
 		""" This checks if there are enough known variables to look up values in the table."""
-		given, passed, temperatureCheck = [-1,[-1,medium,[[-1,-1],[-1,-1]]]], 0, False
+		given, passed, temperatureCheck, answer = [-1,[-1,medium,[[-1,-1],[-1,-1]]]], False, False, []
 		if 'T1' in known: #Finds if you know the temperature or not. Assumes that T1 determines the Cp. CHANGE THIS so it is smarter.
 			temperatureCheck = True
 
-		for item in known.items():
+		for knownItem in known.items():
 			#print('known',item)
 			if medium in ['Water','R134a']: #FIX THIS: Make it smart with the criteria for the tables A4, A5, & A6.
 				pass
+			#	if 'T' in unknownItem[0]: 
+			#		given[1][0] = 'Temperature'
+			#		passed = True
+			#	elif 'P' in unknownItem[0]: 
+			#		given[1][0] = 'Pressure'
+			#		passed = True
+			#	elif 'x' in unknownItem[0]: #make the rest of the cirteria for Water and R134a.
+
 			else: #It is an ideal gas [-1,['Cp','Air',[['Temperature',300],['N/A']]]]
 				if temperatureCheck == True:
-					if item[0] in ['Cp','Cv','n']:
-						given[1][2][0] = ['Temperature',self.known['T1'][1]]
+					given[1][2][0] = ['Temperature',known['T1']]
+					
 
-			for item in unknown.items(): #Find the unknowns that can be found.
-				#print('unknown',item)
-				if 'T' in item[0]: given[1][0] = 'Temperature'
-				elif 'Cp' in item[0]: given[1][0] = 'Cp'
-				elif 'Cv' in item[0]: given[1][0] = 'Cv'
-				elif 'n' in item[0]: given[1][0] = 'k'
-				elif 'P' in item[0]: given[1][0] = 'Pressure'
-				#elif 'x' in item[0]: #make the rest of the cirteria for Water and R134a.
-				given = self.TableInquiry(given) #Which table should be used?
+		for unknownItem in unknown.items(): #Find the unknowns that can be found.
+			#print('unknown',item)
+			if 'Cp' in unknownItem[0]: 
+				given[1][0] = 'Cp'
+				passed = True
+			elif 'Cv' in unknownItem[0]: 
+				given[1][0] = 'Cv'
+				passed = True
+			elif 'n' in unknownItem[0]: 
+				given[1][0] = 'k'
+				passed = True
+
+			if passed == True: 
+				print('passed',unknownItem[0])
+				print('given', given)
+				temp = self.TableDecider(given)
+				print(answer)
+				answer.append([unknownItem[0], temp]) #Solve it
+				print('answer',answer)
+				passed = False
+		return answer
 
 	def TableInquiry(self,given):
 		""" This decides which table should be used."""
@@ -150,7 +170,7 @@ class TableUtilities:
 
 	def TableDecider(self,given):
 		"""
-			This determines first determines which table to use.
+			This determines first determines if Tabl Inquiry should be run.
 			It then determines if interpolation is necissary. It is also the first step.
 
 			Example Input: TableDecider(['A1',['Molar Mass','Air','N/A']]) Answer: 28.97

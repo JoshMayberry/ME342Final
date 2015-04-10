@@ -1,8 +1,8 @@
 import wx
 import numpy as np #For the argmax() functionality
+import math
 import copy #This is needed because sometimes the temp lists modify their parent lists. So, deep copies are made.
-from .logicThermoEquations import LogicThermoEquations
-from .logicThermoTableLookup import TableUtilities
+
 
 class LogicCalculator:
 	"""
@@ -35,9 +35,7 @@ class LogicCalculator:
 		self = LogicCalculator
 	#What have I been given?
 		self.subject = args[0][0]
-		self.medium = args[2]
-		#print('\n',self.subject)
-		print('\n',kwargs,'\n')
+		print('\nsubject: ',self.subject, '\nmedium: ',self.medium)
 
 	#What is known? What is not known?
 		self.unknown,self.known = {},{} #Blank dictionaries
@@ -49,21 +47,26 @@ class LogicCalculator:
 					if i[0][0] != 'U':  self.known.update({i[0]:i[1]})
 		#For now, we will not worry about these.			
 		self.unknown.update({'MM':'unknown','R':'unknown','Tcr':'unknown','Pcr':'unknown','Vcr':'unknown'})
+		print('\nknown: ',self.known,'\nunknown: ',self.unknown)
 
 	#What do  I need to find?
 		self.goal = args[1]
+		print('\ngoal: ',self.goal)
 
 		for element in ['known','unknown','goal']: #Set the values in the system
 			for item in getattr(self,element).items(): 
 				setattr(self,item[0],item[1])
 
 	#Equations
-	##Retrieve the correct Equation Database
+	##Retrieve the correct Equation Database & other things pertaining to the subject.
 		print('Loading Database')
 		if self.subject == 'thermo':
+			from .logicThermoEquations import LogicThermoEquations
+			from .logicThermoTableLookup import TableUtilities
+			self.medium = args[2]
 			constants = LogicThermoEquations.constants()
 			for item in constants.items():
-				setattr(self,item[0],item[1])
+				setattr(self,item[0],item[1]) #Record the constants
 			self.eqnDatabase = LogicThermoEquations.eqnDatabase(self)
 			print('    ~ Thermo Database Loaded')
 
@@ -77,20 +80,19 @@ class LogicCalculator:
 					self.MM = table_utils.TableDecider(['A1',['Molar Mass',self.medium,'N/A']])
 				if 'R' in self.unknown: 
 					self.R = table_utils.TableDecider(['A1',['Gas Constant R',self.medium,'N/A']])
-			#	if 'Tcr' in self.unknown: 
-			#		self.Tcr = table_utils.TableDecider(['A1',['Critical Temperature',self.medium,'N/A']])
-			#	if 'Pcr' in self.unknown: 
-			#		self.Pcr = table_utils.TableDecider(['A1',['Critical Pressure',self.medium,'N/A']])
-			#	if 'Vcr' in self.unknown: 
-			#		self.Vcr = table_utils.TableDecider(['A1',['Critical Volume',self.medium,'N/A']])
+				if 'Tcr' in self.unknown: 
+					self.Tcr = table_utils.TableDecider(['A1',['Critical Temperature',self.medium,'N/A']])
+				if 'Pcr' in self.unknown: 
+					self.Pcr = table_utils.TableDecider(['A1',['Critical Pressure',self.medium,'N/A']])
+				if 'Vcr' in self.unknown: 
+					self.Vcr = table_utils.TableDecider(['A1',['Critical Volume',self.medium,'N/A']])
 				for element in ['MM','R','Tcr','Pcr','Vcr']:
 					if element in self.unknown: 
 						del self.unknown[element] #Remove found values from the unknown list
 					self.known.update({element:getattr(self,element)}) #Add found values to the known list
 
-			table_utils.TableEnough(self.unknown, self.known, self.medium) #Find any others that can be found
-
-
+			self.interThermoPassed = False #This will be true once it has been able to do a full table lookup.
+			self.intermediateStep(self)
 
 #		elif self.subject == 'statics': 		#This is to show how to add another subject.
 #			from .logicStaticsEquations import LogicStaticsEquations
@@ -101,10 +103,28 @@ class LogicCalculator:
 			self.equationFinder(self,temp)
 
 	#Solve the equations
-			self.solver(self,self.equations)
+			self.solver(self,self.equations) #Find any others that can be found
 
 	#Return your answer
 		#Have it go through the answers and return only the ones that we want.
+
+	def intermediateStep(self):
+		"""
+			This does things that must be checked between steps of gauss sidel or linear solver.
+
+			For thermo, this is a check if the values of the tables can be/have been found.
+			Once self.interThermoPassed == True, then this doesn't run any more, because all values have been gotten from the tables.
+		"""
+		if self.subject == 'thermo':
+			if self.interThermoPassed == False:
+				table_utils = TableUtilities()
+				answer = table_utils.TableEnough(self.unknown, self.known, self.medium)
+				if answer != []: #There was enough
+					self.interThermoPassed = True
+					for element in answer:
+						setattr(self,element[0],element[1])
+						del self.unknown[element[0]]
+						self.known.update({element[0]:element[1]})
 
 	def eqnDatabaseContains(self,varsSearch,varsAfter):
 		"""
@@ -175,135 +195,95 @@ class LogicCalculator:
 		wayCount = 0 #How many ways there are to solve it
 		myMatrix = [[],[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]]
 
-		#First, have it search for the 1 step solutions.
-		for j in range(len(self.goal)):
-			for eqn in self.eqnDatabase.items():
-				row += 1
-				myMatrix[0].append(eqn[0])
-				col = 0
-				for var in unknownList:
-					col += 1
-					if var in eqn[1]: 
-						myMatrix[1][row].append(1)
-					else: 
-						myMatrix[1][row].append(0)
-				if (1 not in myMatrix[1][row][0:-1]) and (myMatrix[1][row][-1] == 1): #Delete all that contain only my goal & store them (which is the last one in the list. Always.)   
-					wayCount += 1
-					tempInside = {
-						'way'+str(wayCount):[[],[[-1],[-1]],[], [myMatrix[0][row], unknownList[-1]]]
-						}
-					earlyPaths.update(tempInside)
-					del myMatrix[1][row], myMatrix[0][row]
-					row -= 1
-				elif 1 not in myMatrix[1][row]: #Delete all that contain pure zeros  
-					del myMatrix[1][row], myMatrix[0][row]
-					row -= 1
+
+		###This is still undr development. 
+		#Input 
+		known =  {'T1': 453.15, 'P1': 130.0, 'V1': 0.07, 'P2': 80.0} 
+		unknown =  {'MM': 'unknown', 'x1': 'unknown', 'Cp': 'unknown', 'u2': 'unknown', 's1': 'unknown', 'V2': 'unknown', 'x2': 'unknown', 'R': 'unknown', 's2': 'unknown', 'v1': '', 'Q': 'unknown', 'v2': 'unknown', 'Pcr': 'unknown', 'T2': 'unknown', 'Cv': 'unknown', 'k': 'unknown', 'Cavg': 'unknown', 'Tcr': 'unknown', 'm2': 'unknown', 'roe': 'unknown', 'u1': 'unknown', 'Vcr': 'unknown', 'm1': 'unknown'}
+		goal =  {'W': 'unknown'} 
+
+		n = (len(dataBase))
+		col,row = 0,0
+		earlyPaths = {} #These are the pathways that were completed before all unknowns were used up.
+		paths = {} #A dictionary of all the ways
+		wayCount = 0 #How many ways there are to solve it
+		myMatrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+
+
+
+		for endVar in goal.items(): #First, label which variable is for which column
+			for var in unknown.items():
+				myMatrix[0].append(var[0])
+			myMatrix[0].append(endVar[0])
+		for eqn in dataBase.items(): #Second, label which equation is for which row
+			row += 1
+			myMatrix[row].append(eqn[0])
+			for item in unknown.items(): #Fill in the 1 and 0
+				if item[0] in eqn[1]:
+					myMatrix[row].append(1)
+				else:
+					myMatrix[row].append(0)
+		row = 0
+		for eqn in myMatrix[1:]: #Third, have it search for the 1 step solutions & non-useable equations.
+			row += 1
+			print(eqn[1:])
+			if sum(eqn[1:]) == 0:  #Weed out the eqns that are pure 0
+				print('    =0')
+				del myMatrix[row]
+				row -= 1
+			if (1 not in eqn[1:-1]) and (eqn[-1] == 1): #Delete all that contain only my goal & store them (which is the last one in the list. Always.)   
+				print('    Only Goal')
+				wayCount += 1
+				col = np.argmax(np.array(eqn[1:])) + 1 #Get the positio of the 1
+				temp = [myMatrix,myMatrix[row][0],myMatrix[0][col]] #[current myMatrix, eqn, var to solve for]
+				del myMatrix[row]
+				earlyPaths.update({'way'+str(wayCount):temp})
+				row -= 1
+			if sum(eqn[1:]) == 1:
+				print('    =1')
+				wayCount += 1
+				col = np.argmax(np.array(eqn[1:])) + 1 #Get the positio of the 1
+				temp = [-1,myMatrix[row][0],myMatrix[0][col]] #[current myMatrix, eqn, var to solve for]
+				myMatrixTemp = copy.deepcopy(myMatrix)
+				del myMatrixTemp[row] #Delete the row
+				temp[0] = myMatrixTemp
+				for i in range(len(myMatrix)): #Delete the column
+					del myMatrix[i][col]
+				paths.update({'way'+str(wayCount):temp})
+				row -= 1
+		row, passedAlready = 0, False
+		print(stop)
+
+		for k in range(len(unknown)-1):#Fourth. This loop will end just before only the goal var remains
+			for item in paths.items():
+				myMatrix = item[1][0][:]
+				for eqn in myMatrix[1:]: #Find the equations with 1 unknown.
+					row += 1
+					if sum(eqn[1:]) == 1:
+						col = np.argmax(np.array(eqn[1:])) + 1 #Get the positio of the 1
+						temp[1].append(myMatrix[row][0]) #Add eqn
+						temp[2].append(myMatrix[0][col]) #Add var
+						del myMatrix[row] #Delete the row
+						for i in range(len(myMatrix)): #Delete the column
+							del myMatrix[i][col]
+						temp[0] = myMatrix #Update current myMatrix
+						row -= 1
+						if passedAlready == False:
+							paths.update({item[0]:temp})
+						else: #There is another way that branches off of this one.
+							wayCount += 1
+							paths.update({'way'+str(wayCount):temp})
+							passedAlready = True
+		print(myMatrix)
+		print('\n','early',earlyPaths)
+		print('\n','paths',paths)
+		print(stop)
+
 
 		#{way1: [[eqnsLeft],[[varAvailable],[varToSolveFor]],[eqnsPathway]], way2: ...
 					#eqnsPathway: [[eqn1,var1],[eqn2,var2],...
 
 
-		#Re-order it so that one with just one 1 is at the top
-			##How many contain just 1 on the top? Make a separate matrix for each of those. Delete the others from eachother's matrix. This means that Each matrix will start with a differet eqn.
-		for i in range(len(myMatrix[1])):
-			if (sum(myMatrix[1][i][0:-1]) == 1) and (myMatrix[1][i][-1] != 1):
-				wayCount += 1
-				j = 0
-				for element in myMatrix[1][i]: #find which unknown is being solved for
-					j+=1
-					if element == 1: n = j #where the 1 is located
-				#print(unknownList[n])
-				unknownListTemp = copy.deepcopy(unknownList)
-				del unknownListTemp[n]
-				tempInside = {
-					'way'+str(wayCount):[
-					[myMatrix[0]],
-					[unknownListTemp],
-					[],
-					[[myMatrix[0][i],
-					unknownList[n]]]]
-					}
-				temp.update(tempInside)
-				myMatrix[1][i] = 'used'
-		while 'used' in myMatrix[1]: #Remove the used rows from the matrix
-			n = myMatrix[1].index('used')
-			del myMatrix[0][n], myMatrix[1][n]
-		for item in temp.items():
-			newList = item[1]
-			newList[2] = myMatrix[1]
-			newList[1] = [unknownList,newList[1][0]]
-			newList[0] = newList[0][0]
-			temp.update({item[0]:newList})
-
-		#Loop until just the goal var remains:
-			#Get one that contains that one and another one below it. This can be done by searching for a line that has that var and another 1.
-				##After this is done, delete the entire column of the previous variable. Add the name of that variable to another list.
-		for k in range(len(unknownList)-1):#This loop will end just before only the goal var remains
-			tempNew = copy.deepcopy(temp)
-			print('Iteration', k)
-			for item in temp.items(): #Look at each way
-				#print(item,'\n')
-				unknownHaveList = copy.deepcopy(item[1][1][1]) #Vars to solve for
-				unknownNeedList = copy.deepcopy(item[1][1][0]) #Vars available.
-				tempMatrix = copy.deepcopy([item[1][0],item[1][2]])
-				eqnPath = copy.deepcopy(item[1][3])
-				for var in unknownNeedList: #Lets remove the variable that is solved in this way.
-					if var not in unknownHaveList:
-						n = unknownNeedList.index(var)
-						for row in tempMatrix[1]:
-							del row[n]
-							unknownNeedListTemp = copy.deepcopy(unknownNeedList) #And record which variable was solved
-							unknownNeedListTemp.remove(var)
-							
-				passed,i = False,0 #For if there is another way that branches off of this way.
-				for i in range(len(tempMatrix[1])):
-					eqnPathTemp = copy.deepcopy(eqnPath)
-					if (sum(tempMatrix[1][i][0:-1]) == 1) and (tempMatrix[1][i][-1] != 1):
-						j = 0
-						for element in tempMatrix[1][i]: #find which unknown is being solved for
-							j+=1
-							if element == 1: n = j #where the 1 is located
-						unknownListTemp = copy.deepcopy(unknownHaveList)
-						eqnPathTemp.append([tempMatrix[0][i],unknownListTemp[n]])
-						del unknownListTemp[n] #Remove the column that has been solved for already           
-						tempMatrix[1][i] = 'used' #Set the eqn up to be removed
-						if passed == True: #If there is another way
-							wayCount += 1
-							tempNew.update({'way'+str(wayCount):[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]})
-						else: tempNew.update({item[0]:[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]}) #If this is the first way of the many or just the only way.
-						passed = True
-
-					elif (1 not in tempMatrix[1][i][0:-1]) and (tempMatrix[1][i][-1] == 1): #This is for the case that it can be solved early
-						tempMatrix[1][i] = 'used'
-						eqnPathTemp.append([tempMatrix[0][i],unknownHaveList[-1]])
-						if passed == True: #If there is another way
-							wayCount += 1
-							earlyPaths.update({'way'+str(wayCount):[[],[[-1],[-1]],[],[eqnPathTemp]]})
-						else:earlyPaths.update({item[0]:[[],[[-1],[-1]],[],[tempMatrix[0][i],unknownList[-1]]]}) #If this is the first way of the many or just the only way.
-						passed = True
-						
-					elif (len(unknownHaveList) == 1) and (tempMatrix[1][i][0] == 1): #This runs instead for the last run.
-						tempMatrix[1][i] = 'used'
-						eqnPathTemp.append([tempMatrix[0][i],unknownHaveList[0]])
-						if passed == True: #If there is another way
-							wayCount += 1
-							tempNew.update({'way'+str(wayCount):[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]})
-						else: tempNew.update({item[0]:[tempMatrix[0],[unknownNeedListTemp,unknownListTemp],tempMatrix[1],eqnPathTemp]}) #If this is the first way of the many or just the only way.
-						passed = True
-					
-				if passed != True: #There were none that could follow it.
-					del tempNew[item[0]] #This means that this path cannot continue. So, let's get rid of it.
-			for item in tempNew.items():
-				while 'used' in item[1][2]: #Remove the used rows from the matrix
-					n = item[1][2].index('used')
-					del item[1][0][n], item[1][2][n]
-			temp = copy.deepcopy(tempNew) #update the new myMatrix
-
-	#Once the path is complete, return a list of just the eqn names as a list in the order they are to be done. Return all possibilities
-			temp.update(earlyPaths) #Include the pathways that were found early
-			self.equations = []
-			for item in temp.items():
-				self.equations.append(item[1][3])
 
 	def solver(self,eqns):
 		"""
@@ -322,7 +302,7 @@ class LogicCalculator:
 		print(self.equations)
 
 		for item in self.equations:
-			answer = ridder(self,item[0]+'Eqn',item[1])
+			answer = self.ridder(self,item[0]+'Eqn',item[1])
 			setattr('self',item[1],answer[0])
 			if item != self.equations[-1]:
 				print('I used equation ',item[0],' and solved for ',item[1],'. The answer was ',answer[0],' with a percent error of ',answer[1])
